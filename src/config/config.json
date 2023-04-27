@@ -1,0 +1,10 @@
+{
+    "proyek_ws": {
+        "host": "127.0.0.1",
+        "username" : "root",
+        "password" : "",
+        "port" : "3306",
+        "database" : "proyek_ws",
+        "dialect" : "mysql"
+    }
+}
