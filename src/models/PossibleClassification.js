@@ -1,31 +1,23 @@
-"use strict";
-const { Model } = require("sequelize");
+'use strict';
+const {
+  Model
+} = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
   class PossibleClassification extends Model {
+    /**
+     * Helper method for defining associations.
+     * This method is not a part of Sequelize lifecycle.
+     * The `models/index` file will call this method automatically.
+     */
     static associate(models) {
-      PossibleClassification.belongsTo(models.Task, {foreignKey: "task_id", otherKey: "task_id"});
+      // define association here
     }
   }
-  PossibleClassification.init(
-    {
-      possible_id: {
-        type: DataTypes.STRING,
-        primaryKey: true,
-        
-      },
-      possible_name: {
-        type: DataTypes.STRING,
-      },
-      task_id: {
-        type: DataTypes.STRING,
-      },
-    },
-    {
-      sequelize,
-      timestamps: false,
-      modelName: "PossibleClassification",
-      tableName: "possible_classification"
-    }
-  );
+  PossibleClassification.init({
+    possible_id: DataTypes.STRING
+  }, {
+    sequelize,
+    modelName: 'PossibleClassification',
+  });
   return PossibleClassification;
 };

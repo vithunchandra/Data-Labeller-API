@@ -1,43 +1,38 @@
-"use strict";
-const { Model } = require("sequelize");
+'use strict';
+const {
+  Model
+} = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
   class Data extends Model {
-    static associate(models) {
-      Data.belongsTo(models.Task, {foreignKey: "task_id", otherKey: "task_id"});
-
-      Data.hasMany(models.Label, {foreignKey: "data_id", otherKey: "data_id"});
-    }
+	/**
+	 * Helper method for defining associations.
+	 * This method is not a part of Sequelize lifecycle.
+	 * The `models/index` file will call this method automatically.
+	 */
+	static associate(models) {
+	  // define association here
+	}
   }
-  Data.init(
-    {
-      data_id: {
-        type: DataTypes.STRING,
-        primaryKey: true,
-        allowNull: false,
-      },
-      data_text: {
-        type: DataTypes.TEXT,
-        allowNull: false,
-      },
-      price: {
-        type: DataTypes.INTEGER,
-        allowNull: false,
-      },
-      closeDate: {
-        type: DataTypes.DATE,
-        allowNull: false,
-      },
-      task_id: {
-        type: DataTypes.STRING,
-        allowNull: false,
-      },
-    },
-    {
-      sequelize,
-      timestamps: false,
-      modelName: "Data",
-      tableName: "data"
-    }
-  );
+  Data.init({
+	data_id: {
+	  type: DataTypes.STRING,
+	  primaryKey: true,
+	  allowNull: false
+	},
+	task_id: {
+		type: DataTypes.STRING,
+		references: {
+			key: "task_id",
+			model: "Task"
+		}
+	},
+	data_text: DataTypes.TEXT,
+	price: DataTypes.INTEGER,
+	closeDate: DataTypes.DATE
+  }, {
+	sequelize,
+	modelName: 'Data',
+	timestamps: false
+  });
   return Data;
 };

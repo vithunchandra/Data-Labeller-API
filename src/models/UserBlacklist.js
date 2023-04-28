@@ -1,35 +1,23 @@
-"use strict";
-const { Model } = require("sequelize");
+'use strict';
+const {
+  Model
+} = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
   class UserBlacklist extends Model {
+    /**
+     * Helper method for defining associations.
+     * This method is not a part of Sequelize lifecycle.
+     * The `models/index` file will call this method automatically.
+     */
     static associate(models) {
-      UserBlacklist.belongsTo(models.Task, {foreignKey: "task_id", otherKey: "task_id"});
-      
-      UserBlacklist.belongsTo(models.User, {foreignKey: "username", otherKey: "username"});
+      // define association here
     }
   }
-  UserBlacklist.init(
-    {
-      ban_id: {
-        type: DataTypes.STRING,
-        primaryKey: true,
-        allowNull: false,
-      },
-      username: {
-        type: DataTypes.STRING,
-        allowNull: false,
-      },
-      task_id: {
-        type: DataTypes.STRING,
-        allowNull: false,
-      },
-    },
-    {
-      sequelize,
-      timestamps: false,
-      modelName: "UserBlacklist",
-      tableName: "user_blacklists"
-    }
-  );
+  UserBlacklist.init({
+    ban_id: DataTypes.STRING
+  }, {
+    sequelize,
+    modelName: 'UserBlacklist',
+  });
   return UserBlacklist;
 };
