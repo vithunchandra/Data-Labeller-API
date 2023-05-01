@@ -22,6 +22,7 @@ module.exports = {
         },
       },
       max_labeller: Sequelize.INTEGER,
+      minimal_credibility: Sequelize.INTEGER,
       closeDate: Sequelize.DATE,
       status: Sequelize.STRING,
     });

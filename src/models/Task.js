@@ -1,23 +1,59 @@
-'use strict';
-const {
-  Model
-} = require('sequelize');
+"use strict";
+const { Model } = require("sequelize");
 module.exports = (sequelize, DataTypes) => {
   class Task extends Model {
-    /**
-     * Helper method for defining associations.
-     * This method is not a part of Sequelize lifecycle.
-     * The `models/index` file will call this method automatically.
-     */
     static associate(models) {
-      // define association here
+      Task.hasMany(models.PossibleClassification, {
+        foreignKey: "task_id",
+        otherKey: "task_id",
+      });
+      Task.belongsTo(models.TaskType, {
+        foreignKey: "type_id",
+        otherKey: "type_id",
+      });
+      Task.belongsTo(models.User, {
+        foreignKey: "username",
+        otherKey: "username",
+      });
+      Task.hasMany(models.UserBlacklist, {
+        foreignKey: "task_id",
+        otherKey: "task_id",
+      });
     }
   }
-  Task.init({
-    task_id: DataTypes.STRING
-  }, {
-    sequelize,
-    modelName: 'Task',
-  });
+  Task.init(
+    {
+      task_id: {
+        type: DataTypes.STRING,
+        primaryKey: true,
+      },
+      type_id: {
+        type: DataTypes.STRING,
+      },
+      username: {
+        type: DataTypes.STRING,
+      },
+      minimal_credibility: {
+        type: DataTypes.INTEGER,
+      },
+      max_labeller: {
+        type: DataTypes.INTEGER,
+      },
+      status: {
+        type: DataTypes.STRING,
+      },
+    },
+    {
+      sequelize,
+      modelName: "Task",
+      tableName: "tasks",
+      // paranoid: true,
+      timestamps: false,
+      name: {
+        singular: "Task",
+        plural: "Task",
+      },
+    }
+  );
   return Task;
 };
