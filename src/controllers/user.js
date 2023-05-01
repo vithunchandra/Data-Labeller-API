@@ -19,9 +19,7 @@ const register = async (req, res) => {
   
   let idres = await User.findAll
   ({
-    where: {
-      username, email
-    }
+    
   });
   
                         
@@ -49,7 +47,7 @@ const register = async (req, res) => {
   } 
   const checkrole = (role) => 
   { 
-    if(role == "labeler" || role == "requester") 
+    if(role == "labeler" && role == "requester") 
     {  
       throw new Error("role harus labeler/requester")
     }
@@ -131,6 +129,102 @@ const register = async (req, res) => {
       });
 }
 
+const login = async (req, res) => {
+  const {username, password} = req.body;
+  let token = jwt.sign
+  ({
+    username: username,
+    password: password,
+    
+  }, process.env.JWT_TOKEN_SECRET, {expiresIn: '3600s'})
+
+  
+  let idres = await User.findAll
+  ({
+    
+  });
+  
+  const checkpass = (password) => { 
+    if(idres.length > 0) {  
+        const s = idres.find(idres => {
+            return idres.password === password 
+        })
+        if (s == undefined) {
+            throw new Error("password salah")
+        }
+    }
+  }                
+
+  const checkusername = (username) => { 
+    if(idres.length > 0) {  
+        const s = idres.find(idres => {
+            return idres.username === username 
+        })
+        if (s == undefined) {
+            throw new Error("user tidak ada")
+        }
+    }
+  } 
+  
+
+      const schema = Joi.object
+      ({
+        
+        
+        
+        username: Joi.string().required().external(checkusername).messages
+        ({
+            "any.required": "Semua field wajib diisi",
+            
+        }),
+
+        password: Joi.string().external(checkpass).required().messages
+        ({
+            "any.required": "Semua field wajib diisi",
+            
+        }),
+      })
+    
+      try 
+      {
+        await schema.validateAsync(req.body)
+      } 
+      catch (error)
+      {
+          return res.status(403).send(error.toString())
+      }
+    
+
+    
+
+  let user = null
+//yuni@istts.ac.id
+  
+  
+   
+   
+   
+   //const usercheck = await useduser(username);
+   
+
+      
+    
+      return res.status(201).send
+      ({
+          
+          username: username,
+          
+          token : token
+          
+          
+          
+      });
+}
+
+
+
+
 module.exports = {
-  register
+  register,
+  login
 };
