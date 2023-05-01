@@ -14,10 +14,17 @@ module.exports = (sequelize, DataTypes) => {
     }
   }
   Label.init({
-    label_id: DataTypes.STRING
+    label_id: {
+      type: DataTypes.STRING,
+      primaryKey: true
+    },
+    data_id: DataTypes.STRING,
+    username: DataTypes.STRING,
+    label_result: DataTypes.TEXT
   }, {
     sequelize,
     modelName: 'Label',
+    timestamps: false
   });
   return Label;
 };

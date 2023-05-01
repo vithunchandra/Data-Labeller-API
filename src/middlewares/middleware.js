@@ -22,3 +22,7 @@ const authorization = async (req, res, next) => {
     req.body.user = user;
     next();
 };
+
+module.exports = {
+    authorization
+};

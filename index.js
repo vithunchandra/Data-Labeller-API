@@ -8,9 +8,11 @@ const conn = require("./src/databases/connection");
 
 const userRouter = require("./src/routes/user");
 const dataRouter = require("./src/routes/data");
+const labelRouter = require('./src/routes/label');
 
 app.use("/api/v1/user", userRouter);
 app.use("/api/v1/data", dataRouter);
+app.use("/api/v1/", labelRouter);
 
 const initApp = async () => {
   try {
