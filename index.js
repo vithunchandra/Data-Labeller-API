@@ -7,8 +7,10 @@ app.use(express.json());
 const conn = require("./src/databases/connection");
 
 const userRouter = require("./src/routes/user");
+const dataRouter = require("./src/routes/data");
 
 app.use("/api/v1/user", userRouter);
+app.use("/api/v1/data", dataRouter);
 
 const initApp = async () => {
   try {
