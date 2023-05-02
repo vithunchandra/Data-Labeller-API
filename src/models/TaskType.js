@@ -12,7 +12,7 @@ module.exports = (sequelize, DataTypes) => {
   TaskType.init(
     {
       type_id: {
-        type: DataTypes.INTEGER,
+        type: DataTypes.STRING,
         autoIncrement: true,
         primaryKey: true,
       },

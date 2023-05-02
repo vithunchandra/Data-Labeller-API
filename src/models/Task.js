@@ -39,6 +39,9 @@ module.exports = (sequelize, DataTypes) => {
       max_labeller: {
         type: DataTypes.INTEGER,
       },
+      closeDate: {
+        type: DataTypes.DATE,
+      },
       status: {
         type: DataTypes.STRING,
       },
