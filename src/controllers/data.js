@@ -1,6 +1,7 @@
-const { Data, Task, TaskType } = require("../models");
+const { Data, Task, TaskType, PossibleClassification } = require("../models");
 const { default: axios } = require("axios");
 const { getMaxId } = require("../utils/util");
+const jwt = require("jsonwebtoken");
 
 const queryHuggingFace = async (textToBeSummarized) => {
   const opts = {
@@ -31,19 +32,47 @@ const queryHuggingFace = async (textToBeSummarized) => {
 
 const addData = async (req, res) => {
   let { task_id, data_text } = req.body;
+  const tokenNow = req.headers["x-auth-token"];
 
   let taskNow = await Task.findByPk(task_id);
   let taskType = await TaskType.findByPk(taskNow["type_id"]);
   let charNum = String(data_text).length;
+  let labelNum = 0;
 
-  if (taskType["type_name"] == "Bot Summarization") {
+  let userData = [];
+  try {
+    userData = jwt.verify(tokenNow, process.env.JWT_TOKEN_SECRET);
+  } catch {
+    return res.json({
+      status: 400,
+      message: "unverified",
+    });
+  }
+  // userData = jwt.verify(tokenNow, process.env.JWT_TOKEN_SECRET);
+
+  if (userData["username"] != taskNow["username"]) {
+    return res.json({
+      status: 400,
+      message: "Data can only be created by the one who create the task",
+    });
+  }
+
+  if (String(taskType["type_name"]).toLowerCase() == "bot summarization") {
     console.log(data_text);
     const result = await queryHuggingFace(data_text);
     const summary = result[0]["generated_text"];
 
-    // console.log(result);
-
     data_text = data_text + "\n\n Summary : " + summary;
+  }
+
+  if (taskType["type_name"] == "Classification") {
+    let allPosClass = await PossibleClassification.findAll({
+      where: {
+        task_id: task_id,
+      },
+    });
+
+    labelNum = allPosClass.length;
   }
 
   if (!taskNow) {
@@ -71,7 +100,9 @@ const addData = async (req, res) => {
     data_id: idNow,
     task_id: task_id,
     data_text: data_text,
-    price: Math.ceil((charNum * taskTypeNow["price_char"]) / 10),
+    price: Math.ceil(
+      (charNum * taskTypeNow["price_char"]) / 10 + labelNum * 10
+    ),
   };
 
   await Data.create(newData);
