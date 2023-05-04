@@ -103,6 +103,16 @@ const addTask = async (req, res) => {
   });
 };
 
+const closeTask = async (req, res) => {
+  const {task_id} = req.params;
+  const {user} = req.user;
+  if(user.role === 'admin' && !task_id){
+    
+  }else{
+
+  }
+};
+
 module.exports = {
   addTask,
 };
