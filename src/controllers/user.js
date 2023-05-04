@@ -221,10 +221,33 @@ const login = async (req, res) => {
       });
 }
 
+const userDetail = async (req, res) => {
+  const {user} = req.body;
+  const {user_id} = req.params;
 
+  let result = undefined;
+  if(user_id){
+    result = await User.findByPk(user_id, {
+      attributes: ['username', 'name', 'role', 'credibility']
+    });
+    if(!result){
+      return res.status(404).json({message: "User not found"});
+    }
+  }else{
+    result = {
+      username: user.username,
+      name: user.name,
+      role: user.role,
+      credibility: user.credibility
+    };
+  }
+
+  return res.status(200).json({body: result});
+};
 
 
 module.exports = {
   register,
-  login
+  login,
+  userDetail
 };

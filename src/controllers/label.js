@@ -12,7 +12,6 @@ const labeling = async (req, res) => {
     if(user.role !== 'labeler'){
         return res.status(403).json({message: "Endpoint only allowed for labeller"});
     }
-
     const data = await Data.findByPk(data_id);
     if(!data){
         return res.status(404).json({message: "Data not found"});
@@ -21,6 +20,8 @@ const labeling = async (req, res) => {
     if(!task){
         return res.status(404).json({message: "Task not found"});
     }
+    const now = new Date();
+    
     const total_label = await label.findAll({
         where: {data_id}
     });
