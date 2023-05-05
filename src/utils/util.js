@@ -10,6 +10,11 @@ function generateRandomAlphanum(length) {
   return generate;
 }
 
+function daysDifference(date1, date2){
+  let difference = Math.floor(Number(date1) - Number(date2) / (1000 * 60 * 60 * 24));
+  return difference;
+};
+
 async function getMaxId(tableName, colName, prefix, padLen) {
   const conn = require("../databases/connection");
   const { QueryTypes } = require("sequelize");
@@ -34,5 +39,6 @@ async function getMaxId(tableName, colName, prefix, padLen) {
 
 module.exports = {
   generateRandomAlphanum,
+  daysDifference,
   getMaxId,
 };

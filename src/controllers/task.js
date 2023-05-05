@@ -106,11 +106,60 @@ const addTask = async (req, res) => {
 const closeTask = async (req, res) => {
   const {task_id} = req.params;
   const {user} = req.user;
-  if(user.role === 'admin' && !task_id){
-    
-  }else{
-
+  if(user.role !== "requester"){
+    return res.status(403).json({message: "Endpoint is allowed for user with requester role only"});
   }
+  let task = await Task.findByPk(task_id);
+  if(!task){
+    return res.status(404).json({message: "Task not found"});
+  }
+  const taskType = await TaskType.findByPk(task.type_id);
+  const data = await Data.findAll({where: {task_id}});
+  let payChange = 0;
+  let cost = 0;
+  let maxCost = 0;
+  let dataResult = [];
+  for(const datum of data){
+    const labels = await Label.findAll({where: {data_id: datum.data_id}});
+    for(const label of labels){
+      const labeller = await User.findByPk(label.username);
+      await labeller.update({
+        saldo: Number(saldo) + Number(datum.price)
+      });
+    }
+    const currentCost = labels.length * Number(datum.price);
+    const totalCost = Number(task.max_labeller) * Number(datum.price);
+    cost += currentCost;
+    maxCost += totalCost;
+    payChange += totalCost - currentCost;
+    dataResult.push({
+      data_id: datum.data_id,
+      data_text: datum.data_text,
+      data_price: datum.data_price,
+      total_label: labels.length,
+      total_data_cost: totalCost,
+      final_data_cost: currentCost
+    });
+  }
+  await user.update({
+    saldo: Number(saldo) + payChange
+  });
+
+  task = await task.update({
+    status: "closed"
+  });
+
+  return res.status(200).json({body: {
+    message: "Task closed successfully",
+    task_id,
+    task_type: taskType.type_name,
+    max_labeller: task.max_labeller,
+    status: task.status,
+    maximal_cost: maxCost,
+    final_cost: cost,
+    pay_change: payChange,
+    data: dataResult
+  }});
 };
 
 module.exports = {

@@ -1,5 +1,6 @@
 const {Data, Task, TaskType, Label} = require('../models');
 const {labelValidation} = require('../validation/labelValidation');
+const {daysDifference} = require('../utils/util');
 
 const labeling = async (req, res) => {
     const {user, label_result, data_id} = req.body;
@@ -20,7 +21,13 @@ const labeling = async (req, res) => {
     if(!task){
         return res.status(404).json({message: "Task not found"});
     }
-    const now = new Date();
+    const dateNow = new Date();
+    const taskDate = new Date(task.close_date);
+    const difference = daysDifference(taskDate, dateNow);
+
+    if(difference <= 0){
+        return res.status(400).json({message: "Task already closed"});
+    }
     
     const total_label = await label.findAll({
         where: {data_id}
@@ -52,6 +59,17 @@ const updateLabel = async (req, res) => {
     const label = await findByPk(label_id);
     if(!label){
         return res.status(404).json({message: "Label not found"});
+    }
+
+    const data = await Data.findByPk(label.data_id);
+    const task = await Task.findByPk(data.task_id);
+    
+    const dateNow = new Date();
+    const taskDate = new Date(task.close_date);
+    const difference = daysDifference(taskDate, dateNow);
+
+    if(difference <= 0){
+        return res.status(400).json({message: "Task already closed"});
     }
 
     if(label.username !== user.username){
