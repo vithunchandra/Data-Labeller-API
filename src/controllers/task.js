@@ -4,15 +4,18 @@ const {
   TaskType,
   PossibleClassification,
   User,
+  Label,
 } = require("../models");
 const { taskValidation } = require("../validation/taskValidation");
 const { getMaxId } = require("../utils/util");
 const jwt = require("jsonwebtoken");
+const { Op, QueryTypes } = require("sequelize");
+const conn = require("../databases/connection");
 
 require("dotenv").config();
 
 const addTask = async (req, res) => {
-  const { type_id, max_labeller, closeDate, minimal_credibility } = req.body;
+  const { type_id, max_labeller, close_date, minimal_credibility } = req.body;
   const tokenNow = req.headers["x-auth-token"];
 
   try {
@@ -44,19 +47,19 @@ const addTask = async (req, res) => {
   let idNow = String(taskType["type_name"]).substring(0, 2).toUpperCase();
   idNow += String(userData["username"]).substring(0, 2).toUpperCase();
   idNow +=
-    String(closeDate).split("-")[0] +
-    String(closeDate).split("-")[1] +
-    String(closeDate).split("-")[2];
+    String(close_date).split("-")[0] +
+    String(close_date).split("-")[1] +
+    String(close_date).split("-")[2];
 
   let maxId = await getMaxId("tasks", "task_id", idNow, 4);
-  let dateClose = new Date(closeDate); //new Date(closeDate);
+  let dateClose = new Date(close_date); //new Date(closeDate);
 
   let newTask = {
     task_id: maxId,
     type_id: type_id,
     username: userData["username"],
     max_labeller: max_labeller,
-    closeDate: dateClose,
+    close_date: dateClose,
     status: "active",
     minimal_credibility: minimal_credibility,
   };
@@ -104,27 +107,29 @@ const addTask = async (req, res) => {
 };
 
 const closeTask = async (req, res) => {
-  const {task_id} = req.params;
-  const {user} = req.user;
-  if(user.role !== "requester"){
-    return res.status(403).json({message: "Endpoint is allowed for user with requester role only"});
+  const { task_id } = req.params;
+  const { user } = req.user;
+  if (user.role !== "requester") {
+    return res.status(403).json({
+      message: "Endpoint is allowed for user with requester role only",
+    });
   }
   let task = await Task.findByPk(task_id);
-  if(!task){
-    return res.status(404).json({message: "Task not found"});
+  if (!task) {
+    return res.status(404).json({ message: "Task not found" });
   }
   const taskType = await TaskType.findByPk(task.type_id);
-  const data = await Data.findAll({where: {task_id}});
+  const data = await Data.findAll({ where: { task_id } });
   let payChange = 0;
   let cost = 0;
   let maxCost = 0;
   let dataResult = [];
-  for(const datum of data){
-    const labels = await Label.findAll({where: {data_id: datum.data_id}});
-    for(const label of labels){
+  for (const datum of data) {
+    const labels = await Label.findAll({ where: { data_id: datum.data_id } });
+    for (const label of labels) {
       const labeller = await User.findByPk(label.username);
       await labeller.update({
-        saldo: Number(saldo) + Number(datum.price)
+        saldo: Number(saldo) + Number(datum.price),
       });
     }
     const currentCost = labels.length * Number(datum.price);
@@ -138,30 +143,128 @@ const closeTask = async (req, res) => {
       data_price: datum.data_price,
       total_label: labels.length,
       total_data_cost: totalCost,
-      final_data_cost: currentCost
+      final_data_cost: currentCost,
     });
   }
   await user.update({
-    saldo: Number(saldo) + payChange
+    saldo: Number(saldo) + payChange,
   });
 
   task = await task.update({
-    status: "closed"
+    status: "closed",
   });
 
-  return res.status(200).json({body: {
-    message: "Task closed successfully",
-    task_id,
-    task_type: taskType.type_name,
-    max_labeller: task.max_labeller,
-    status: task.status,
-    maximal_cost: maxCost,
-    final_cost: cost,
-    pay_change: payChange,
-    data: dataResult
-  }});
+  return res.status(200).json({
+    body: {
+      message: "Task closed successfully",
+      task_id,
+      task_type: taskType.type_name,
+      max_labeller: task.max_labeller,
+      status: task.status,
+      maximal_cost: maxCost,
+      final_cost: cost,
+      pay_change: payChange,
+      data: dataResult,
+    },
+  });
+};
+
+const get_tasks = async (req, res) => {
+  let { type_id, requirement_fulfilled, page, data_per_page } = req.query;
+  const tokenNow = req.headers["x-auth-token"];
+
+  let userData = [];
+  try {
+    userData = jwt.verify(tokenNow, process.env.JWT_TOKEN_SECRET);
+  } catch {
+    return res.json({
+      status: 400,
+      message: "unverified",
+    });
+  }
+  userData = await User.findByPk(userData["username"]);
+
+  req_args = false;
+  if (requirement_fulfilled) {
+    if (requirement_fulfilled == "true") {
+      req_args = true;
+    }
+  }
+
+  if (String(userData["role"]).toLowerCase() == "labeller") {
+    let sqlNow = `SELECT t.task_id,task_types.type_name,username,max_labeller,close_date,status,minimal_credibility `;
+    sqlNow += `FROM tasks t,  task_types `;
+    sqlNow += `where task_types.type_id = t.type_id `;
+    if (type_id) {
+      sqlNow += `AND t.type_id = :type_id `;
+    }
+    if (req_args) {
+      sqlNow += `AND (SELECT credibility from users where username = :username) >= t.minimal_credibility `;
+    }
+    sqlNow += `LIMIT ${data_per_page} offset ${page * data_per_page} `;
+
+    results = await conn.query(sqlNow, {
+      type: QueryTypes.SELECT,
+      replacements: {
+        type_id: type_id,
+        username: userData["username"],
+      },
+    });
+
+    if (results.length > 0) {
+      results = await Promise.all(
+        results.map(async (item) => {
+          if (String(item["type_name"]).toLowerCase() == "classification") {
+            possible = await PossibleClassification.findAll({
+              attributes: ["possible_name"],
+              where: {
+                task_id: item["task_id"],
+              },
+            });
+            possible = possible.map((item2) => {
+              return item2.possible_name;
+            });
+            item.possible = possible;
+          }
+
+          dataFound = await Data.findAll({
+            attributes: ["data_id", "data_text", "price"],
+            where: {
+              task_id: item["task_id"],
+            },
+            raw: true,
+          });
+
+          dataFound = await Promise.all(
+            dataFound.map(async (itemData) => {
+              let countLabelled = await Label.findAll({
+                where: {
+                  data_id: itemData["data_id"],
+                },
+                raw: true,
+              });
+
+              itemData.labelled = countLabelled.length;
+
+              return itemData;
+            })
+          );
+
+          // if (String(item["type_name"]).toLowerCase() === "classification") {
+          // }
+
+          item.data = dataFound;
+          return item;
+        })
+      );
+    }
+
+    return res.json(results);
+  } else {
+  }
 };
 
 module.exports = {
   addTask,
+  get_tasks,
 };

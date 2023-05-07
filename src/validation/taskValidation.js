@@ -8,7 +8,7 @@ const taskValidation = Joi.object({
     "any.required": "Semua field wajib diisi",
     "number.greater": "max_labeller harus lebih besar dari 0",
   }),
-  closeDate: Joi.date().format("YYYY-MM-DD").required().messages({
+  close_date: Joi.date().format("YYYY-MM-DD").required().messages({
     "any.required": "Semua field wajib diisi",
   }),
   minimal_credibility: Joi.number().greater(-1).less(101).required().messages({
