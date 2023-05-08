@@ -5,12 +5,14 @@ const {
   PossibleClassification,
   User,
   Label,
+  Sequelize,
 } = require("../models");
 const { taskValidation } = require("../validation/taskValidation");
 const { getMaxId } = require("../utils/util");
 const jwt = require("jsonwebtoken");
 const { Op, QueryTypes } = require("sequelize");
 const conn = require("../databases/connection");
+const { default: axios } = require("axios");
 
 require("dotenv").config();
 
@@ -212,59 +214,194 @@ const get_tasks = async (req, res) => {
     });
 
     if (results.length > 0) {
-      results = await Promise.all(
-        results.map(async (item) => {
-          if (String(item["type_name"]).toLowerCase() == "classification") {
-            possible = await PossibleClassification.findAll({
-              attributes: ["possible_name"],
-              where: {
-                task_id: item["task_id"],
-              },
-            });
-            possible = possible.map((item2) => {
-              return item2.possible_name;
-            });
-            item.possible = possible;
-          }
+      // results = await Promise.all(
+      //   results.map(async (item) => {
+      //     const opts = {
+      //       headers: {
+      //         "x-auth-token": tokenNow,
+      //       },
+      //     };
+      //     const perintah = await axios.get(
+      //       "http://localhost:3000/api/v1/task/" + item["task_id"],
+      //       opts
+      //     );
+      //     return perintah.data.result;
+      //     // return item;
+      //   })
+      // );
 
-          dataFound = await Data.findAll({
-            attributes: ["data_id", "data_text", "price"],
-            where: {
-              task_id: item["task_id"],
-            },
-            raw: true,
-          });
+      for (var i = 0; i < results.length; i++) {
+        let item = results[i];
+        const opts = {
+          headers: {
+            "x-auth-token": tokenNow,
+          },
+        };
+        const perintah = await axios.get(
+          "http://localhost:3000/api/v1/task/" + item["task_id"],
+          opts
+        );
 
-          dataFound = await Promise.all(
-            dataFound.map(async (itemData) => {
-              let countLabelled = await Label.findAll({
-                where: {
-                  data_id: itemData["data_id"],
-                },
-                raw: true,
-              });
-
-              itemData.labelled = countLabelled.length;
-
-              return itemData;
-            })
-          );
-
-          // if (String(item["type_name"]).toLowerCase() === "classification") {
-          // }
-
-          item.data = dataFound;
-          return item;
-        })
-      );
+        results[i] = perintah.data.result;
+      }
     }
 
     return res.json(results);
   } else {
+    let sqlNow = `SELECT t.task_id,task_types.type_name,username,max_labeller,close_date,status,minimal_credibility `;
+    sqlNow += `FROM tasks t,  task_types `;
+    sqlNow += `where task_types.type_id = t.type_id `;
+    sqlNow += `AND t.username = :username `;
+    if (type_id) {
+      sqlNow += `AND t.type_id = :type_id `;
+    }
+    sqlNow += `LIMIT ${data_per_page} offset ${page * data_per_page} `;
+
+    results = await conn.query(sqlNow, {
+      type: QueryTypes.SELECT,
+      replacements: {
+        type_id: type_id,
+        username: userData["username"],
+      },
+    });
+
+    // return res.json(results);
+
+    if (results.length > 0) {
+      for (var i = 0; i < results.length; i++) {
+        let item = results[i];
+        const opts = {
+          headers: {
+            "x-auth-token": tokenNow,
+          },
+        };
+        const perintah = await axios.get(
+          "http://localhost:3000/api/v1/task/" + item["task_id"],
+          opts
+        );
+
+        results[i] = perintah.data.result;
+      }
+
+      // results = await Promise.all(
+      //   results.map(async (item) => {
+      //     const opts = {
+      //       headers: {
+      //         "x-auth-token": tokenNow,
+      //       },
+      //     };
+      //     const perintah = await axios.get(
+      //       "http://localhost:3000/api/v1/task/" + item["task_id"],
+      //       opts
+      //     );
+
+      //     return perintah.data.result;
+      //   })
+      // );
+    }
+
+    return res.json({
+      status: 200,
+      results,
+    });
   }
+};
+
+const get_task = async (req, res) => {
+  const { task_id } = req.params;
+  const tokenNow = req.headers["x-auth-token"];
+  console.log("TASK ID NOW : " + task_id);
+
+  let userData = [];
+  try {
+    userData = jwt.verify(tokenNow, process.env.JWT_TOKEN_SECRET);
+  } catch {
+    return res.json({
+      status: 400,
+      message: "unverified",
+    });
+  }
+  userData = await User.findByPk(userData["username"]);
+
+  item = await Task.findByPk(task_id, {
+    attributes: [
+      "task_id",
+      [Sequelize.col("TaskType.type_name"), "type_name"],
+      "username",
+      "max_labeller",
+      "close_date",
+      "status",
+      "minimal_credibility",
+    ],
+    include: [{ model: TaskType, attributes: [] }],
+    raw: true,
+  });
+
+  if (String(item["type_name"]).toLowerCase() == "classification") {
+    possible = await PossibleClassification.findAll({
+      attributes: ["possible_name"],
+      where: {
+        task_id: item["task_id"],
+      },
+    });
+    possible = possible.map((item2) => {
+      return item2.possible_name;
+    });
+    item.possible = possible;
+  }
+
+  let creator = false;
+  if (userData["username"] == item["username"]) {
+    creator = true;
+  }
+
+  dataFound = await Data.findAll({
+    attributes: ["data_id", "data_text", "price"],
+    where: {
+      task_id: item["task_id"],
+    },
+    raw: true,
+  });
+
+  dataFound = await Promise.all(
+    dataFound.map(async (itemData) => {
+      let countLabelled = await Label.findAll({
+        attributes: ["username", "label_result"],
+        where: {
+          data_id: itemData["data_id"],
+        },
+        raw: true,
+      });
+
+      if (creator) {
+        itemData.label = countLabelled;
+      }
+
+      itemData.labelled = countLabelled.length;
+
+      return itemData;
+    })
+  );
+
+  item.data = dataFound;
+  return res.json({
+    status: 200,
+    result: item,
+  });
+};
+
+const get_task_type = async (req, res) => {
+  let task_types = await TaskType.findAll();
+
+  return res.json({
+    status: 200,
+    task_types,
+  });
 };
 
 module.exports = {
   addTask,
   get_tasks,
+  get_task,
+  get_task_type,
 };
