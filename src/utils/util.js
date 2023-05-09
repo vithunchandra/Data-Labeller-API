@@ -11,7 +11,7 @@ function generateRandomAlphanum(length) {
 }
 
 function daysDifference(date1, date2){
-  let difference = Math.floor(Number(date1) - Number(date2) / (1000 * 60 * 60 * 24));
+  let difference = (Math.floor(Number(date1) - Number(date2)) / (1000 * 60 * 60 * 24));
   return difference;
 };
 

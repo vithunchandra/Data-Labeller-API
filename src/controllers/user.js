@@ -131,13 +131,6 @@ const register = async (req, res) => {
 
 const login = async (req, res) => {
   const {username, password} = req.body;
-  let token = jwt.sign
-  ({
-    username: username,
-    password: password,
-    
-  }, process.env.JWT_TOKEN_SECRET, {expiresIn: '3600s'})
-
   
   let idres = await User.findAll
   ({
@@ -207,7 +200,10 @@ const login = async (req, res) => {
    //const usercheck = await useduser(username);
    
 
-      
+   let token = jwt.sign
+   ({
+     username: username
+   }, process.env.JWT_TOKEN_SECRET, {expiresIn: '3600s'});
     
       return res.status(201).send
       ({
@@ -223,11 +219,11 @@ const login = async (req, res) => {
 
 const userDetail = async (req, res) => {
   const {user} = req.body;
-  const {user_id} = req.params;
+  const {username} = req.params;
 
   let result = undefined;
-  if(user_id){
-    result = await User.findByPk(user_id, {
+  if(username){
+    result = await User.findByPk(username, {
       attributes: ['username', 'name', 'role', 'credibility']
     });
     if(!result){

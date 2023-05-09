@@ -15,7 +15,7 @@ const authorization = async (req, res, next) => {
         return res.status(401).json({message: "Invalid JWT Token"});
     }
 
-    const user = await User.findByPk(token.user_id);
+    const user = await User.findByPk(tokenData.username);
     if(!user){
         return res.status(404).json({message: "User not found"});
     }

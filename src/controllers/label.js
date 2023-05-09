@@ -5,12 +5,16 @@ const {daysDifference} = require('../utils/util');
 const labeling = async (req, res) => {
     const {user, label_result, data_id} = req.body;
     try{
-        await labelValidation.validateAsync(label);
+        await labelValidation.validateAsync({label_result});
     }catch(error){
         return res.status(400).json({message: error.message})
     }
 
-    if(user.role !== 'labeler'){
+    if(!label_result || !data_id){
+        return res.status(404).json({message: "Every field must be provided"});
+    }
+
+    if(user.role !== 'labeller'){
         return res.status(403).json({message: "Endpoint only allowed for labeller"});
     }
     const data = await Data.findByPk(data_id);
@@ -24,21 +28,30 @@ const labeling = async (req, res) => {
     const dateNow = new Date();
     const taskDate = new Date(task.close_date);
     const difference = daysDifference(taskDate, dateNow);
+    console.log(difference);
 
     if(difference <= 0){
         return res.status(400).json({message: "Task already closed"});
     }
     
-    const total_label = await label.findAll({
+    const total_label = await Label.findAll({
         where: {data_id}
     });
-    if(Number(total_label.length) > Number(task.max_labeller)){
+    if(Number(total_label.length) >= Number(task.max_labeller)){
         return res.status(400).json({message: `Quota exceeded for Data ${data_id}`});
     }
 
-    const lastData = await Data.findOne({order: [['label_id', 'DESC']]});
+    const isExist = await Label.findOne({
+        where: {data_id, username: user.username}
+    });
+
+    if(isExist) {
+        return res.status(200).json({message: "Labeller can only post one label in at one data"});
+    }
+
+    const lastData = await Label.findOne({order: [['label_id', 'DESC']]});
     const lastID = lastData ? Number(String(lastData.label_id).substring(1)) : 0;
-    const newID = `L${String(lastID + 1).padStart(4, '0')}`;
+    const newID = `L${String(lastID + 1).padStart(3, '0')}`;
     const newLabel = await Label.create({
         label_id: newID,
         data_id,
@@ -51,14 +64,22 @@ const labeling = async (req, res) => {
 const updateLabel = async (req, res) => {
     const {user, label_result, label_id} = req.body;
     try{
-        await labelValidation.validateAsync(label);
+        await labelValidation.validateAsync({label_result});
     }catch(error){
         return res.status(400).json({message: error.message})
     }
 
-    const label = await findByPk(label_id);
+    if(!label_result || !label_id){
+        return res.status(404).json({message: "Every field must be provided"});
+    }
+
+    const label = await Label.findByPk(label_id);
     if(!label){
         return res.status(404).json({message: "Label not found"});
+    }
+
+    if(user.role !== 'labeller'){
+        return res.status(403).json({message: "Endpoint only allowed for labeller"});
     }
 
     const data = await Data.findByPk(label.data_id);
@@ -90,22 +111,31 @@ const getLabel = async (req, res) => {
     if(user.role === "requester"){
         if(data_id){
             const data = await Data.findOne({where: {data_id}});
-            if(data.username !== user.username){
+            if(!data){
+                return res.status(404).json({message: "Data not found"});
+            }
+            const task = await Task.findByPk(data.task_id);
+            if(task.username !== user.username){
                 return res.status(403).json({message: "Forbidden access"});
             }
-            result = await Label.findAll({
+            labels = await Label.findAll({
                 where: {data_id},
                 attributes: ['label_id', 'username', 'label_result']
             });
+            result = labels.length > 0 ? labels : "Labels is empty";
         }else if(task_id){
-            const task = await Task.findByPk(task_id, {attributes: ['task_id', 'task_name', 'type_id']});
+            const task = await Task.findByPk(task_id, {attributes: ['task_id', 'type_id', 'username']});
+            if(!task){
+                return res.status(404).json({message: "Task not found"});
+            }
             const task_type = await TaskType.findByPk(task.type_id);
             if(task.username !== user.username){
                 return res.status(403).json({message: "Forbidden access"});
             }
             const data = await Data.findAll({where: {task_id}});
+            console.log(data);
             let datas = [];
-            for(const datum in data){
+            for(const datum of data){
                 const labels = await Label.findAll({
                     where: {data_id: datum.data_id},
                     attributes: ['label_id', 'username', 'label_result']
@@ -115,7 +145,7 @@ const getLabel = async (req, res) => {
                     data_text: datum.data_text,
                     price: datum.price,
                     close_date: datum.closeDate,
-                    labels
+                    labels: labels.length > 0 ? labels : "Label is empty"
                 });
             }
             result = {
@@ -158,29 +188,32 @@ const getLabel = async (req, res) => {
     }else{
         if(data_id){
             const data = await Data.findByPk(data_id);
-            if(data.username !== user.username){
-                return res.status(403).json({message: "Forbidden access"});
+            if(!data){
+                return res.status(404).json({message: "Data not found"});
             }
             const labels = await Label.findAll({
-                where: {data_id},
+                where: {data_id, username: user.username},
                 attributes: ['label_id', 'label_result']
             });
             result = {
                 data_id: data.data_id,
                 data_text: data.data_text,
                 close_date: data.closeDate,
-                labels
+                labels: labels.length > 0 ? labels : "User never label this data"
             };
         }else{
             result = [];
-            const labels = await Label.findAll({where: {username: user.username}, attributes: ['label_id', 'label_result']});
+            const labels = await Label.findAll({where: {username: user.username}, attributes: ['label_id', 'data_id', 'label_result']});
             for(const label of labels){
                 const data = await Data.findByPk(label.data_id);
                 result.push({
                     data_id: data.data_id,
                     data_text: data.data_text,
                     close_date: data.closeDate,
-                    label
+                    label: {
+                        label_id: label.label_id,
+                        label_result: label.label_result
+                    }
                 });
             }
         }

@@ -110,7 +110,10 @@ const addTask = async (req, res) => {
 
 const closeTask = async (req, res) => {
   const { task_id } = req.params;
-  const { user } = req.user;
+  const { user } = req.body;
+  if(!task_id){
+    return res.status(400).json({message: "Every field must be provided"});
+  }
   if (user.role !== "requester") {
     return res.status(403).json({
       message: "Endpoint is allowed for user with requester role only",
@@ -119,6 +122,12 @@ const closeTask = async (req, res) => {
   let task = await Task.findByPk(task_id);
   if (!task) {
     return res.status(404).json({ message: "Task not found" });
+  }
+  if(task.username !== user.username){
+    return res.status(403).json({message: "Task doesn't belongs to user"});
+  }
+  if(task.status === 'closed'){
+    return res.status(400).json({message: "Task is already closed"});
   }
   const taskType = await TaskType.findByPk(task.type_id);
   const data = await Data.findAll({ where: { task_id } });
@@ -131,7 +140,7 @@ const closeTask = async (req, res) => {
     for (const label of labels) {
       const labeller = await User.findByPk(label.username);
       await labeller.update({
-        saldo: Number(saldo) + Number(datum.price),
+        saldo: Number(labeller.saldo) + Number(datum.price),
       });
     }
     const currentCost = labels.length * Number(datum.price);
@@ -149,11 +158,14 @@ const closeTask = async (req, res) => {
     });
   }
   await user.update({
-    saldo: Number(saldo) + payChange,
+    saldo: Number(user.saldo) + payChange,
   });
-
+  const currentDate = new Date();
+  const closeDate = `${currentDate.getFullYear()}-${currentDate.getMonth() + 1}-${currentDate.getDate() + 1}`;
+  console.log(closeDate);
   task = await task.update({
     status: "closed",
+    close_date: closeDate
   });
 
   return res.status(200).json({
@@ -404,4 +416,5 @@ module.exports = {
   get_tasks,
   get_task,
   get_task_type,
+  closeTask
 };

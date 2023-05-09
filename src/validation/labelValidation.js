@@ -1,7 +1,7 @@
 const Joi = require("joi");
 
 const labelValidation = Joi.object({
-  label: Joi.string().required().messages({
+  label_result: Joi.string().required().messages({
     "any.required": "Semua field wajib diisi",
   }),
 });
