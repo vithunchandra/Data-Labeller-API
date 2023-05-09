@@ -6,13 +6,13 @@ dotenv.config();
 const authorization = async (req, res, next) => {
     const token = req.header('x-auth-token');
     if(!token){
-        return res.status(401).json({message: "Not Authorized"});
+        return res.status(403).json({message: "Not Authorized"});
     }
     let tokenData = undefined;
     try{
         tokenData = jwt.verify(token, process.env.JWT_TOKEN_SECRET);
     }catch(error){
-        return res.status(401).json({message: "Invalid JWT Token"});
+        return res.status(403).json({message: "Invalid JWT Token"});
     }
 
     const user = await User.findByPk(tokenData.username);

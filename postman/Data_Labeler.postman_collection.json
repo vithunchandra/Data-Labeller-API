@@ -59,8 +59,40 @@
 		{
 			"name": "labelling",
 			"request": {
-				"method": "GET",
-				"header": []
+				"method": "POST",
+				"header": [
+					{
+						"key": "x-auth-token",
+						"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IkFrZWVtNCIsImlhdCI6MTY4MzYyNDMwMSwiZXhwIjoxNjgzNjI3OTAxfQ.1zvDCvJS27Etd7fka5OdahIjJuoBurerdAz3cjvva3s",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "data_id",
+							"value": "D20234441400009",
+							"type": "text"
+						},
+						{
+							"key": "label_result",
+							"value": "Label of dummy data",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "{{HOST}}/api/v1/label",
+					"host": [
+						"{{HOST}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"label"
+					]
+				}
 			},
 			"response": [
 				{
@@ -662,28 +694,190 @@
 		{
 			"name": "loginUser",
 			"request": {
-				"method": "GET",
-				"header": []
+				"method": "POST",
+				"header": [
+					{
+						"key": "",
+						"value": "",
+						"type": "text",
+						"disabled": true
+					}
+				],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "username",
+							"value": "Akeem4",
+							"type": "text"
+						},
+						{
+							"key": "password",
+							"value": "ts7pB",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "{{HOST}}/api/v1/user/login",
+					"host": [
+						"{{HOST}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"user",
+						"login"
+					]
+				}
 			},
 			"response": []
 		},
 		{
 			"name": "createTask",
 			"request": {
-				"method": "GET",
-				"header": []
+				"method": "POST",
+				"header": [
+					{
+						"key": "x-auth-token",
+						"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IkFiaWdhaWw5MyIsImlhdCI6MTY4MzU0MDgxOSwiZXhwIjoxNjgzNTQ0NDE5fQ._BQdbPtjo7n6XDBga757SEtwan94U8LtqQjLtKpBHvE",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "type_id",
+							"value": "TT003",
+							"type": "text"
+						},
+						{
+							"key": "max_labeller",
+							"value": "100",
+							"type": "text"
+						},
+						{
+							"key": "close_date",
+							"value": "2023-05-21",
+							"type": "text"
+						},
+						{
+							"key": "minimal_credibility",
+							"value": "20",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "{{HOST}}/api/v1/task",
+					"host": [
+						"{{HOST}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"task"
+					]
+				}
 			},
 			"response": []
 		},
 		{
 			"name": "closeTask",
 			"request": {
-				"method": "GET",
-				"header": []
+				"method": "POST",
+				"header": [
+					{
+						"key": "x-auth-token",
+						"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IkFudG9pbmV0dGU0MyIsImlhdCI6MTY4MzYyNzYxNiwiZXhwIjoxNjgzNjMxMjE2fQ.rLQTKIRpkI-POjAbtTWFu3u77LFIjRGA-NpSQwMQm0k",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": []
+				},
+				"url": {
+					"raw": "{{HOST}}/api/v1/task/SUAN202309220001",
+					"host": [
+						"{{HOST}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"task",
+						"SUAN202309220001"
+					]
+				}
 			},
 			"response": [
 				{
-					"name": "Not provided x-auth-token",
+					"name": "Success request",
+					"originalRequest": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "x-auth-token",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IkFudG9pbmV0dGU0MyIsImlhdCI6MTY4MzYyNzYxNiwiZXhwIjoxNjgzNjMxMjE2fQ.rLQTKIRpkI-POjAbtTWFu3u77LFIjRGA-NpSQwMQm0k",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": []
+						},
+						"url": {
+							"raw": "{{HOST}}/api/v1/task/SUAN202309220001",
+							"host": [
+								"{{HOST}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"task",
+								"SUAN202309220001"
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "X-Powered-By",
+							"value": "Express"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json; charset=utf-8"
+						},
+						{
+							"key": "Content-Length",
+							"value": "4159"
+						},
+						{
+							"key": "ETag",
+							"value": "W/\"103f-PKcd0teUSexHrzs20NHTtKsdvy4\""
+						},
+						{
+							"key": "Date",
+							"value": "Tue, 09 May 2023 10:24:14 GMT"
+						},
+						{
+							"key": "Connection",
+							"value": "keep-alive"
+						},
+						{
+							"key": "Keep-Alive",
+							"value": "timeout=5"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"body\": {\n        \"message\": \"Task closed successfully\",\n        \"task_id\": \"SUAN202309220001\",\n        \"task_type\": \"Summarization\",\n        \"max_labeller\": 3,\n        \"status\": \"closed\",\n        \"maximal_cost\": 9312,\n        \"final_cost\": 1164,\n        \"pay_change\": 8148,\n        \"data\": [\n            {\n                \"data_id\": \"D20234331500001\",\n                \"data_text\": \"With the ambitious Ryuusui Nanami on board, Senkuu Ishigami and his team are almost ready to sail the seas and reach the other side of the world—where the bizarre green light that petrified humanity originated. Thanks to the revival of a skillful chef, enough food is being prepared for the entire crew, and the incredible reinvention of the GPS promises to ensure safety on the open sea.\",\n                \"total_label\": 0,\n                \"total_data_cost\": 1164,\n                \"final_data_cost\": 0\n            },\n            {\n                \"data_id\": \"D20234441400001\",\n                \"data_text\": \"With the ambitious Ryuusui Nanami on board, Senkuu Ishigami and his team are almost ready to sail the seas and reach the other side of the world—where the bizarre green light that petrified humanity originated. Thanks to the revival of a skillful chef, enough food is being prepared for the entire crew, and the incredible reinvention of the GPS promises to ensure safety on the open sea.\",\n                \"total_label\": 0,\n                \"total_data_cost\": 1164,\n                \"final_data_cost\": 0\n            },\n            {\n                \"data_id\": \"D20234441400002\",\n                \"data_text\": \"With the ambitious Ryuusui Nanami on board, Senkuu Ishigami and his team are almost ready to sail the seas and reach the other side of the world—where the bizarre green light that petrified humanity originated. Thanks to the revival of a skillful chef, enough food is being prepared for the entire crew, and the incredible reinvention of the GPS promises to ensure safety on the open sea.\",\n                \"total_label\": 3,\n                \"total_data_cost\": 1164,\n                \"final_data_cost\": 1164\n            },\n            {\n                \"data_id\": \"D20234441400003\",\n                \"data_text\": \"With the ambitious Ryuusui Nanami on board, Senkuu Ishigami and his team are almost ready to sail the seas and reach the other side of the world—where the bizarre green light that petrified humanity originated. Thanks to the revival of a skillful chef, enough food is being prepared for the entire crew, and the incredible reinvention of the GPS promises to ensure safety on the open sea.\",\n                \"total_label\": 0,\n                \"total_data_cost\": 1164,\n                \"final_data_cost\": 0\n            },\n            {\n                \"data_id\": \"D20234441400004\",\n                \"data_text\": \"With the ambitious Ryuusui Nanami on board, Senkuu Ishigami and his team are almost ready to sail the seas and reach the other side of the world—where the bizarre green light that petrified humanity originated. Thanks to the revival of a skillful chef, enough food is being prepared for the entire crew, and the incredible reinvention of the GPS promises to ensure safety on the open sea.\",\n                \"total_label\": 0,\n                \"total_data_cost\": 1164,\n                \"final_data_cost\": 0\n            },\n            {\n                \"data_id\": \"D20234441400005\",\n                \"data_text\": \"With the ambitious Ryuusui Nanami on board, Senkuu Ishigami and his team are almost ready to sail the seas and reach the other side of the world—where the bizarre green light that petrified humanity originated. Thanks to the revival of a skillful chef, enough food is being prepared for the entire crew, and the incredible reinvention of the GPS promises to ensure safety on the open sea.\",\n                \"total_label\": 0,\n                \"total_data_cost\": 1164,\n                \"final_data_cost\": 0\n            },\n            {\n                \"data_id\": \"D20234441400006\",\n                \"data_text\": \"With the ambitious Ryuusui Nanami on board, Senkuu Ishigami and his team are almost ready to sail the seas and reach the other side of the world—where the bizarre green light that petrified humanity originated. Thanks to the revival of a skillful chef, enough food is being prepared for the entire crew, and the incredible reinvention of the GPS promises to ensure safety on the open sea.\",\n                \"total_label\": 0,\n                \"total_data_cost\": 1164,\n                \"final_data_cost\": 0\n            },\n            {\n                \"data_id\": \"D20234441400007\",\n                \"data_text\": \"With the ambitious Ryuusui Nanami on board, Senkuu Ishigami and his team are almost ready to sail the seas and reach the other side of the world—where the bizarre green light that petrified humanity originated. Thanks to the revival of a skillful chef, enough food is being prepared for the entire crew, and the incredible reinvention of the GPS promises to ensure safety on the open sea.\",\n                \"total_label\": 0,\n                \"total_data_cost\": 1164,\n                \"final_data_cost\": 0\n            }\n        ]\n    }\n}"
+				},
+				{
+					"name": "Without token",
 					"originalRequest": {
 						"method": "POST",
 						"header": [
@@ -1066,70 +1260,6 @@
 					],
 					"cookie": [],
 					"body": "{\n    \"message\": \"Task is already closed\"\n}"
-				},
-				{
-					"name": "Success request",
-					"originalRequest": {
-						"method": "POST",
-						"header": [
-							{
-								"key": "x-auth-token",
-								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IkFudG9pbmV0dGU0MyIsImlhdCI6MTY4MzYyNzYxNiwiZXhwIjoxNjgzNjMxMjE2fQ.rLQTKIRpkI-POjAbtTWFu3u77LFIjRGA-NpSQwMQm0k",
-								"type": "text"
-							}
-						],
-						"body": {
-							"mode": "urlencoded",
-							"urlencoded": []
-						},
-						"url": {
-							"raw": "{{HOST}}/api/v1/task/SUAN202309220001",
-							"host": [
-								"{{HOST}}"
-							],
-							"path": [
-								"api",
-								"v1",
-								"task",
-								"SUAN202309220001"
-							]
-						}
-					},
-					"status": "OK",
-					"code": 200,
-					"_postman_previewlanguage": "json",
-					"header": [
-						{
-							"key": "X-Powered-By",
-							"value": "Express"
-						},
-						{
-							"key": "Content-Type",
-							"value": "application/json; charset=utf-8"
-						},
-						{
-							"key": "Content-Length",
-							"value": "4159"
-						},
-						{
-							"key": "ETag",
-							"value": "W/\"103f-PKcd0teUSexHrzs20NHTtKsdvy4\""
-						},
-						{
-							"key": "Date",
-							"value": "Tue, 09 May 2023 10:24:14 GMT"
-						},
-						{
-							"key": "Connection",
-							"value": "keep-alive"
-						},
-						{
-							"key": "Keep-Alive",
-							"value": "timeout=5"
-						}
-					],
-					"cookie": [],
-					"body": "{\n    \"body\": {\n        \"message\": \"Task closed successfully\",\n        \"task_id\": \"SUAN202309220001\",\n        \"task_type\": \"Summarization\",\n        \"max_labeller\": 3,\n        \"status\": \"closed\",\n        \"maximal_cost\": 9312,\n        \"final_cost\": 1164,\n        \"pay_change\": 8148,\n        \"data\": [\n            {\n                \"data_id\": \"D20234331500001\",\n                \"data_text\": \"With the ambitious Ryuusui Nanami on board, Senkuu Ishigami and his team are almost ready to sail the seas and reach the other side of the world—where the bizarre green light that petrified humanity originated. Thanks to the revival of a skillful chef, enough food is being prepared for the entire crew, and the incredible reinvention of the GPS promises to ensure safety on the open sea.\",\n                \"total_label\": 0,\n                \"total_data_cost\": 1164,\n                \"final_data_cost\": 0\n            },\n            {\n                \"data_id\": \"D20234441400001\",\n                \"data_text\": \"With the ambitious Ryuusui Nanami on board, Senkuu Ishigami and his team are almost ready to sail the seas and reach the other side of the world—where the bizarre green light that petrified humanity originated. Thanks to the revival of a skillful chef, enough food is being prepared for the entire crew, and the incredible reinvention of the GPS promises to ensure safety on the open sea.\",\n                \"total_label\": 0,\n                \"total_data_cost\": 1164,\n                \"final_data_cost\": 0\n            },\n            {\n                \"data_id\": \"D20234441400002\",\n                \"data_text\": \"With the ambitious Ryuusui Nanami on board, Senkuu Ishigami and his team are almost ready to sail the seas and reach the other side of the world—where the bizarre green light that petrified humanity originated. Thanks to the revival of a skillful chef, enough food is being prepared for the entire crew, and the incredible reinvention of the GPS promises to ensure safety on the open sea.\",\n                \"total_label\": 3,\n                \"total_data_cost\": 1164,\n                \"final_data_cost\": 1164\n            },\n            {\n                \"data_id\": \"D20234441400003\",\n                \"data_text\": \"With the ambitious Ryuusui Nanami on board, Senkuu Ishigami and his team are almost ready to sail the seas and reach the other side of the world—where the bizarre green light that petrified humanity originated. Thanks to the revival of a skillful chef, enough food is being prepared for the entire crew, and the incredible reinvention of the GPS promises to ensure safety on the open sea.\",\n                \"total_label\": 0,\n                \"total_data_cost\": 1164,\n                \"final_data_cost\": 0\n            },\n            {\n                \"data_id\": \"D20234441400004\",\n                \"data_text\": \"With the ambitious Ryuusui Nanami on board, Senkuu Ishigami and his team are almost ready to sail the seas and reach the other side of the world—where the bizarre green light that petrified humanity originated. Thanks to the revival of a skillful chef, enough food is being prepared for the entire crew, and the incredible reinvention of the GPS promises to ensure safety on the open sea.\",\n                \"total_label\": 0,\n                \"total_data_cost\": 1164,\n                \"final_data_cost\": 0\n            },\n            {\n                \"data_id\": \"D20234441400005\",\n                \"data_text\": \"With the ambitious Ryuusui Nanami on board, Senkuu Ishigami and his team are almost ready to sail the seas and reach the other side of the world—where the bizarre green light that petrified humanity originated. Thanks to the revival of a skillful chef, enough food is being prepared for the entire crew, and the incredible reinvention of the GPS promises to ensure safety on the open sea.\",\n                \"total_label\": 0,\n                \"total_data_cost\": 1164,\n                \"final_data_cost\": 0\n            },\n            {\n                \"data_id\": \"D20234441400006\",\n                \"data_text\": \"With the ambitious Ryuusui Nanami on board, Senkuu Ishigami and his team are almost ready to sail the seas and reach the other side of the world—where the bizarre green light that petrified humanity originated. Thanks to the revival of a skillful chef, enough food is being prepared for the entire crew, and the incredible reinvention of the GPS promises to ensure safety on the open sea.\",\n                \"total_label\": 0,\n                \"total_data_cost\": 1164,\n                \"final_data_cost\": 0\n            },\n            {\n                \"data_id\": \"D20234441400007\",\n                \"data_text\": \"With the ambitious Ryuusui Nanami on board, Senkuu Ishigami and his team are almost ready to sail the seas and reach the other side of the world—where the bizarre green light that petrified humanity originated. Thanks to the revival of a skillful chef, enough food is being prepared for the entire crew, and the incredible reinvention of the GPS promises to ensure safety on the open sea.\",\n                \"total_label\": 0,\n                \"total_data_cost\": 1164,\n                \"final_data_cost\": 0\n            }\n        ]\n    }\n}"
 				}
 			]
 		},
@@ -1144,8 +1274,40 @@
 		{
 			"name": "updateLabel",
 			"request": {
-				"method": "GET",
-				"header": []
+				"method": "PUT",
+				"header": [
+					{
+						"key": "x-auth-token",
+						"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IkFrZWVtNCIsImlhdCI6MTY4MzYyNDMwMSwiZXhwIjoxNjgzNjI3OTAxfQ.1zvDCvJS27Etd7fka5OdahIjJuoBurerdAz3cjvva3s",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "label_id",
+							"value": "L007",
+							"type": "text"
+						},
+						{
+							"key": "label_result",
+							"value": "New Label Result",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "{{HOST}}/api/v1/label",
+					"host": [
+						"{{HOST}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"label"
+					]
+				}
 			},
 			"response": [
 				{
@@ -1677,7 +1839,7 @@
 				"header": [
 					{
 						"key": "x-auth-token",
-						"value": "",
+						"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IkFudG9pbmV0dGU0MyIsImlhdCI6MTY4MzYzNDg1NSwiZXhwIjoxNjgzNjM4NDU1fQ.yqtZD9MP_PVKKUvq4msS6Ulyn4buiLgri9AcNb2d410",
 						"type": "text"
 					}
 				],
@@ -1694,6 +1856,125 @@
 				}
 			},
 			"response": [
+				{
+					"name": "Success with parameter",
+					"originalRequest": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "x-auth-token",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IkFudG9pbmV0dGU0MyIsImlhdCI6MTY4MzYzNDg1NSwiZXhwIjoxNjgzNjM4NDU1fQ.yqtZD9MP_PVKKUvq4msS6Ulyn4buiLgri9AcNb2d410",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{HOST}}/api/v1/user/Akeem4",
+							"host": [
+								"{{HOST}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"user",
+								"Akeem4"
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "X-Powered-By",
+							"value": "Express"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json; charset=utf-8"
+						},
+						{
+							"key": "Content-Length",
+							"value": "80"
+						},
+						{
+							"key": "ETag",
+							"value": "W/\"50-+zJCcJ6fNvuav0/1Wb07kGruvSM\""
+						},
+						{
+							"key": "Date",
+							"value": "Tue, 09 May 2023 12:21:08 GMT"
+						},
+						{
+							"key": "Connection",
+							"value": "keep-alive"
+						},
+						{
+							"key": "Keep-Alive",
+							"value": "timeout=5"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"body\": {\n        \"username\": \"Akeem4\",\n        \"name\": \"Akeem\",\n        \"role\": \"labeller\",\n        \"credibility\": 50\n    }\n}"
+				},
+				{
+					"name": "Success without parameter",
+					"originalRequest": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "x-auth-token",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IkFudG9pbmV0dGU0MyIsImlhdCI6MTY4MzYzNDg1NSwiZXhwIjoxNjgzNjM4NDU1fQ.yqtZD9MP_PVKKUvq4msS6Ulyn4buiLgri9AcNb2d410",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{HOST}}/api/v1/user",
+							"host": [
+								"{{HOST}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"user"
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "X-Powered-By",
+							"value": "Express"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json; charset=utf-8"
+						},
+						{
+							"key": "Content-Length",
+							"value": "92"
+						},
+						{
+							"key": "ETag",
+							"value": "W/\"5c-69c4U27mWQmwQ6iB8jXjlKZHFtE\""
+						},
+						{
+							"key": "Date",
+							"value": "Tue, 09 May 2023 12:21:52 GMT"
+						},
+						{
+							"key": "Connection",
+							"value": "keep-alive"
+						},
+						{
+							"key": "Keep-Alive",
+							"value": "timeout=5"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"body\": {\n        \"username\": \"Antoinette43\",\n        \"name\": \"Antoinette\",\n        \"role\": \"requester\",\n        \"credibility\": 50\n    }\n}"
+				},
 				{
 					"name": "Not provide x-auth-token",
 					"originalRequest": {
@@ -1754,16 +2035,915 @@
 					],
 					"cookie": [],
 					"body": "{\n    \"message\": \"Not Authorized\"\n}"
+				},
+				{
+					"name": "Invalid token",
+					"originalRequest": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "x-auth-token",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IkRlbm5pczY2IiwiaWF0IjoxNjgzNTQyNTczLCJleHAiOjE2ODM1NDYxNzN9.ehO4XJ4EOw_Rmcgqvo9z8oiDONSllmvbhkODGsRokn8",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{HOST}}/api/v1/user/Akeem4",
+							"host": [
+								"{{HOST}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"user",
+								"Akeem4"
+							]
+						}
+					},
+					"status": "Unauthorized",
+					"code": 401,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "X-Powered-By",
+							"value": "Express"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json; charset=utf-8"
+						},
+						{
+							"key": "Content-Length",
+							"value": "31"
+						},
+						{
+							"key": "ETag",
+							"value": "W/\"1f-YcNYeMNtWOaOemFQirKL0uXCF/w\""
+						},
+						{
+							"key": "Date",
+							"value": "Tue, 09 May 2023 12:20:27 GMT"
+						},
+						{
+							"key": "Connection",
+							"value": "keep-alive"
+						},
+						{
+							"key": "Keep-Alive",
+							"value": "timeout=5"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"message\": \"Invalid JWT Token\"\n}"
 				}
 			]
 		},
 		{
 			"name": "getLabel",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
 			"request": {
 				"method": "GET",
-				"header": []
+				"header": [
+					{
+						"key": "x-auth-token",
+						"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IkFrZWVtNCIsImlhdCI6MTY4MzYzNTU1NiwiZXhwIjoxNjgzNjM5MTU2fQ.hQCQH10Nas9lmWc1jCdpvqd8EzdDVoD5O00dyPbDQrM",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": []
+				},
+				"url": {
+					"raw": "{{HOST}}/api/v1/label",
+					"host": [
+						"{{HOST}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"label"
+					],
+					"query": [
+						{
+							"key": "task_id",
+							"value": "CLAB202308250001",
+							"disabled": true
+						}
+					]
+				}
 			},
-			"response": []
+			"response": [
+				{
+					"name": "Without token",
+					"originalRequest": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "x-auth-token",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IkFrZWVtNCIsImlhdCI6MTY4MzYxNzY4NSwiZXhwIjoxNjgzNjIxMjg1fQ.s2W8IGtFBzB-4YUTQHj5wfCTVgic215HM5CLtXxfVlY",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": []
+						},
+						"url": {
+							"raw": "{{HOST}}/api/v1/label?data_id=D20234441400002",
+							"host": [
+								"{{HOST}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"label"
+							],
+							"query": [
+								{
+									"key": "data_id",
+									"value": "D20234441400002"
+								},
+								{
+									"key": "task_id",
+									"value": "CLAB202308250001",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"status": "Unauthorized",
+					"code": 401,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "X-Powered-By",
+							"value": "Express"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json; charset=utf-8"
+						},
+						{
+							"key": "Content-Length",
+							"value": "28"
+						},
+						{
+							"key": "ETag",
+							"value": "W/\"1c-j+znjSBGYk1IoOLxkUWYndvLrls\""
+						},
+						{
+							"key": "Date",
+							"value": "Tue, 09 May 2023 12:22:27 GMT"
+						},
+						{
+							"key": "Connection",
+							"value": "keep-alive"
+						},
+						{
+							"key": "Keep-Alive",
+							"value": "timeout=5"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"message\": \"Not Authorized\"\n}"
+				},
+				{
+					"name": "Invalid token",
+					"originalRequest": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "x-auth-token",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IkFrZWVtNCIsImlhdCI6MTY4MzYxNzY4NSwiZXhwIjoxNjgzNjIxMjg1fQ.s2W8IGtFBzB-4YUTQHj5wfCTVgic215HM5CLtXxfVlY",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": []
+						},
+						"url": {
+							"raw": "{{HOST}}/api/v1/label?data_id=D20234441400002",
+							"host": [
+								"{{HOST}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"label"
+							],
+							"query": [
+								{
+									"key": "data_id",
+									"value": "D20234441400002"
+								},
+								{
+									"key": "task_id",
+									"value": "CLAB202308250001",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"status": "Unauthorized",
+					"code": 401,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "X-Powered-By",
+							"value": "Express"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json; charset=utf-8"
+						},
+						{
+							"key": "Content-Length",
+							"value": "31"
+						},
+						{
+							"key": "ETag",
+							"value": "W/\"1f-YcNYeMNtWOaOemFQirKL0uXCF/w\""
+						},
+						{
+							"key": "Date",
+							"value": "Tue, 09 May 2023 12:22:59 GMT"
+						},
+						{
+							"key": "Connection",
+							"value": "keep-alive"
+						},
+						{
+							"key": "Keep-Alive",
+							"value": "timeout=5"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"message\": \"Invalid JWT Token\"\n}"
+				},
+				{
+					"name": "Success request as requester role with data_id as query",
+					"originalRequest": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "x-auth-token",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IkFudG9pbmV0dGU0MyIsImlhdCI6MTY4MzYzNDg1NSwiZXhwIjoxNjgzNjM4NDU1fQ.yqtZD9MP_PVKKUvq4msS6Ulyn4buiLgri9AcNb2d410",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": []
+						},
+						"url": {
+							"raw": "{{HOST}}/api/v1/label?data_id=D20234441400002",
+							"host": [
+								"{{HOST}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"label"
+							],
+							"query": [
+								{
+									"key": "data_id",
+									"value": "D20234441400002"
+								},
+								{
+									"key": "task_id",
+									"value": "CLAB202308250001",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "X-Powered-By",
+							"value": "Express"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json; charset=utf-8"
+						},
+						{
+							"key": "Content-Length",
+							"value": "244"
+						},
+						{
+							"key": "ETag",
+							"value": "W/\"f4-/Jbu+bdEleKb+vMYIA7ujDprc9A\""
+						},
+						{
+							"key": "Date",
+							"value": "Tue, 09 May 2023 12:23:34 GMT"
+						},
+						{
+							"key": "Connection",
+							"value": "keep-alive"
+						},
+						{
+							"key": "Keep-Alive",
+							"value": "timeout=5"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"body\": [\n        {\n            \"label_id\": \"L007\",\n            \"username\": \"Akeem4\",\n            \"label_result\": \"New Label Result\"\n        },\n        {\n            \"label_id\": \"L008\",\n            \"username\": \"Diego8\",\n            \"label_result\": \"Label of dummy data 3\"\n        },\n        {\n            \"label_id\": \"L009\",\n            \"username\": \"Dennis66\",\n            \"label_result\": \"Label of dummy data 4\"\n        }\n    ]\n}"
+				},
+				{
+					"name": "Access other requester data",
+					"originalRequest": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "x-auth-token",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IkFudG9pbmV0dGU0MyIsImlhdCI6MTY4MzYzNDg1NSwiZXhwIjoxNjgzNjM4NDU1fQ.yqtZD9MP_PVKKUvq4msS6Ulyn4buiLgri9AcNb2d410",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": []
+						},
+						"url": {
+							"raw": "{{HOST}}/api/v1/label?data_id=D20234221600001",
+							"host": [
+								"{{HOST}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"label"
+							],
+							"query": [
+								{
+									"key": "task_id",
+									"value": "CLAB202308250001",
+									"disabled": true
+								},
+								{
+									"key": "data_id",
+									"value": "D20234221600001"
+								}
+							]
+						}
+					},
+					"status": "Forbidden",
+					"code": 403,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "X-Powered-By",
+							"value": "Express"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json; charset=utf-8"
+						},
+						{
+							"key": "Content-Length",
+							"value": "30"
+						},
+						{
+							"key": "ETag",
+							"value": "W/\"1e-jF8YAbqevWJCzE+L61bECHDk710\""
+						},
+						{
+							"key": "Date",
+							"value": "Tue, 09 May 2023 12:25:44 GMT"
+						},
+						{
+							"key": "Connection",
+							"value": "keep-alive"
+						},
+						{
+							"key": "Keep-Alive",
+							"value": "timeout=5"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"message\": \"Forbidden access\"\n}"
+				},
+				{
+					"name": "Access other requester task",
+					"originalRequest": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "x-auth-token",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IkFudG9pbmV0dGU0MyIsImlhdCI6MTY4MzYzNDg1NSwiZXhwIjoxNjgzNjM4NDU1fQ.yqtZD9MP_PVKKUvq4msS6Ulyn4buiLgri9AcNb2d410",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": []
+						},
+						"url": {
+							"raw": "{{HOST}}/api/v1/label?task_id=BOAB202308250001",
+							"host": [
+								"{{HOST}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"label"
+							],
+							"query": [
+								{
+									"key": "task_id",
+									"value": "CLAB202308250001",
+									"disabled": true
+								},
+								{
+									"key": "task_id",
+									"value": "BOAB202308250001"
+								}
+							]
+						}
+					},
+					"status": "Forbidden",
+					"code": 403,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "X-Powered-By",
+							"value": "Express"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json; charset=utf-8"
+						},
+						{
+							"key": "Content-Length",
+							"value": "30"
+						},
+						{
+							"key": "ETag",
+							"value": "W/\"1e-jF8YAbqevWJCzE+L61bECHDk710\""
+						},
+						{
+							"key": "Date",
+							"value": "Tue, 09 May 2023 12:27:08 GMT"
+						},
+						{
+							"key": "Connection",
+							"value": "keep-alive"
+						},
+						{
+							"key": "Keep-Alive",
+							"value": "timeout=5"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"message\": \"Forbidden access\"\n}"
+				},
+				{
+					"name": "Success request as requester role with task_id as query",
+					"originalRequest": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "x-auth-token",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IkFudG9pbmV0dGU0MyIsImlhdCI6MTY4MzYzNDg1NSwiZXhwIjoxNjgzNjM4NDU1fQ.yqtZD9MP_PVKKUvq4msS6Ulyn4buiLgri9AcNb2d410",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": []
+						},
+						"url": {
+							"raw": "{{HOST}}/api/v1/label?task_id=SUAN202309220001",
+							"host": [
+								"{{HOST}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"label"
+							],
+							"query": [
+								{
+									"key": "task_id",
+									"value": "CLAB202308250001",
+									"disabled": true
+								},
+								{
+									"key": "task_id",
+									"value": "SUAN202309220001"
+								}
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "X-Powered-By",
+							"value": "Express"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json; charset=utf-8"
+						},
+						{
+							"key": "Content-Length",
+							"value": "4079"
+						},
+						{
+							"key": "ETag",
+							"value": "W/\"fef-JVLLafaj53zHt+jaLtaCuKFuSNE\""
+						},
+						{
+							"key": "Date",
+							"value": "Tue, 09 May 2023 12:28:01 GMT"
+						},
+						{
+							"key": "Connection",
+							"value": "keep-alive"
+						},
+						{
+							"key": "Keep-Alive",
+							"value": "timeout=5"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"body\": {\n        \"task_id\": \"SUAN202309220001\",\n        \"task_type\": \"Summarization\",\n        \"data\": [\n            {\n                \"data_id\": \"D20234331500001\",\n                \"data_text\": \"With the ambitious Ryuusui Nanami on board, Senkuu Ishigami and his team are almost ready to sail the seas and reach the other side of the world—where the bizarre green light that petrified humanity originated. Thanks to the revival of a skillful chef, enough food is being prepared for the entire crew, and the incredible reinvention of the GPS promises to ensure safety on the open sea.\",\n                \"price\": 388,\n                \"labels\": \"Label is empty\"\n            },\n            {\n                \"data_id\": \"D20234441400001\",\n                \"data_text\": \"With the ambitious Ryuusui Nanami on board, Senkuu Ishigami and his team are almost ready to sail the seas and reach the other side of the world—where the bizarre green light that petrified humanity originated. Thanks to the revival of a skillful chef, enough food is being prepared for the entire crew, and the incredible reinvention of the GPS promises to ensure safety on the open sea.\",\n                \"price\": 388,\n                \"labels\": \"Label is empty\"\n            },\n            {\n                \"data_id\": \"D20234441400002\",\n                \"data_text\": \"With the ambitious Ryuusui Nanami on board, Senkuu Ishigami and his team are almost ready to sail the seas and reach the other side of the world—where the bizarre green light that petrified humanity originated. Thanks to the revival of a skillful chef, enough food is being prepared for the entire crew, and the incredible reinvention of the GPS promises to ensure safety on the open sea.\",\n                \"price\": 388,\n                \"labels\": [\n                    {\n                        \"label_id\": \"L007\",\n                        \"username\": \"Akeem4\",\n                        \"label_result\": \"New Label Result\"\n                    },\n                    {\n                        \"label_id\": \"L008\",\n                        \"username\": \"Diego8\",\n                        \"label_result\": \"Label of dummy data 3\"\n                    },\n                    {\n                        \"label_id\": \"L009\",\n                        \"username\": \"Dennis66\",\n                        \"label_result\": \"Label of dummy data 4\"\n                    }\n                ]\n            },\n            {\n                \"data_id\": \"D20234441400003\",\n                \"data_text\": \"With the ambitious Ryuusui Nanami on board, Senkuu Ishigami and his team are almost ready to sail the seas and reach the other side of the world—where the bizarre green light that petrified humanity originated. Thanks to the revival of a skillful chef, enough food is being prepared for the entire crew, and the incredible reinvention of the GPS promises to ensure safety on the open sea.\",\n                \"price\": 388,\n                \"labels\": \"Label is empty\"\n            },\n            {\n                \"data_id\": \"D20234441400004\",\n                \"data_text\": \"With the ambitious Ryuusui Nanami on board, Senkuu Ishigami and his team are almost ready to sail the seas and reach the other side of the world—where the bizarre green light that petrified humanity originated. Thanks to the revival of a skillful chef, enough food is being prepared for the entire crew, and the incredible reinvention of the GPS promises to ensure safety on the open sea.\",\n                \"price\": 388,\n                \"labels\": \"Label is empty\"\n            },\n            {\n                \"data_id\": \"D20234441400005\",\n                \"data_text\": \"With the ambitious Ryuusui Nanami on board, Senkuu Ishigami and his team are almost ready to sail the seas and reach the other side of the world—where the bizarre green light that petrified humanity originated. Thanks to the revival of a skillful chef, enough food is being prepared for the entire crew, and the incredible reinvention of the GPS promises to ensure safety on the open sea.\",\n                \"price\": 388,\n                \"labels\": \"Label is empty\"\n            },\n            {\n                \"data_id\": \"D20234441400006\",\n                \"data_text\": \"With the ambitious Ryuusui Nanami on board, Senkuu Ishigami and his team are almost ready to sail the seas and reach the other side of the world—where the bizarre green light that petrified humanity originated. Thanks to the revival of a skillful chef, enough food is being prepared for the entire crew, and the incredible reinvention of the GPS promises to ensure safety on the open sea.\",\n                \"price\": 388,\n                \"labels\": \"Label is empty\"\n            },\n            {\n                \"data_id\": \"D20234441400007\",\n                \"data_text\": \"With the ambitious Ryuusui Nanami on board, Senkuu Ishigami and his team are almost ready to sail the seas and reach the other side of the world—where the bizarre green light that petrified humanity originated. Thanks to the revival of a skillful chef, enough food is being prepared for the entire crew, and the incredible reinvention of the GPS promises to ensure safety on the open sea.\",\n                \"price\": 388,\n                \"labels\": \"Label is empty\"\n            }\n        ]\n    }\n}"
+				},
+				{
+					"name": "Task not found",
+					"originalRequest": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "x-auth-token",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IkFudG9pbmV0dGU0MyIsImlhdCI6MTY4MzYzNDg1NSwiZXhwIjoxNjgzNjM4NDU1fQ.yqtZD9MP_PVKKUvq4msS6Ulyn4buiLgri9AcNb2d410",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": []
+						},
+						"url": {
+							"raw": "{{HOST}}/api/v1/label?task_id=SUAN20230922000",
+							"host": [
+								"{{HOST}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"label"
+							],
+							"query": [
+								{
+									"key": "task_id",
+									"value": "CLAB202308250001",
+									"disabled": true
+								},
+								{
+									"key": "task_id",
+									"value": "SUAN20230922000"
+								}
+							]
+						}
+					},
+					"status": "Not Found",
+					"code": 404,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "X-Powered-By",
+							"value": "Express"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json; charset=utf-8"
+						},
+						{
+							"key": "Content-Length",
+							"value": "28"
+						},
+						{
+							"key": "ETag",
+							"value": "W/\"1c-MHDSHEeakQ3QeijgQMEHeol2HWg\""
+						},
+						{
+							"key": "Date",
+							"value": "Tue, 09 May 2023 12:28:41 GMT"
+						},
+						{
+							"key": "Connection",
+							"value": "keep-alive"
+						},
+						{
+							"key": "Keep-Alive",
+							"value": "timeout=5"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"message\": \"Task not found\"\n}"
+				},
+				{
+					"name": "Data not found",
+					"originalRequest": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "x-auth-token",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IkFudG9pbmV0dGU0MyIsImlhdCI6MTY4MzYzNDg1NSwiZXhwIjoxNjgzNjM4NDU1fQ.yqtZD9MP_PVKKUvq4msS6Ulyn4buiLgri9AcNb2d410",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": []
+						},
+						"url": {
+							"raw": "{{HOST}}/api/v1/label?data_id=SUAN20230922000",
+							"host": [
+								"{{HOST}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"label"
+							],
+							"query": [
+								{
+									"key": "task_id",
+									"value": "CLAB202308250001",
+									"disabled": true
+								},
+								{
+									"key": "data_id",
+									"value": "SUAN20230922000"
+								}
+							]
+						}
+					},
+					"status": "Not Found",
+					"code": 404,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "X-Powered-By",
+							"value": "Express"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json; charset=utf-8"
+						},
+						{
+							"key": "Content-Length",
+							"value": "28"
+						},
+						{
+							"key": "ETag",
+							"value": "W/\"1c-i0EptGmraAHmxP2zNRGy7HQtj2g\""
+						},
+						{
+							"key": "Date",
+							"value": "Tue, 09 May 2023 12:29:02 GMT"
+						},
+						{
+							"key": "Connection",
+							"value": "keep-alive"
+						},
+						{
+							"key": "Keep-Alive",
+							"value": "timeout=5"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"message\": \"Data not found\"\n}"
+				},
+				{
+					"name": "Success request as requester without query",
+					"originalRequest": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "x-auth-token",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IkFiZTY5IiwiaWF0IjoxNjgzNjM1MzkyLCJleHAiOjE2ODM2Mzg5OTJ9.i8kimh45AgyZ6I9B1dyyTmIYlg_2LwjCbzoEQONET9I",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": []
+						},
+						"url": {
+							"raw": "{{HOST}}/api/v1/label",
+							"host": [
+								"{{HOST}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"label"
+							],
+							"query": [
+								{
+									"key": "task_id",
+									"value": "CLAB202308250001",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "X-Powered-By",
+							"value": "Express"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json; charset=utf-8"
+						},
+						{
+							"key": "Content-Length",
+							"value": "1332"
+						},
+						{
+							"key": "ETag",
+							"value": "W/\"534-tPTsHJrBVxXUiXV/jgbUX2kU/KA\""
+						},
+						{
+							"key": "Date",
+							"value": "Tue, 09 May 2023 12:30:09 GMT"
+						},
+						{
+							"key": "Connection",
+							"value": "keep-alive"
+						},
+						{
+							"key": "Keep-Alive",
+							"value": "timeout=5"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"body\": [\n        {\n            \"task_id\": \"BOAB202308250001\",\n            \"task_type\": \"Bot Summarization\",\n            \"data\": [\n                {\n                    \"data_id\": \"D20234221600001\",\n                    \"data_text\": \"Gabimaru the Hollow  was set up by his fellow ninja and is now on death row. Tired of killing and betrayal, he wants to die. However, no method of execution works on him because as much as the seemingly apathetic Gabimaru refuses to admit it, he does have a reason to live. He wants to return to his wife, who was the reason why he softened up and failed to be an effective assassin. Thus, he refuses to die.\\n\\n Summary : Gabimaru the Hollow is a ninja who was set up by his fellow\",\n                    \"price\": 204,\n                    \"labels\": \"Label is empty\"\n                }\n            ]\n        },\n        {\n            \"task_id\": \"CLAB202308250001\",\n            \"task_type\": \"Classification\",\n            \"data\": [\n                {\n                    \"data_id\": \"D20234441400008\",\n                    \"data_text\": \"are you yes man?\",\n                    \"price\": 28,\n                    \"labels\": [\n                        {\n                            \"label_id\": \"L001\",\n                            \"username\": \"Ray7\",\n                            \"label_result\": \"yes\"\n                        },\n                        {\n                            \"label_id\": \"L002\",\n                            \"username\": \"Akeem4\",\n                            \"label_result\": \"yes\"\n                        },\n                        {\n                            \"label_id\": \"L003\",\n                            \"username\": \"Frida58\",\n                            \"label_result\": \"no\"\n                        },\n                        {\n                            \"label_id\": \"L005\",\n                            \"username\": \"Akeem4\",\n                            \"label_result\": \"Yeah, i am a man\"\n                        }\n                    ]\n                },\n                {\n                    \"data_id\": \"D20234441400009\",\n                    \"data_text\": \"do you like playing game?\",\n                    \"price\": 33,\n                    \"labels\": [\n                        {\n                            \"label_id\": \"L010\",\n                            \"username\": \"Akeem4\",\n                            \"label_result\": \"Label of dummy data\"\n                        }\n                    ]\n                },\n                {\n                    \"data_id\": \"D20234701600001\",\n                    \"data_text\": \"do you like watching anime?\",\n                    \"price\": 34,\n                    \"labels\": \"Label is empty\"\n                }\n            ]\n        }\n    ]\n}"
+				},
+				{
+					"name": "Success request as labeller with data_id as query",
+					"originalRequest": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "x-auth-token",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IkFrZWVtNCIsImlhdCI6MTY4MzYzNTU1NiwiZXhwIjoxNjgzNjM5MTU2fQ.hQCQH10Nas9lmWc1jCdpvqd8EzdDVoD5O00dyPbDQrM",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": []
+						},
+						"url": {
+							"raw": "{{HOST}}/api/v1/label?data_id=D20234441400002",
+							"host": [
+								"{{HOST}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"label"
+							],
+							"query": [
+								{
+									"key": "task_id",
+									"value": "CLAB202308250001",
+									"disabled": true
+								},
+								{
+									"key": "data_id",
+									"value": "D20234441400002"
+								}
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "X-Powered-By",
+							"value": "Express"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json; charset=utf-8"
+						},
+						{
+							"key": "Content-Length",
+							"value": "508"
+						},
+						{
+							"key": "ETag",
+							"value": "W/\"1fc-Q/cvmNc4QVuI9XSgNmmgAWvGbWs\""
+						},
+						{
+							"key": "Date",
+							"value": "Tue, 09 May 2023 12:33:18 GMT"
+						},
+						{
+							"key": "Connection",
+							"value": "keep-alive"
+						},
+						{
+							"key": "Keep-Alive",
+							"value": "timeout=5"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"body\": {\n        \"data_id\": \"D20234441400002\",\n        \"data_text\": \"With the ambitious Ryuusui Nanami on board, Senkuu Ishigami and his team are almost ready to sail the seas and reach the other side of the world—where the bizarre green light that petrified humanity originated. Thanks to the revival of a skillful chef, enough food is being prepared for the entire crew, and the incredible reinvention of the GPS promises to ensure safety on the open sea.\",\n        \"labels\": [\n            {\n                \"label_id\": \"L007\",\n                \"label_result\": \"New Label Result\"\n            }\n        ]\n    }\n}"
+				},
+				{
+					"name": "Success request as labeller without query",
+					"originalRequest": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "x-auth-token",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IkFrZWVtNCIsImlhdCI6MTY4MzYzNTU1NiwiZXhwIjoxNjgzNjM5MTU2fQ.hQCQH10Nas9lmWc1jCdpvqd8EzdDVoD5O00dyPbDQrM",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": []
+						},
+						"url": {
+							"raw": "{{HOST}}/api/v1/label",
+							"host": [
+								"{{HOST}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"label"
+							],
+							"query": [
+								{
+									"key": "task_id",
+									"value": "CLAB202308250001",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "X-Powered-By",
+							"value": "Express"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json; charset=utf-8"
+						},
+						{
+							"key": "Content-Length",
+							"value": "995"
+						},
+						{
+							"key": "ETag",
+							"value": "W/\"3e3-04hyX6VqAxJtYCb27n2k0NdS5mw\""
+						},
+						{
+							"key": "Date",
+							"value": "Tue, 09 May 2023 12:34:11 GMT"
+						},
+						{
+							"key": "Connection",
+							"value": "keep-alive"
+						},
+						{
+							"key": "Keep-Alive",
+							"value": "timeout=5"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"body\": [\n        {\n            \"data_id\": \"D20234441400008\",\n            \"data_text\": \"are you yes man?\",\n            \"label\": {\n                \"label_id\": \"L002\",\n                \"label_result\": \"yes\"\n            }\n        },\n        {\n            \"data_id\": \"D20234441400008\",\n            \"data_text\": \"are you yes man?\",\n            \"label\": {\n                \"label_id\": \"L005\",\n                \"label_result\": \"Yeah, i am a man\"\n            }\n        },\n        {\n            \"data_id\": \"D20234811700001\",\n            \"data_text\": \"Dummy Data\",\n            \"label\": {\n                \"label_id\": \"L006\",\n                \"label_result\": \"Label of dummy data\"\n            }\n        },\n        {\n            \"data_id\": \"D20234441400002\",\n            \"data_text\": \"With the ambitious Ryuusui Nanami on board, Senkuu Ishigami and his team are almost ready to sail the seas and reach the other side of the world—where the bizarre green light that petrified humanity originated. Thanks to the revival of a skillful chef, enough food is being prepared for the entire crew, and the incredible reinvention of the GPS promises to ensure safety on the open sea.\",\n            \"label\": {\n                \"label_id\": \"L007\",\n                \"label_result\": \"New Label Result\"\n            }\n        },\n        {\n            \"data_id\": \"D20234441400009\",\n            \"data_text\": \"do you like playing game?\",\n            \"label\": {\n                \"label_id\": \"L010\",\n                \"label_result\": \"Label of dummy data\"\n            }\n        }\n    ]\n}"
+				}
+			]
 		}
 	]
 }
