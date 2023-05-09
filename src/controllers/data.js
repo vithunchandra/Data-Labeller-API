@@ -52,6 +52,15 @@ const addData = async (req, res) => {
     });
   }
 
+  if (String(taskNow["status"]).toLowerCase() != "active") {
+    return res.status(400).json({
+      status: 400,
+      body: {
+        message: "That task is already closed!",
+      },
+    });
+  }
+
   let taskType = await TaskType.findByPk(taskNow["type_id"]);
   let charNum = String(data_text).length;
   let labelNum = 0;
