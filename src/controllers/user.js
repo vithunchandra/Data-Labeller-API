@@ -241,9 +241,313 @@ const userDetail = async (req, res) => {
   return res.status(200).json({body: result});
 };
 
+const topup = async (req, res) => {
+  const {password , saldo} = req.body;
+  const {username} = req.params;
+  const tokenNow = req.headers["x-auth-token"];
+  try {
+    userData = jwt.verify(tokenNow, process.env.JWT_TOKEN_SECRET);
+  } catch {
+    return res.json({
+      status: 400,
+      message: "unverified",
+    });
+  }
+  let idres = await User.findAll
+  ({
+    
+  });
+  
+  const checkpass = (password) => { 
+    if(idres.length > 0) {  
+        const s = idres.find(idres => {
+            return idres.password === password 
+        })
+        if (s == undefined) {
+            throw new Error("password salah")
+        }
+    }
+  }                
+
+  const checkusername = (username) => { 
+    if(idres.length > 0) {  
+        const s = idres.find(idres => {
+            return idres.username === username 
+        })
+        if (s == undefined) {
+            throw new Error("user tidak ada")
+        }
+    }
+  } 
+  
+
+      const schema = Joi.object
+      ({
+        
+        
+        
+        saldo: Joi.string().required().messages
+        ({
+            "any.required": "Semua field wajib diisi",
+            
+        }),
+
+        password: Joi.string().external(checkpass).required().messages
+        ({
+            "any.required": "Semua field wajib diisi",
+            
+        }),
+      })
+    
+      try 
+      {
+        await schema.validateAsync(req.body)
+      } 
+      catch (error)
+      {
+          return res.status(403).send(error.toString())
+      }
+    
+      const schema2 = Joi.object
+      ({
+        
+        
+        
+        username: Joi.string().required().external(checkusername).messages
+        ({
+            "any.required": "Semua field wajib diisi",
+            
+        }),
+
+        
+      })
+    
+      try 
+      {
+        await schema2.validateAsync(req.params)
+      } 
+      catch (error)
+      {
+          return res.status(403).send(error.toString())
+      }
+    
+
+  let user = null
+//yuni@istts.ac.id
+  
+  
+  let ceckrole = await User.findOne
+  ({
+  attributes: ["username" , "role"],
+  where: 
+  {
+    username: username
+  }
+  });
+   
+   
+  let before_topup = await User.findOne
+  ({
+    attributes: ["username" , "saldo"],
+    where: 
+    {
+      username: username , role: "requester"
+    }
+  });
+  if (!before_topup) {
+    return res.status(400).send('username does not exist / role is not requester')
+    
+  }
+   const nominal = Number(saldo)
+    let userup = await User.update
+    (
+      {
+        saldo: before_topup.saldo + nominal ,
+      },
+      {where: {username: username,}}
+      
+    );
+    
+    
+    let hasil_topup = await User.findOne
+    ({
+      attributes: ["username" , "saldo"],
+      where: 
+      {
+        username: username, role: "requester"
+      }
+    });
+      return res.status(201).send
+      ({
+          
+          username: username,
+          msg: `berhasil topup saldo sebesar: "${ saldo}" `,
+          new_saldo: hasil_topup.saldo ,
+          
+          
+          
+          
+      });
+}
+
+
+const retrive_money = async (req, res) => {
+  const {password , saldo} = req.body;
+  const {username} = req.params;
+  const tokenNow = req.headers["x-auth-token"];
+  try {
+    userData = jwt.verify(tokenNow, process.env.JWT_TOKEN_SECRET);
+  } catch {
+    return res.json({
+      status: 400,
+      message: "unverified",
+    });
+  }
+  let idres = await User.findAll
+  ({
+    
+  });
+  
+  const checkpass = (password) => { 
+    if(idres.length > 0) {  
+        const s = idres.find(idres => {
+            return idres.password === password 
+        })
+        if (s == undefined) {
+            throw new Error("password salah")
+        }
+    }
+  }                
+
+  const checkusername = (username) => { 
+    if(idres.length > 0) {  
+        const s = idres.find(idres => {
+            return idres.username === username 
+        })
+        if (s == undefined) {
+            throw new Error("user tidak ada")
+        }
+    }
+  } 
+  
+
+      const schema = Joi.object
+      ({
+        
+        
+        
+        saldo: Joi.string().required().messages
+        ({
+            "any.required": "Semua field wajib diisi",
+            
+        }),
+
+        password: Joi.string().external(checkpass).required().messages
+        ({
+            "any.required": "Semua field wajib diisi",
+            
+        }),
+      })
+    
+      try 
+      {
+        await schema.validateAsync(req.body)
+      } 
+      catch (error)
+      {
+          return res.status(403).send(error.toString())
+      }
+    
+      const schema2 = Joi.object
+      ({
+        
+        
+        
+        username: Joi.string().required().external(checkusername).messages
+        ({
+            "any.required": "Semua field wajib diisi",
+            
+        }),
+
+        
+      })
+    
+      try 
+      {
+        await schema2.validateAsync(req.params)
+      } 
+      catch (error)
+      {
+          return res.status(403).send(error.toString())
+      }
+    
+
+  let user = null
+//yuni@istts.ac.id
+  
+  
+  let ceckrole = await User.findOne
+  ({
+  attributes: ["username" , "role"],
+  where: 
+  {
+    username: username
+  }
+  });
+   
+   
+  let before_topup = await User.findOne
+  ({
+    attributes: ["username" , "saldo"],
+    where: 
+    {
+      username: username , role: "labeller"
+    }
+  });
+  const nominal = Number(saldo)
+  if (!before_topup) {
+    return res.status(400).send('username does not exist / role is not labeller')
+    
+  }
+  if (before_topup.saldo < nominal) {
+    return res.status(400).send('saldo tidak cukup')
+    
+  }
+   
+    let userup = await User.update
+    (
+      {
+        saldo: before_topup.saldo + nominal ,
+      },
+      {where: {username: username,}}
+      
+    );
+    
+    
+    let hasil_topup = await User.findOne
+    ({
+      attributes: ["username" , "saldo"],
+      where: 
+      {
+        username: username, role: "labeller"
+      }
+    });
+      return res.status(201).send
+      ({
+          
+          username: username,
+          msg: `berhasil menarik saldo sebesar: "${ saldo}" `,
+          
+          
+          
+          
+      });
+}
 
 module.exports = {
   register,
   login,
-  userDetail
+  userDetail,
+  topup,
+  retrive_money
 };
