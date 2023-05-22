@@ -377,6 +377,18 @@ const topup = async (req, res) => {
         username: username, role: "requester"
       }
     });
+
+    // add to topup history
+    let history_id = "T" + Date.now();
+    const datetime = new Date().toLocaleDateString() + " " + new Date().toLocaleTimeString();
+  
+    await History.create({
+      history_id: history_id,
+      username: username,
+      amount: saldo,
+      date: datetime
+    });
+    //~~~~~~~~~~~~~~~~~~~~~
       return res.status(201).send
       ({
           
@@ -390,6 +402,19 @@ const topup = async (req, res) => {
       });
 }
 
+const topupHistory = async (req, res) => {
+  const histories = await History.findAll({
+    where: {
+      username: req.body.user.username,
+      history_id: {
+        [Op.like]: "T%"
+      }
+    },
+    attributes: ["amount","date"]
+  })
+
+  return res.status(200).send({histories});
+};
 
 const retrive_money = async (req, res) => {
   const {password , saldo} = req.body;
@@ -517,7 +542,7 @@ const retrive_money = async (req, res) => {
     let userup = await User.update
     (
       {
-        saldo: before_topup.saldo + nominal ,
+        saldo: before_topup.saldo - nominal ,
       },
       {where: {username: username,}}
       
@@ -532,6 +557,18 @@ const retrive_money = async (req, res) => {
         username: username, role: "labeller"
       }
     });
+
+    //add to withdraw history
+    let history_id = "W" + Date.now();
+    const datetime = new Date().toLocaleDateString() + " " + new Date().toLocaleTimeString();
+    
+    await History.create({
+      history_id: history_id,
+      username: username,
+      amount: saldo,
+      date: datetime
+    });
+    //~~~~~~~~~~~~~~~~~~~~~~
       return res.status(201).send
       ({
           
@@ -544,10 +581,220 @@ const retrive_money = async (req, res) => {
       });
 }
 
+const withdrawHistory = async (req, res) => {
+  const histories = await History.findAll({
+    where: {
+      username: req.body.user.username,
+      history_id: {
+        [Op.like]: "W%"
+      }
+    },
+    attributes: ["amount","date"]
+  })
+
+  return res.status(200).send({histories});
+};
+
+const banUser = async (req, res) => {
+  const checkrole = (user) => { 
+    if(user.role == 'requester') {  
+        return true;
+    }else{
+        throw new Error("Hanya role REQUESTER yang boleh mengakses");
+    }
+  }
+
+  const checkuser = async (username) => { 
+    const user = await User.findByPk(username);
+
+    if(user){
+      if(user.role == "labeller"){
+        return true;
+      }else{
+        throw new Error("User role harus LABELLER");
+      }
+    }else{
+      throw new Error("Username tidak terdaftar");
+    }
+  }
+
+  const checktask = async (task_id) => { 
+    const task = await Task.findByPk(task_id);
+
+    if(task){
+      return true;
+    }else{
+      throw new Error("Task tidak terdaftar");
+    }
+  }
+
+  const istask = async (istask) => { 
+    const task = await Task.findByPk(istask.task_id);
+
+    if(task.username == istask.user.username){
+      return true;
+    }else{
+      throw new Error("Task bukan punya anda");
+    }
+  }
+
+  const is_task_user = async (task_user) => { 
+    const blacklist = await UserBlacklist.findOne({
+      where: {username: task_user.username, task_id: task_user.task_id}
+    })
+
+    if(blacklist){
+      throw new Error("Blacklist sudah ada");
+    }
+
+    const data = await Data.findAll({
+      where: {task_id: task_user.task_id}
+    })
+
+    var cek = false;
+    for(var i = 0; i < data.length; i++){
+      const label = await Label.findAll({
+        where: {data_id: data[i].data_id}
+      })
+
+      for(var i = 0; i < label.length; i++){
+        if(label[i].username == task_user.username){
+          cek = true;
+          break;
+        }
+      }
+
+      if(cek){
+        return true;
+      }
+    }
+
+    throw new Error(`User yang memiliki username ${task_user.username} tidak pernah melabeli salah satu data pada task dengan task_id ${task_user.task_id}`);
+  }
+
+  const schema = Joi.object({
+    username: Joi.string().required().external(checkuser).messages
+    ({
+        "any.required": "Semua field wajib diisi",
+    }),
+    task_id: Joi.string().required().external(checktask).messages
+    ({
+        "any.required": "Semua field wajib diisi",
+    }),
+    user: Joi.object().external(checkrole),
+    istask: Joi.object().external(istask),
+    is_task_user: Joi.object().external(is_task_user),
+  })
+
+  try {
+    await schema.validateAsync({...req.body, istask: {task_id: req.body.task_id, user: req.body.user}, is_task_user : {task_id: req.body.task_id, username: req.body.username}})
+  } catch (error) {
+    return res.status(400).send(error.toString())
+  }
+
+  const BD = await UserBlacklist.findAll();
+  let ban_id = "BD" + BD.length;
+  await UserBlacklist.create({
+    ban_id: ban_id,
+    username: req.body.username,
+    task_id: req.body.task_id
+  })
+
+  const user = await User.findByPk(req.body.username);
+  await user.update({
+    credibility: (user.credibility - 5)
+  })
+
+  return res.status(200).send({mag: `User dengan username ${req.body.username} sudah di ban oleh User dengan username ${req.body.user.username}`});
+};
+
+const getBanUser = async (req, res) => {
+  let result = [];
+  if(req.body.user.role == "requester"){
+    const blacklists = await UserBlacklist.findAll();
+    for (let i = 0; i < blacklists.length; i++) {
+      const task = await Task.findByPk(blacklists[i].task_id);
+      if(task.username == req.body.user.username){
+        result.push(blacklists[i])
+      }
+    }
+  }else{
+    const blacklists = await UserBlacklist.findAll({
+      where: {username: req.body.user.username}
+    })
+    for (let i = 0; i < blacklists.length; i++) {
+      const task = await Task.findByPk(blacklists[i].task_id);
+      result.push({
+        task_id: blacklists[i].task_id,
+        owner_of_task: task.username
+      })
+    }
+  }
+  return res.status(200).send({blacklists: result});
+};
+
+const removeBan = async (req, res) => {
+  const checkrole = (user) => { 
+    if(user.role == 'requester') {  
+        return true;
+    }else{
+        throw new Error("Hanya role REQUESETER yang boleh mengakses");
+    }
+  }
+
+  const checkban = async (ban_id) => { 
+    const ban = await UserBlacklist.findByPk(ban_id);
+
+    if(ban){
+      return true;
+    }else{
+      throw new Error("Blacklist tidak ada");
+    }
+  }
+
+  const isban = async (isban) => { 
+    const ban = await UserBlacklist.findByPk(isban.ban_id);
+    const task = await Task.findByPk(ban.task_id);
+    
+    if(task.username == isban.user.username){
+      return true;
+    }else{
+      throw new Error("Blacklist is not yours");
+    }
+  }
+
+  const schema = Joi.object({
+    ban_id: Joi.string().required().external(checkban).messages
+    ({
+        "any.required": "Semua field wajib diisi",
+    }),
+    user: Joi.object().external(checkrole),
+    isban: Joi.object().external(isban)
+  })
+
+  try {
+    await schema.validateAsync({...req.body, isban: {user: req.body.user, ban_id: req.body.ban_id}})
+  } catch (error) {
+    return res.status(400).send(error.toString())
+  }
+
+  await UserBlacklist.destroy({
+    where: {ban_id: req.body.ban_id}
+  })
+
+  res.status(200).send({msg: `Blacklist sudah dicabut`});
+};
+
+
 module.exports = {
   register,
   login,
   userDetail,
   topup,
-  retrive_money
+  topupHistory,
+  retrive_money,
+  withdrawHistory,
+  banUser,
+  getBanUser,
+  removeBan
 };
