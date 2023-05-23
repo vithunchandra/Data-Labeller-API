@@ -26,25 +26,28 @@ const addTask = async (req, res) => {
     return res.status(400).json({ message: error.message });
   }
 
+  const taskType = await TaskType.findByPk(type_id);
+  if (!taskType) {
+    return res.status(404).json({ message: "Task Type not found!" });
+  }
+
   let userData = [];
   try {
     userData = jwt.verify(tokenNow, process.env.JWT_TOKEN_SECRET);
   } catch {
-    return res.json({
-      status: 400,
-      message: "unverified",
+    return res.status(401).json({
+      status: 401,
+      message: "Unauthorized",
     });
   }
   userData = await User.findByPk(userData["username"]);
 
   if (String(userData["role"]).toLowerCase() != "requester") {
-    return res.json({
-      status: 400,
+    return res.status(403).json({
+      status: 403,
       message: "Task must be created by requester",
     });
   }
-
-  const taskType = await TaskType.findByPk(type_id);
 
   let idNow = String(taskType["type_name"]).substring(0, 2).toUpperCase();
   idNow += String(userData["username"]).substring(0, 2).toUpperCase();
@@ -69,7 +72,7 @@ const addTask = async (req, res) => {
   if (String(taskType["type_name"]).toLowerCase() == "classification") {
     const { possible_class } = req.body;
     if (possible_class == "" || !possible_class) {
-      return res.json({
+      return res.status(400).json({
         status: 400,
         message: "classification must have possible_class",
       });
@@ -111,8 +114,8 @@ const addTask = async (req, res) => {
 const closeTask = async (req, res) => {
   const { task_id } = req.params;
   const { user } = req.body;
-  if(!task_id){
-    return res.status(400).json({message: "Every field must be provided"});
+  if (!task_id) {
+    return res.status(400).json({ message: "Every field must be provided" });
   }
   if (user.role !== "requester") {
     return res.status(403).json({
@@ -123,11 +126,11 @@ const closeTask = async (req, res) => {
   if (!task) {
     return res.status(404).json({ message: "Task not found" });
   }
-  if(task.username !== user.username){
-    return res.status(403).json({message: "Task doesn't belongs to user"});
+  if (task.username !== user.username) {
+    return res.status(403).json({ message: "Task doesn't belongs to user" });
   }
-  if(task.status === 'closed'){
-    return res.status(400).json({message: "Task is already closed"});
+  if (task.status === "closed") {
+    return res.status(400).json({ message: "Task is already closed" });
   }
   const taskType = await TaskType.findByPk(task.type_id);
   const data = await Data.findAll({ where: { task_id } });
@@ -161,11 +164,13 @@ const closeTask = async (req, res) => {
     saldo: Number(user.saldo) + payChange,
   });
   const currentDate = new Date();
-  const closeDate = `${currentDate.getFullYear()}-${currentDate.getMonth() + 1}-${currentDate.getDate() + 1}`;
+  const closeDate = `${currentDate.getFullYear()}-${
+    currentDate.getMonth() + 1
+  }-${currentDate.getDate() + 1}`;
   console.log(closeDate);
   task = await task.update({
     status: "closed",
-    close_date: closeDate
+    close_date: closeDate,
   });
 
   return res.status(200).json({
@@ -191,9 +196,9 @@ const get_tasks = async (req, res) => {
   try {
     userData = jwt.verify(tokenNow, process.env.JWT_TOKEN_SECRET);
   } catch {
-    return res.json({
-      status: 400,
-      message: "unverified",
+    return res.status(401).json({
+      status: 401,
+      message: "Unauthorized",
     });
   }
   userData = await User.findByPk(userData["username"]);
@@ -258,7 +263,7 @@ const get_tasks = async (req, res) => {
       }
     }
 
-    return res.json(results);
+    return res.status(200).json(results);
   } else {
     let sqlNow = `SELECT t.task_id,task_types.type_name,username,max_labeller,close_date,status,minimal_credibility `;
     sqlNow += `FROM tasks t,  task_types `;
@@ -276,6 +281,14 @@ const get_tasks = async (req, res) => {
         username: userData["username"],
       },
     });
+
+    if (results["username"] != userData["username"]) {
+      return res.status(403).json({
+        status: 403,
+        message:
+          "Task can only be seen by labeller/requester who create the task.",
+      });
+    }
 
     // return res.json(results);
 
@@ -312,7 +325,7 @@ const get_tasks = async (req, res) => {
       // );
     }
 
-    return res.json({
+    return res.status(200).json({
       status: 200,
       results,
     });
@@ -328,9 +341,9 @@ const get_task = async (req, res) => {
   try {
     userData = jwt.verify(tokenNow, process.env.JWT_TOKEN_SECRET);
   } catch {
-    return res.json({
-      status: 400,
-      message: "unverified",
+    return res.status(401).json({
+      status: 401,
+      message: "Unauthorized",
     });
   }
   userData = await User.findByPk(userData["username"]);
@@ -367,6 +380,14 @@ const get_task = async (req, res) => {
     creator = true;
   }
 
+  if (userData["role"] == "requester" && !creator) {
+    return res.status(403).json({
+      status: 403,
+      message:
+        "Task can only be seen by labeller/requester who create the task.",
+    });
+  }
+
   dataFound = await Data.findAll({
     attributes: ["data_id", "data_text", "price"],
     where: {
@@ -396,7 +417,7 @@ const get_task = async (req, res) => {
   );
 
   item.data = dataFound;
-  return res.json({
+  return res.status(200).json({
     status: 200,
     result: item,
   });
@@ -405,7 +426,7 @@ const get_task = async (req, res) => {
 const get_task_type = async (req, res) => {
   let task_types = await TaskType.findAll();
 
-  return res.json({
+  return res.status(200).json({
     status: 200,
     task_types,
   });
@@ -416,5 +437,5 @@ module.exports = {
   get_tasks,
   get_task,
   get_task_type,
-  closeTask
+  closeTask,
 };

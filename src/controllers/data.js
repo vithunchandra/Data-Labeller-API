@@ -24,13 +24,13 @@ const queryHuggingFace = async (textToBeSummarized) => {
 
   const params = {
     inputs: text_now,
-    temperature: 0,
-    max_new_tokens: 16,
-    do_sample: false,
+    temperature: 0.4,
+    max_new_tokens: 128,
+    do_sample: true,
   };
 
   const perintah = await axios.post(
-    "https://api-inference.huggingface.co/models/google/flan-t5-xxl",
+    "https://api-inference.huggingface.co/models/bigscience/bloom",
     params,
     opts
   );
@@ -69,16 +69,16 @@ const addData = async (req, res) => {
   try {
     userData = jwt.verify(tokenNow, process.env.JWT_TOKEN_SECRET);
   } catch {
-    return res.json({
-      status: 400,
-      message: "unverified",
+    return res.status(401).json({
+      status: 401,
+      message: "Unauthorized",
     });
   }
   userData = await User.findByPk(userData["username"]);
 
   if (userData["username"] != taskNow["username"]) {
-    return res.json({
-      status: 400,
+    return res.status(403).json({
+      status: 403,
       message: "Data can only be created by the one who create the task",
     });
   }
@@ -98,7 +98,7 @@ const addData = async (req, res) => {
     (charNum * taskType["price_char"]) / 10 + labelNum * 10
   );
   if (userData["saldo"] < priceNow * taskNow["max_labeller"]) {
-    return res.json({
+    return res.status(400).json({
       status: 400,
       message: `Saldo anda tidak cukup, uang yang dibutuhkan adalah ${
         priceNow * taskNow["max_labeller"]
@@ -126,6 +126,15 @@ const addData = async (req, res) => {
     nowDate.getHours();
   idNow = await getMaxId("data", "data_id", idNow, 5);
 
+  const showData = {
+    data_id: idNow,
+    task_id: task_id,
+    data_text: data_text,
+    per_labeller_price: priceNow,
+    price_you_pay: priceNow * taskNow["max_labeller"],
+    remaining_money: userData["saldo"] - priceNow * taskNow["max_labeller"],
+  };
+
   const newData = {
     data_id: idNow,
     task_id: task_id,
@@ -139,7 +148,7 @@ const addData = async (req, res) => {
     status: 200,
     body: {
       message: "Succesfully Created",
-      newData,
+      showData,
     },
   });
 };
@@ -158,15 +167,15 @@ const labeller_get_data = async (req, res) => {
   try {
     userData = jwt.verify(tokenNow, process.env.JWT_TOKEN_SECRET);
   } catch {
-    return res.json({
-      status: 400,
-      message: "unverified",
+    return res.status(401).json({
+      status: 401,
+      message: "Unauthorized",
     });
   }
   userData = await User.findByPk(userData["username"]);
   if (String(userData["role"]).toLowerCase() != "labeller") {
-    return res.json({
-      status: 400,
+    return res.status(403).json({
+      status: 403,
       message: "only labeller can search data",
     });
   }
@@ -226,7 +235,7 @@ const labeller_get_data = async (req, res) => {
     );
   }
 
-  return res.json({
+  return res.status(200).json({
     status: 200,
     results,
   });
