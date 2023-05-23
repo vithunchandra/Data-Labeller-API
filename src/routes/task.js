@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const {authorization} = require('../middlewares/middleware');
+const { authorization } = require("../middlewares/middleware");
 const {
   addTask,
   get_tasks,
