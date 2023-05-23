@@ -11,7 +11,7 @@ const labeling = async (req, res) => {
     }
 
     if(!label_result || !data_id){
-        return res.status(404).json({message: "Every field must be provided"});
+        return res.status(400).json({message: "Every field must be provided"});
     }
 
     if(user.role !== 'labeller'){
@@ -46,7 +46,7 @@ const labeling = async (req, res) => {
     });
 
     if(isExist) {
-        return res.status(200).json({message: "Labeller can only post one label in at one data"});
+        return res.status(400).json({message: "Labeller can only post one label in at one data"});
     }
 
     const lastData = await Label.findOne({order: [['label_id', 'DESC']]});
@@ -56,9 +56,9 @@ const labeling = async (req, res) => {
         label_id: newID,
         data_id,
         username: user.username,
-        label_result
+        label_result: undefined
     });
-    return res.status(201).json({message: newLabel});
+    return res.status(201).json({body: undefined});
 };
 
 const updateLabel = async (req, res) => {
