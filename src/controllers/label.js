@@ -56,9 +56,9 @@ const labeling = async (req, res) => {
         label_id: newID,
         data_id,
         username: user.username,
-        label_result: undefined
+        label_result
     });
-    return res.status(201).json({body: undefined});
+    return res.status(201).json({body: newLabel});
 };
 
 const updateLabel = async (req, res) => {
@@ -97,11 +97,11 @@ const updateLabel = async (req, res) => {
         return res.status(400).json({message: "Label doesn't belong to this user"});
     }
 
-    await label.update({
+    const newLabel = await label.update({
         label_result
     });
 
-    return res.status(201).json({message: label});
+    return res.status(201).json({body: newLabel});
 };
 
 const getLabel = async (req, res) => {

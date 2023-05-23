@@ -16,17 +16,17 @@
 					"urlencoded": [
 						{
 							"key": "username",
-							"value": "user1",
+							"value": "user12",
 							"type": "text"
 						},
 						{
 							"key": "password",
-							"value": "user1",
+							"value": "user12",
 							"type": "text"
 						},
 						{
 							"key": "name",
-							"value": "user1",
+							"value": "user12",
 							"type": "text"
 						},
 						{
@@ -58,12 +58,53 @@
 		},
 		{
 			"name": "labelling",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Autohorization test\", () => {\r",
+							"    const result = pm.response.json();\r",
+							"    if(result.message === \"Invalid JWT Token\"){\r",
+							"        pm.response.to.have.status(403);\r",
+							"    }else if(result.message === \"User not found\"){\r",
+							"        pm.response.to.have.status(404);\r",
+							"    }\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Input test\", () => {\r",
+							"    const result = pm.response.json();\r",
+							"    if(result.message === \"Every field must be provided\" || result.message === \"Task already closed\" || String(result.message).includes(\"Quota exceeded for Data\") || result.message === \"Labeller can only post one label in at one data\"){\r",
+							"        pm.response.to.have.status(400);\r",
+							"    }else if(result.message === \"Endpoint only allowed for labeller\"){\r",
+							"        pm.response.to.have.status(403);\r",
+							"    }else if(result.message === \"Data not found\" || result.message === \"Task not found\"){\r",
+							"        pm.response.to.have.status(404);\r",
+							"    }\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Result test\", () => {\r",
+							"    pm.expect(response).is.not.undefined;\r",
+							"    const result = pm.response.json();\r",
+							"    const body = result.body;\r",
+							"    pm.expect(body).to.have.all.keys('label_id', 'data_id', 'username', 'label_result');\r",
+							"    for(const property in body){\r",
+							"        console.log()\r",
+							"        pm.expect(body[property]).is.not.undefined;\r",
+							"    }\r",
+							"    pm.response.to.have.status(201);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
 			"request": {
 				"method": "POST",
 				"header": [
 					{
 						"key": "x-auth-token",
-						"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IkFrZWVtNCIsImlhdCI6MTY4MzYyNDMwMSwiZXhwIjoxNjgzNjI3OTAxfQ.1zvDCvJS27Etd7fka5OdahIjJuoBurerdAz3cjvva3s",
+						"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IkFsYmVydG81OSIsImlhdCI6MTY4NDgzNDgwMiwiZXhwIjoxNjg0ODM4NDAyfQ.7aCOUn35dHLQZoWjJIxpBoBmC3m3nuUUFmHmmWA4JIc",
 						"type": "text"
 					}
 				],
@@ -708,12 +749,12 @@
 					"urlencoded": [
 						{
 							"key": "username",
-							"value": "Akeem4",
+							"value": "Alberto59",
 							"type": "text"
 						},
 						{
 							"key": "password",
-							"value": "ts7pB",
+							"value": "aBIXr",
 							"type": "text"
 						}
 					]
@@ -785,6 +826,55 @@
 		},
 		{
 			"name": "closeTask",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Autohorization test\", () => {\r",
+							"    const result = pm.response.json();\r",
+							"    if(result.message === \"Invalid JWT Token\"){\r",
+							"        pm.response.to.have.status(403);\r",
+							"    }else if(result.message === \"User not found\"){\r",
+							"        pm.response.to.have.status(404);\r",
+							"    }\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Input test\", () => {\r",
+							"    const result = pm.response.json();\r",
+							"    if(result.message === \"Every field must be provided\" || result.message === \"Task already closed\"){\r",
+							"        pm.response.to.have.status(400);\r",
+							"    }else if(result.message === \"Endpoint only allowed for requester\"){\r",
+							"        pm.response.to.have.status(403);\r",
+							"    }else if(result.message === \"Data not found\" || result.message === \"Task not found\"){\r",
+							"        pm.response.to.have.status(404);\r",
+							"    }\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Result test\", () => {\r",
+							"    const body = pm.response.json().body;\r",
+							"    pm.expect(body).to.have.all.keys([\r",
+							"        'message', \r",
+							"        'task_id', \r",
+							"        'task_type', \r",
+							"        'max_labeller', \r",
+							"        'status', \r",
+							"        'maximal_cost', \r",
+							"        'final_cost', \r",
+							"        'pay_change',\r",
+							"        'data'\r",
+							"    ]);\r",
+							"    for(const property in body){\r",
+							"        console.log()\r",
+							"        pm.expect(body[property]).is.not.undefined;\r",
+							"    }\r",
+							"    pm.response.to.have.status(200);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
 			"request": {
 				"method": "POST",
 				"header": [
@@ -1266,19 +1356,93 @@
 		{
 			"name": "createData",
 			"request": {
-				"method": "GET",
-				"header": []
+				"method": "POST",
+				"header": [
+					{
+						"key": "x-auth-token",
+						"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IkFiaWdhaWw5MyIsImlhdCI6MTY4MzU0MDgxOSwiZXhwIjoxNjgzNTQ0NDE5fQ._BQdbPtjo7n6XDBga757SEtwan94U8LtqQjLtKpBHvE",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "task_id",
+							"value": "TRAB202305210001",
+							"type": "text"
+						},
+						{
+							"key": "data_text",
+							"value": "Dummy Data",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "{{HOST}}/api/v1/data",
+					"host": [
+						"{{HOST}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"data"
+					]
+				}
 			},
 			"response": []
 		},
 		{
 			"name": "updateLabel",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Autohorization test\", () => {\r",
+							"    const result = pm.response.json();\r",
+							"    if(result.message === \"Invalid JWT Token\"){\r",
+							"        pm.response.to.have.status(403);\r",
+							"    }else if(result.message === \"User not found\"){\r",
+							"        pm.response.to.have.status(404);\r",
+							"    }\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Input test\", () => {\r",
+							"    const result = pm.response.json();\r",
+							"    if(result.message === \"Every field must be provided\" || result.message === \"Task already closed\" || result.message === \"Label doesn't belong to this user\"){\r",
+							"        pm.response.to.have.status(400);\r",
+							"    }else if(result.message === \"Endpoint only allowed for labeller\"){\r",
+							"        pm.response.to.have.status(403);\r",
+							"    }else if(result.message === \"Label not found\"){\r",
+							"        pm.response.to.have.status(404);\r",
+							"    }\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Result test\", () => {\r",
+							"    pm.expect(pm.response).is.not.undefined;\r",
+							"    const result = pm.response.json();\r",
+							"    const body = result.body;\r",
+							"    console.log(body);\r",
+							"    pm.expect(body).to.have.all.keys('label_id', 'data_id', 'username', 'label_result');\r",
+							"    for(const property in body){\r",
+							"        console.log()\r",
+							"        pm.expect(body[property]).is.not.undefined;\r",
+							"    }\r",
+							"    pm.response.to.have.status(201);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
 			"request": {
 				"method": "PUT",
 				"header": [
 					{
 						"key": "x-auth-token",
-						"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IkFrZWVtNCIsImlhdCI6MTY4MzYyNDMwMSwiZXhwIjoxNjgzNjI3OTAxfQ.1zvDCvJS27Etd7fka5OdahIjJuoBurerdAz3cjvva3s",
+						"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IkFsYmVydG81OSIsImlhdCI6MTY4NDgzODUyMiwiZXhwIjoxNjg0ODQyMTIyfQ.bRoERCB9XvHC64FMOah6foMN3xhCBOGm9K0ok_TOMHc",
 						"type": "text"
 					}
 				],
@@ -1287,7 +1451,7 @@
 					"urlencoded": [
 						{
 							"key": "label_id",
-							"value": "L007",
+							"value": "L010",
 							"type": "text"
 						},
 						{
@@ -2360,7 +2524,7 @@
 					"body": "{\n    \"body\": [\n        {\n            \"label_id\": \"L007\",\n            \"username\": \"Akeem4\",\n            \"label_result\": \"New Label Result\"\n        },\n        {\n            \"label_id\": \"L008\",\n            \"username\": \"Diego8\",\n            \"label_result\": \"Label of dummy data 3\"\n        },\n        {\n            \"label_id\": \"L009\",\n            \"username\": \"Dennis66\",\n            \"label_result\": \"Label of dummy data 4\"\n        }\n    ]\n}"
 				},
 				{
-					"name": "Access other requester data",
+					"name": "Access other requester task",
 					"originalRequest": {
 						"method": "GET",
 						"header": [
@@ -2944,6 +3108,44 @@
 					"body": "{\n    \"body\": [\n        {\n            \"data_id\": \"D20234441400008\",\n            \"data_text\": \"are you yes man?\",\n            \"label\": {\n                \"label_id\": \"L002\",\n                \"label_result\": \"yes\"\n            }\n        },\n        {\n            \"data_id\": \"D20234441400008\",\n            \"data_text\": \"are you yes man?\",\n            \"label\": {\n                \"label_id\": \"L005\",\n                \"label_result\": \"Yeah, i am a man\"\n            }\n        },\n        {\n            \"data_id\": \"D20234811700001\",\n            \"data_text\": \"Dummy Data\",\n            \"label\": {\n                \"label_id\": \"L006\",\n                \"label_result\": \"Label of dummy data\"\n            }\n        },\n        {\n            \"data_id\": \"D20234441400002\",\n            \"data_text\": \"With the ambitious Ryuusui Nanami on board, Senkuu Ishigami and his team are almost ready to sail the seas and reach the other side of the world—where the bizarre green light that petrified humanity originated. Thanks to the revival of a skillful chef, enough food is being prepared for the entire crew, and the incredible reinvention of the GPS promises to ensure safety on the open sea.\",\n            \"label\": {\n                \"label_id\": \"L007\",\n                \"label_result\": \"New Label Result\"\n            }\n        },\n        {\n            \"data_id\": \"D20234441400009\",\n            \"data_text\": \"do you like playing game?\",\n            \"label\": {\n                \"label_id\": \"L010\",\n                \"label_result\": \"Label of dummy data\"\n            }\n        }\n    ]\n}"
 				}
 			]
+		},
+		{
+			"name": "{{HOST}}/api/v1/label?task_id=BOAB202308250001",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "x-auth-token",
+						"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IkFudG9pbmV0dGU0MyIsImlhdCI6MTY4MzYzNDg1NSwiZXhwIjoxNjgzNjM4NDU1fQ.yqtZD9MP_PVKKUvq4msS6Ulyn4buiLgri9AcNb2d410",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": []
+				},
+				"url": {
+					"raw": "{{HOST}}/api/v1/label?task_id=BOAB202308250001",
+					"host": [
+						"{{HOST}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"label"
+					],
+					"query": [
+						{
+							"key": "task_id",
+							"value": "BOAB202308250001"
+						}
+					]
+				}
+			},
+			"response": []
 		}
 	]
 }
