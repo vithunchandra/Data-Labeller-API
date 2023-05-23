@@ -73,6 +73,21 @@
 							"});\r",
 							"\r",
 							"pm.test(\"Input test\", () => {\r",
+							"    const request = pm.request.body.urlencoded.filter((item) => {\r",
+							"        if(!item.disabled){\r",
+							"            return item;\r",
+							"        }\r",
+							"    }).reduce((input, item) => {\r",
+							"        return {...input, [item.key] : item.value};\r",
+							"    }, {});\r",
+							"    \r",
+							"    for(const key in input){\r",
+							"        if(!input[key]){\r",
+							"            pm.expect(pm.response.json().message).is.equal(\"Every field must be provided\");\r",
+							"            pm.response.to.have.status(400);\r",
+							"        }\r",
+							"    }\r",
+							"\r",
 							"    const result = pm.response.json();\r",
 							"    if(result.message === \"Every field must be provided\" || result.message === \"Task already closed\" || String(result.message).includes(\"Quota exceeded for Data\") || result.message === \"Labeller can only post one label in at one data\"){\r",
 							"        pm.response.to.have.status(400);\r",
@@ -84,7 +99,7 @@
 							"});\r",
 							"\r",
 							"pm.test(\"Result test\", () => {\r",
-							"    pm.expect(response).is.not.undefined;\r",
+							"    pm.expect(pm.response).is.not.undefined;\r",
 							"    const result = pm.response.json();\r",
 							"    const body = result.body;\r",
 							"    pm.expect(body).to.have.all.keys('label_id', 'data_id', 'username', 'label_result');\r",
@@ -841,6 +856,24 @@
 							"});\r",
 							"\r",
 							"pm.test(\"Input test\", () => {\r",
+							"    const request = pm.request.body.urlencoded.filter((item) => {\r",
+							"        if(!item.disabled){\r",
+							"            return item;\r",
+							"        }\r",
+							"    }).reduce((input, item) => {\r",
+							"        return {...input, [item.key] : item.value};\r",
+							"    }, {});\r",
+							"\r",
+							"    console.log(pm.request.url.query.all());\r",
+							"    \r",
+							"    for(const key in input){\r",
+							"        if(!input[key]){\r",
+							"            pm.expect(pm.response.json().message).is.equal(\"Every field must be provided\");\r",
+							"            pm.response.to.have.status(400);\r",
+							"        }\r",
+							"    }\r",
+							"\r",
+							"\r",
 							"    const result = pm.response.json();\r",
 							"    if(result.message === \"Every field must be provided\" || result.message === \"Task already closed\"){\r",
 							"        pm.response.to.have.status(400);\r",
@@ -1410,6 +1443,22 @@
 							"});\r",
 							"\r",
 							"pm.test(\"Input test\", () => {\r",
+							"const request = pm.request.body.urlencoded.filter((item) => {\r",
+							"        if(!item.disabled){\r",
+							"            return item;\r",
+							"        }\r",
+							"    }).reduce((input, item) => {\r",
+							"        return {...input, [item.key] : item.value};\r",
+							"    }, {});\r",
+							"    \r",
+							"    for(const key in input){\r",
+							"        if(!input[key]){\r",
+							"            pm.expect(pm.response.json().message).is.equal(\"Every field must be provided\");\r",
+							"            pm.response.to.have.status(400);\r",
+							"        }\r",
+							"    }\r",
+							"\r",
+							"\r",
 							"    const result = pm.response.json();\r",
 							"    if(result.message === \"Every field must be provided\" || result.message === \"Task already closed\" || result.message === \"Label doesn't belong to this user\"){\r",
 							"        pm.response.to.have.status(400);\r",
@@ -1998,12 +2047,42 @@
 		},
 		{
 			"name": "userDetail",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Autohorization test\", () => {\r",
+							"    const result = pm.response.json();\r",
+							"    if(result.message === \"Invalid JWT Token\"){\r",
+							"        pm.response.to.have.status(403);\r",
+							"    }else if(result.message === \"User not found\"){\r",
+							"        pm.response.to.have.status(404);\r",
+							"    }\r",
+							"});\r",
+							"\r",
+							"pm.test('Result test', () => {\r",
+							"    let requestBody = pm.request.body;\r",
+							"    let rawData = requestBody.raw;\r",
+							"    console.log(rawData);\r",
+							"    const result = pm.response.json().body;\r",
+							"    console.log(result)\r",
+							"    pm.expect(result).to.have.all.keys('username', 'name', 'role', 'credibility');\r",
+							"    for(const key in result){\r",
+							"        pm.expect(result[key]).is.not.undefined;\r",
+							"    }\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
 			"request": {
 				"method": "GET",
 				"header": [
 					{
 						"key": "x-auth-token",
-						"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IkFudG9pbmV0dGU0MyIsImlhdCI6MTY4MzYzNDg1NSwiZXhwIjoxNjgzNjM4NDU1fQ.yqtZD9MP_PVKKUvq4msS6Ulyn4buiLgri9AcNb2d410",
+						"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IkFudG9pbmV0dGU0MyIsImlhdCI6MTY4NDg0NzM5MiwiZXhwIjoxNjg0ODUwOTkyfQ.-CRlD6tYDnbnznEpnvoPbKHG0xlsoWvn_NOXnloeycY",
 						"type": "text"
 					}
 				],
@@ -2264,6 +2343,50 @@
 		},
 		{
 			"name": "getLabel",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Autohorization test\", () => {\r",
+							"    const result = pm.response.json();\r",
+							"    if(result.message === \"Invalid JWT Token\"){\r",
+							"        pm.response.to.have.status(403);\r",
+							"    }else if(result.message === \"User not found\"){\r",
+							"        pm.response.to.have.status(404);\r",
+							"    }\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Input test\", () => {\r",
+							"    const result = pm.response.json();\r",
+							"    if(result.message === \"Forbidden access\"){\r",
+							"        pm.response.to.have.status(403);\r",
+							"    }else if(result.message === \"Data not found\" || result.message === \"Task not found\"){\r",
+							"        pm.response.to.have.status(404);\r",
+							"    }\r",
+							"});\r",
+							"\r",
+							"pm.request.headers.add({\r",
+							"    key: 'Authorization',\r",
+							"    value: 'Bearer ' + pm.variables.get('jwt')\r",
+							"});\r",
+							"\r",
+							"pm.test('Result test', async () => {\r",
+							"    const request = pm.request.url.query.all()[0];\r",
+							"    await console.log(pm.response.body);\r",
+							"    if(request['task_id']){\r",
+							"\r",
+							"    }else if(request['data_id']){\r",
+							"\r",
+							"    }else{\r",
+							"\r",
+							"    }\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
 			"protocolProfileBehavior": {
 				"disableBodyPruning": true
 			},
@@ -2272,7 +2395,7 @@
 				"header": [
 					{
 						"key": "x-auth-token",
-						"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IkFrZWVtNCIsImlhdCI6MTY4MzYzNTU1NiwiZXhwIjoxNjgzNjM5MTU2fQ.hQCQH10Nas9lmWc1jCdpvqd8EzdDVoD5O00dyPbDQrM",
+						"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IkFudG9pbmV0dGU0MyIsImlhdCI6MTY4NDg0NzM5MiwiZXhwIjoxNjg0ODUwOTkyfQ.-CRlD6tYDnbnznEpnvoPbKHG0xlsoWvn_NOXnloeycY",
 						"type": "text"
 					}
 				],
@@ -2281,7 +2404,7 @@
 					"urlencoded": []
 				},
 				"url": {
-					"raw": "{{HOST}}/api/v1/label",
+					"raw": "{{HOST}}/api/v1/label?task_id=CLAB202308250001",
 					"host": [
 						"{{HOST}}"
 					],
@@ -2293,8 +2416,7 @@
 					"query": [
 						{
 							"key": "task_id",
-							"value": "CLAB202308250001",
-							"disabled": true
+							"value": "CLAB202308250001"
 						}
 					]
 				}
