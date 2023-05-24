@@ -119,7 +119,7 @@ const closeTask = async (req, res) => {
   }
   if (user.role !== "requester") {
     return res.status(403).json({
-      message: "Endpoint is allowed for user with requester role only",
+      message: "Endpoint only allowed for requester",
     });
   }
   let task = await Task.findByPk(task_id);

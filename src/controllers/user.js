@@ -5,7 +5,7 @@ const {Op, where} = require('sequelize');
 const jwt = require('jsonwebtoken');
 require ("dotenv").config();
 
-const {User} = require("../models");
+const {User, History, Task, Data, Label, UserBlacklist} = require("../models");
 
 const register = async (req, res) => {
   const {name, username, password,email,role} = req.body;
@@ -393,7 +393,7 @@ const topup = async (req, res) => {
       ({
           
           username: username,
-          msg: `berhasil topup saldo sebesar: "${ saldo}" `,
+          msg: `berhasil topup saldo sebesar: "${saldo}" `,
           new_saldo: hasil_topup.saldo ,
           
           
@@ -650,15 +650,15 @@ const banUser = async (req, res) => {
     const data = await Data.findAll({
       where: {task_id: task_user.task_id}
     })
-
     var cek = false;
     for(var i = 0; i < data.length; i++){
+      console.log(data[i].data_id);
       const label = await Label.findAll({
         where: {data_id: data[i].data_id}
       })
-
-      for(var i = 0; i < label.length; i++){
-        if(label[i].username == task_user.username){
+      for(var j = 0; j < label.length; j++){
+        console.log(label[j].username);
+        if(label[j].username == task_user.username){
           cek = true;
           break;
         }
