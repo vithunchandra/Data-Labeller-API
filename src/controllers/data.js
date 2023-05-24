@@ -100,9 +100,9 @@ const addData = async (req, res) => {
   if (userData["saldo"] < priceNow * taskNow["max_labeller"]) {
     return res.status(400).json({
       status: 400,
-      message: `Saldo anda tidak cukup, uang yang dibutuhkan adalah ${
+      message: `You don't have enough money, the money needded is ${
         priceNow * taskNow["max_labeller"]
-      }, sedangkan uang anda ${userData["saldo"]}`,
+      }, whereas your money is only ${userData["saldo"]}`,
     });
   } else {
     userData.increment({ saldo: -(priceNow * taskNow["max_labeller"]) });

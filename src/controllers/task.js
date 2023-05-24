@@ -335,6 +335,7 @@ const get_tasks = async (req, res) => {
 const get_task = async (req, res) => {
   const { task_id } = req.params;
   const tokenNow = req.headers["x-auth-token"];
+  console.log(req.headers);
   console.log("TASK ID NOW : " + task_id);
 
   let userData = [];
