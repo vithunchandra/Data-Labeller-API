@@ -14,10 +14,17 @@ module.exports = (sequelize, DataTypes) => {
     }
   }
   UserBlacklist.init({
-    ban_id: DataTypes.STRING
+    ban_id: {
+      type: DataTypes.STRING,
+      primaryKey: true
+    },
+    username: DataTypes.STRING,
+    task_id: DataTypes.STRING
   }, {
     sequelize,
     modelName: 'UserBlacklist',
+    tableName: 'user_blacklists',
+    timestamps: false
   });
   return UserBlacklist;
 };
