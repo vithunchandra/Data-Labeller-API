@@ -5,7 +5,7 @@ const {Op, where} = require('sequelize');
 const jwt = require('jsonwebtoken');
 require ("dotenv").config();
 
-const {User} = require("../models");
+const {User, History, Task, Data, Label, UserBlacklist} = require("../models");
 
 const register = async (req, res) => {
   const {name, username, password,email,role} = req.body;
@@ -393,7 +393,7 @@ const topup = async (req, res) => {
       ({
           
           username: username,
-          msg: `berhasil topup saldo sebesar: "${ saldo}" `,
+          msg: `berhasil topup saldo sebesar: "${saldo}" `,
           new_saldo: hasil_topup.saldo ,
           
           
