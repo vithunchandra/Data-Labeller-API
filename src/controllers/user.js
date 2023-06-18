@@ -581,6 +581,62 @@ const retrive_money = async (req, res) => {
       });
 }
 
+const update_user = async (req, res) => {
+  const {username} = req.params;
+  const tokenNow = req.headers["x-auth-token"];
+  try {
+    userData = jwt.verify(tokenNow, process.env.JWT_TOKEN_SECRET);
+  } catch {
+    return res.json({
+      status: 400,
+      message: "unverified",
+    });
+  }
+
+  let idres = await User.findOne
+  ({
+    attributes: ["role"],
+    where: 
+    {
+      username: username
+    }
+  });
+  let rolenow = null
+  if(idres.role == 'requester') 
+  {  
+    rolenow = "labeller";
+  }
+  if(idres.role == 'labeller') 
+  {  
+    rolenow = "requester";
+  }
+   
+
+    let userup = await User.update
+    (
+      {
+        role: rolenow ,
+      },
+      {where: {username: username,}}
+      
+    );
+    
+    return res.status(201).send
+      ({
+          
+          username: username,
+          msg: `berhasil mengganti role menjadi "${ rolenow}" `,
+          
+          
+          
+          
+      });
+   
+
+    
+}
+
+
 const withdrawHistory = async (req, res) => {
   const histories = await History.findAll({
     where: {
@@ -793,6 +849,7 @@ module.exports = {
   topup,
   topupHistory,
   retrive_money,
+  update_user,
   withdrawHistory,
   banUser,
   getBanUser,
