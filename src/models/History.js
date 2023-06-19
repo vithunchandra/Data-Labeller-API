@@ -24,7 +24,8 @@ module.exports = (sequelize, DataTypes) => {
   }, {
     sequelize,
     modelName: 'History',
-    timestamps: false
+    timestamps: false,
+    tableName: 'histories'
   });
   return History;
 };
