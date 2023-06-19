@@ -30,7 +30,7 @@ const register = async (req, res) => {
             return idres.username === username 
         })
         if (s !== undefined) {
-            throw new Error("email is not unique")
+            throw new Error("username is not unique")
         }
     }
   } 

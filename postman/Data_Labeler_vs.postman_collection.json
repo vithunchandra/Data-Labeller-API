@@ -1,0 +1,5192 @@
+{
+	"info": {
+		"_postman_id": "ceeaf3fb-8fc8-450d-a948-b454b806e441",
+		"name": "Data_Labeler",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "registerUser",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "username",
+							"value": "user12",
+							"type": "text"
+						},
+						{
+							"key": "password",
+							"value": "user12",
+							"type": "text"
+						},
+						{
+							"key": "name",
+							"value": "user12",
+							"type": "text"
+						},
+						{
+							"key": "email",
+							"value": "user1@gmail.com",
+							"type": "text"
+						},
+						{
+							"key": "role",
+							"value": "requester",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "{{HOST}}/api/v1/user/register",
+					"host": [
+						"{{HOST}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"user",
+						"register"
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "user kembar(username , email)",
+					"originalRequest": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "username",
+									"value": "user12",
+									"type": "text"
+								},
+								{
+									"key": "password",
+									"value": "user12",
+									"type": "text"
+								},
+								{
+									"key": "name",
+									"value": "user12",
+									"type": "text"
+								},
+								{
+									"key": "email",
+									"value": "user1@gmail.com",
+									"type": "text"
+								},
+								{
+									"key": "role",
+									"value": "requester",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{HOST}}/api/v1/user/register",
+							"host": [
+								"{{HOST}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"user",
+								"register"
+							]
+						}
+					},
+					"_postman_previewlanguage": null,
+					"header": null,
+					"cookie": [],
+					"body": null
+				},
+				{
+					"name": "berhasil registerUser",
+					"originalRequest": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "username",
+									"value": "user12",
+									"type": "text"
+								},
+								{
+									"key": "password",
+									"value": "user12",
+									"type": "text"
+								},
+								{
+									"key": "name",
+									"value": "user12",
+									"type": "text"
+								},
+								{
+									"key": "email",
+									"value": "user1@gmail.com",
+									"type": "text"
+								},
+								{
+									"key": "role",
+									"value": "requester",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{HOST}}/api/v1/user/register",
+							"host": [
+								"{{HOST}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"user",
+								"register"
+							]
+						}
+					},
+					"_postman_previewlanguage": null,
+					"header": null,
+					"cookie": [],
+					"body": null
+				},
+				{
+					"name": "ada yg kosong",
+					"originalRequest": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "username",
+									"value": "user12",
+									"type": "text"
+								},
+								{
+									"key": "password",
+									"value": "user12",
+									"type": "text"
+								},
+								{
+									"key": "name",
+									"value": "user12",
+									"type": "text"
+								},
+								{
+									"key": "email",
+									"value": "user1@gmail.com",
+									"type": "text"
+								},
+								{
+									"key": "role",
+									"value": "requester",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{HOST}}/api/v1/user/register",
+							"host": [
+								"{{HOST}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"user",
+								"register"
+							]
+						}
+					},
+					"_postman_previewlanguage": null,
+					"header": null,
+					"cookie": [],
+					"body": null
+				}
+			]
+		},
+		{
+			"name": "labelling",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Autohorization test\", () => {\r",
+							"    const result = pm.response.json();\r",
+							"    if(result.message === \"Invalid JWT Token\"){\r",
+							"        pm.response.to.have.status(403);\r",
+							"    }else if(result.message === \"User not found\"){\r",
+							"        pm.response.to.have.status(404);\r",
+							"    }\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Input test\", () => {\r",
+							"    const request = pm.request.body.urlencoded.filter((item) => {\r",
+							"        if(!item.disabled){\r",
+							"            return item;\r",
+							"        }\r",
+							"    }).reduce((input, item) => {\r",
+							"        return {...input, [item.key] : item.value};\r",
+							"    }, {});\r",
+							"    \r",
+							"    for(const key in input){\r",
+							"        if(!input[key]){\r",
+							"            pm.expect(pm.response.json().message).is.equal(\"Every field must be provided\");\r",
+							"            pm.response.to.have.status(400);\r",
+							"        }\r",
+							"    }\r",
+							"\r",
+							"    const result = pm.response.json();\r",
+							"    if(result.message === \"Every field must be provided\" || result.message === \"Task already closed\" || String(result.message).includes(\"Quota exceeded for Data\") || result.message === \"Labeller can only post one label in at one data\"){\r",
+							"        pm.response.to.have.status(400);\r",
+							"    }else if(result.message === \"Endpoint only allowed for labeller\"){\r",
+							"        pm.response.to.have.status(403);\r",
+							"    }else if(result.message === \"Data not found\" || result.message === \"Task not found\"){\r",
+							"        pm.response.to.have.status(404);\r",
+							"    }\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Result test\", () => {\r",
+							"    pm.expect(pm.response).is.not.undefined;\r",
+							"    const result = pm.response.json();\r",
+							"    const body = result.body;\r",
+							"    pm.expect(body).to.have.all.keys('label_id', 'data_id', 'username', 'label_result');\r",
+							"    for(const property in body){\r",
+							"        console.log()\r",
+							"        pm.expect(body[property]).is.not.undefined;\r",
+							"    }\r",
+							"    pm.response.to.have.status(201);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "x-auth-token",
+						"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IlJoaWFubmExOCIsImlhdCI6MTY4NDkzNjgwMCwiZXhwIjoxNjg0OTQwNDAwfQ.NQbGimg0pC-y7YMvsFrW2HF8LjHUtNSN962pn7aiUYk",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "data_id",
+							"value": "D202342432000002",
+							"type": "text"
+						},
+						{
+							"key": "label_result",
+							"value": "Qwerty U10p!",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "{{HOST}}/api/v1/label",
+					"host": [
+						"{{HOST}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"label"
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "Success request",
+					"originalRequest": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "x-auth-token",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IkFrZWVtNCIsImlhdCI6MTY4MzYyNDMwMSwiZXhwIjoxNjgzNjI3OTAxfQ.1zvDCvJS27Etd7fka5OdahIjJuoBurerdAz3cjvva3s",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "data_id",
+									"value": "D20234441400009",
+									"type": "text"
+								},
+								{
+									"key": "label_result",
+									"value": "Label of dummy data",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{HOST}}/api/v1/label",
+							"host": [
+								"{{HOST}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"label"
+							]
+						}
+					},
+					"status": "Created",
+					"code": 201,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "X-Powered-By",
+							"value": "Express"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json; charset=utf-8"
+						},
+						{
+							"key": "Content-Length",
+							"value": "116"
+						},
+						{
+							"key": "ETag",
+							"value": "W/\"74-Fv2CUFp0EC/d5HM4KKeNmMDQXCc\""
+						},
+						{
+							"key": "Date",
+							"value": "Tue, 09 May 2023 09:39:35 GMT"
+						},
+						{
+							"key": "Connection",
+							"value": "keep-alive"
+						},
+						{
+							"key": "Keep-Alive",
+							"value": "timeout=5"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"message\": {\n        \"label_id\": \"L010\",\n        \"data_id\": \"D20234441400009\",\n        \"username\": \"Akeem4\",\n        \"label_result\": \"Label of dummy data\"\n    }\n}"
+				},
+				{
+					"name": "invalid jwt token when labelling",
+					"originalRequest": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "x-auth-token",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IkRlbm5pczY2IiwiaWF0IjoxNjgzNTQyNTczLCJleHAiOjE2ODM1NDYxNzN9.ehO4XJ4EOw_Rmcgqvo9z8oiDONSllmvbhkODGsRokn8",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "data_id",
+									"value": "D20234441400002",
+									"type": "text"
+								},
+								{
+									"key": "label_result",
+									"value": "Label of dummy data 4",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{HOST}}/api/v1/label",
+							"host": [
+								"{{HOST}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"label"
+							]
+						}
+					},
+					"status": "Unauthorized",
+					"code": 401,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "X-Powered-By",
+							"value": "Express"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json; charset=utf-8"
+						},
+						{
+							"key": "Content-Length",
+							"value": "31"
+						},
+						{
+							"key": "ETag",
+							"value": "W/\"1f-YcNYeMNtWOaOemFQirKL0uXCF/w\""
+						},
+						{
+							"key": "Date",
+							"value": "Tue, 09 May 2023 09:22:49 GMT"
+						},
+						{
+							"key": "Connection",
+							"value": "keep-alive"
+						},
+						{
+							"key": "Keep-Alive",
+							"value": "timeout=5"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"message\": \"Invalid JWT Token\"\n}"
+				},
+				{
+					"name": "Labelling without x-auth-token",
+					"originalRequest": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "x-auth-token",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IkRlbm5pczY2IiwiaWF0IjoxNjgzNTQyNTczLCJleHAiOjE2ODM1NDYxNzN9.ehO4XJ4EOw_Rmcgqvo9z8oiDONSllmvbhkODGsRokn8",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "data_id",
+									"value": "D20234441400002",
+									"type": "text"
+								},
+								{
+									"key": "label_result",
+									"value": "Label of dummy data 4",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{HOST}}/api/v1/label",
+							"host": [
+								"{{HOST}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"label"
+							]
+						}
+					},
+					"status": "Unauthorized",
+					"code": 401,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "X-Powered-By",
+							"value": "Express"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json; charset=utf-8"
+						},
+						{
+							"key": "Content-Length",
+							"value": "28"
+						},
+						{
+							"key": "ETag",
+							"value": "W/\"1c-j+znjSBGYk1IoOLxkUWYndvLrls\""
+						},
+						{
+							"key": "Date",
+							"value": "Tue, 09 May 2023 09:24:13 GMT"
+						},
+						{
+							"key": "Connection",
+							"value": "keep-alive"
+						},
+						{
+							"key": "Keep-Alive",
+							"value": "timeout=5"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"message\": \"Not Authorized\"\n}"
+				},
+				{
+					"name": "Quota exceeded for the data",
+					"originalRequest": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "x-auth-token",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IkFrZWVtNCIsImlhdCI6MTY4MzYyNDMwMSwiZXhwIjoxNjgzNjI3OTAxfQ.1zvDCvJS27Etd7fka5OdahIjJuoBurerdAz3cjvva3s",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "data_id",
+									"value": "D20234441400002",
+									"type": "text"
+								},
+								{
+									"key": "label_result",
+									"value": "Label of dummy data 5",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{HOST}}/api/v1/label",
+							"host": [
+								"{{HOST}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"label"
+							]
+						}
+					},
+					"status": "Bad Request",
+					"code": 400,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "X-Powered-By",
+							"value": "Express"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json; charset=utf-8"
+						},
+						{
+							"key": "Content-Length",
+							"value": "53"
+						},
+						{
+							"key": "ETag",
+							"value": "W/\"35-m6GRQ24oXPj73qzdFdLri+wsmUY\""
+						},
+						{
+							"key": "Date",
+							"value": "Tue, 09 May 2023 09:25:14 GMT"
+						},
+						{
+							"key": "Connection",
+							"value": "keep-alive"
+						},
+						{
+							"key": "Keep-Alive",
+							"value": "timeout=5"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"message\": \"Quota exceeded for Data D20234441400002\"\n}"
+				},
+				{
+					"name": "Not provide complete data",
+					"originalRequest": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "x-auth-token",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IkFrZWVtNCIsImlhdCI6MTY4MzYyNDMwMSwiZXhwIjoxNjgzNjI3OTAxfQ.1zvDCvJS27Etd7fka5OdahIjJuoBurerdAz3cjvva3s",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "data_id",
+									"value": "D20234441400002",
+									"type": "text",
+									"disabled": true
+								},
+								{
+									"key": "label_result",
+									"value": "Label of dummy data 5",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{HOST}}/api/v1/label",
+							"host": [
+								"{{HOST}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"label"
+							]
+						}
+					},
+					"status": "Not Found",
+					"code": 404,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "X-Powered-By",
+							"value": "Express"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json; charset=utf-8"
+						},
+						{
+							"key": "Content-Length",
+							"value": "42"
+						},
+						{
+							"key": "ETag",
+							"value": "W/\"2a-z03OoJyadxgz2has8US4A7lz0Y0\""
+						},
+						{
+							"key": "Date",
+							"value": "Tue, 09 May 2023 09:30:09 GMT"
+						},
+						{
+							"key": "Connection",
+							"value": "keep-alive"
+						},
+						{
+							"key": "Keep-Alive",
+							"value": "timeout=5"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"message\": \"Every field must be provided\"\n}"
+				},
+				{
+					"name": "Data not found",
+					"originalRequest": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "x-auth-token",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IkFrZWVtNCIsImlhdCI6MTY4MzYyNDMwMSwiZXhwIjoxNjgzNjI3OTAxfQ.1zvDCvJS27Etd7fka5OdahIjJuoBurerdAz3cjvva3s",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "data_id",
+									"value": "D2023444140000",
+									"type": "text"
+								},
+								{
+									"key": "label_result",
+									"value": "Label of dummy data 5",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{HOST}}/api/v1/label",
+							"host": [
+								"{{HOST}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"label"
+							]
+						}
+					},
+					"status": "Not Found",
+					"code": 404,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "X-Powered-By",
+							"value": "Express"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json; charset=utf-8"
+						},
+						{
+							"key": "Content-Length",
+							"value": "28"
+						},
+						{
+							"key": "ETag",
+							"value": "W/\"1c-i0EptGmraAHmxP2zNRGy7HQtj2g\""
+						},
+						{
+							"key": "Date",
+							"value": "Tue, 09 May 2023 09:31:15 GMT"
+						},
+						{
+							"key": "Connection",
+							"value": "keep-alive"
+						},
+						{
+							"key": "Keep-Alive",
+							"value": "timeout=5"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"message\": \"Data not found\"\n}"
+				},
+				{
+					"name": "Task is closed",
+					"originalRequest": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "x-auth-token",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IkFrZWVtNCIsImlhdCI6MTY4MzYyNDMwMSwiZXhwIjoxNjgzNjI3OTAxfQ.1zvDCvJS27Etd7fka5OdahIjJuoBurerdAz3cjvva3s",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "data_id",
+									"value": "D20234811700001",
+									"type": "text"
+								},
+								{
+									"key": "label_result",
+									"value": "Label of dummy data",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{HOST}}/api/v1/label",
+							"host": [
+								"{{HOST}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"label"
+							]
+						}
+					},
+					"status": "Bad Request",
+					"code": 400,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "X-Powered-By",
+							"value": "Express"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json; charset=utf-8"
+						},
+						{
+							"key": "Content-Length",
+							"value": "33"
+						},
+						{
+							"key": "ETag",
+							"value": "W/\"21-z9+ssclZBvfNP7OMgNZOd30ShOk\""
+						},
+						{
+							"key": "Date",
+							"value": "Tue, 09 May 2023 09:33:07 GMT"
+						},
+						{
+							"key": "Connection",
+							"value": "keep-alive"
+						},
+						{
+							"key": "Keep-Alive",
+							"value": "timeout=5"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"message\": \"Task already closed\"\n}"
+				},
+				{
+					"name": "User role is not labeller",
+					"originalRequest": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "x-auth-token",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IkFiZTY5IiwiaWF0IjoxNjgzNjI0OTkzLCJleHAiOjE2ODM2Mjg1OTN9.BvP2s10Nf1ZUjaeu6FCn64zDuPE_JpDSS3YK3PdLnvI",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "data_id",
+									"value": "D20234811700001",
+									"type": "text"
+								},
+								{
+									"key": "label_result",
+									"value": "Label of dummy data",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{HOST}}/api/v1/label",
+							"host": [
+								"{{HOST}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"label"
+							]
+						}
+					},
+					"status": "Forbidden",
+					"code": 403,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "X-Powered-By",
+							"value": "Express"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json; charset=utf-8"
+						},
+						{
+							"key": "Content-Length",
+							"value": "48"
+						},
+						{
+							"key": "ETag",
+							"value": "W/\"30-W0FWQjUMFSkd4FL/iQ2oWiZ/Fus\""
+						},
+						{
+							"key": "Date",
+							"value": "Tue, 09 May 2023 09:36:46 GMT"
+						},
+						{
+							"key": "Connection",
+							"value": "keep-alive"
+						},
+						{
+							"key": "Keep-Alive",
+							"value": "timeout=5"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"message\": \"Endpoint only allowed for labeller\"\n}"
+				}
+			]
+		},
+		{
+			"name": "loginUser",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "",
+						"value": "",
+						"type": "text",
+						"disabled": true
+					}
+				],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "username",
+							"value": "Alberto59",
+							"type": "text"
+						},
+						{
+							"key": "password",
+							"value": "aBIXr",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "{{HOST}}/api/v1/user/login",
+					"host": [
+						"{{HOST}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"user",
+						"login"
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "berhasil login",
+					"originalRequest": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "",
+								"value": "",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "username",
+									"value": "Alberto59",
+									"type": "text"
+								},
+								{
+									"key": "password",
+									"value": "aBIXr",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{HOST}}/api/v1/user/login",
+							"host": [
+								"{{HOST}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"user",
+								"login"
+							]
+						}
+					},
+					"_postman_previewlanguage": null,
+					"header": null,
+					"cookie": [],
+					"body": null
+				},
+				{
+					"name": "username salah",
+					"originalRequest": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "",
+								"value": "",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "username",
+									"value": "Alberto59",
+									"type": "text"
+								},
+								{
+									"key": "password",
+									"value": "aBIXr",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{HOST}}/api/v1/user/login",
+							"host": [
+								"{{HOST}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"user",
+								"login"
+							]
+						}
+					},
+					"_postman_previewlanguage": null,
+					"header": null,
+					"cookie": [],
+					"body": null
+				},
+				{
+					"name": "password salah",
+					"originalRequest": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "",
+								"value": "",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "username",
+									"value": "Alberto59",
+									"type": "text"
+								},
+								{
+									"key": "password",
+									"value": "aBIXr",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{HOST}}/api/v1/user/login",
+							"host": [
+								"{{HOST}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"user",
+								"login"
+							]
+						}
+					},
+					"_postman_previewlanguage": null,
+					"header": null,
+					"cookie": [],
+					"body": null
+				},
+				{
+					"name": "field kosong",
+					"originalRequest": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "",
+								"value": "",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "username",
+									"value": "Alberto59",
+									"type": "text"
+								},
+								{
+									"key": "password",
+									"value": "aBIXr",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{HOST}}/api/v1/user/login",
+							"host": [
+								"{{HOST}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"user",
+								"login"
+							]
+						}
+					},
+					"_postman_previewlanguage": null,
+					"header": null,
+					"cookie": [],
+					"body": null
+				}
+			]
+		},
+		{
+			"name": "createTask",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "x-auth-token",
+						"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IkFiaWdhaWw5MyIsImlhdCI6MTY4MzU0MDgxOSwiZXhwIjoxNjgzNTQ0NDE5fQ._BQdbPtjo7n6XDBga757SEtwan94U8LtqQjLtKpBHvE",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "type_id",
+							"value": "TT003",
+							"type": "text"
+						},
+						{
+							"key": "max_labeller",
+							"value": "100",
+							"type": "text"
+						},
+						{
+							"key": "close_date",
+							"value": "2023-05-21",
+							"type": "text"
+						},
+						{
+							"key": "minimal_credibility",
+							"value": "20",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "{{HOST}}/api/v1/task",
+					"host": [
+						"{{HOST}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"task"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "closeTask",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Autohorization test\", () => {\r",
+							"    const result = pm.response.json();\r",
+							"    if(result.message === \"Invalid JWT Token\"){\r",
+							"        pm.response.to.have.status(403);\r",
+							"    }else if(result.message === \"User not found\"){\r",
+							"        pm.response.to.have.status(404);\r",
+							"    }\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Input test\", () => {\r",
+							"    const request = pm.request.body.urlencoded.filter((item) => {\r",
+							"        if(!item.disabled){\r",
+							"            return item;\r",
+							"        }\r",
+							"    }).reduce((input, item) => {\r",
+							"        return {...input, [item.key] : item.value};\r",
+							"    }, {});\r",
+							"\r",
+							"    console.log(pm.request.url.query.all());\r",
+							"    \r",
+							"    for(const key in input){\r",
+							"        if(!input[key]){\r",
+							"            pm.expect(pm.response.json().message).is.equal(\"Every field must be provided\");\r",
+							"            pm.response.to.have.status(400);\r",
+							"        }\r",
+							"    }\r",
+							"\r",
+							"\r",
+							"    const result = pm.response.json();\r",
+							"    if(result.message === \"Every field must be provided\" || result.message === \"Task already closed\"){\r",
+							"        pm.response.to.have.status(400);\r",
+							"    }else if(result.message === \"Endpoint only allowed for requester\"){\r",
+							"        pm.response.to.have.status(403);\r",
+							"    }else if(result.message === \"Data not found\" || result.message === \"Task not found\"){\r",
+							"        pm.response.to.have.status(404);\r",
+							"    }\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Result test\", () => {\r",
+							"    const body = pm.response.json().body;\r",
+							"    pm.expect(body).to.have.all.keys([\r",
+							"        'message', \r",
+							"        'task_id', \r",
+							"        'task_type', \r",
+							"        'max_labeller', \r",
+							"        'status', \r",
+							"        'maximal_cost', \r",
+							"        'final_cost', \r",
+							"        'pay_change',\r",
+							"        'data'\r",
+							"    ]);\r",
+							"    for(const property in body){\r",
+							"        console.log()\r",
+							"        pm.expect(body[property]).is.not.undefined;\r",
+							"    }\r",
+							"    pm.response.to.have.status(200);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "x-auth-token",
+						"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IkFudG9pbmV0dGU0MyIsImlhdCI6MTY4MzYyNzYxNiwiZXhwIjoxNjgzNjMxMjE2fQ.rLQTKIRpkI-POjAbtTWFu3u77LFIjRGA-NpSQwMQm0k",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": []
+				},
+				"url": {
+					"raw": "{{HOST}}/api/v1/task/SUAN202309220001",
+					"host": [
+						"{{HOST}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"task",
+						"SUAN202309220001"
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "Success request",
+					"originalRequest": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "x-auth-token",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IkFudG9pbmV0dGU0MyIsImlhdCI6MTY4MzYyNzYxNiwiZXhwIjoxNjgzNjMxMjE2fQ.rLQTKIRpkI-POjAbtTWFu3u77LFIjRGA-NpSQwMQm0k",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": []
+						},
+						"url": {
+							"raw": "{{HOST}}/api/v1/task/SUAN202309220001",
+							"host": [
+								"{{HOST}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"task",
+								"SUAN202309220001"
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "X-Powered-By",
+							"value": "Express"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json; charset=utf-8"
+						},
+						{
+							"key": "Content-Length",
+							"value": "4159"
+						},
+						{
+							"key": "ETag",
+							"value": "W/\"103f-PKcd0teUSexHrzs20NHTtKsdvy4\""
+						},
+						{
+							"key": "Date",
+							"value": "Tue, 09 May 2023 10:24:14 GMT"
+						},
+						{
+							"key": "Connection",
+							"value": "keep-alive"
+						},
+						{
+							"key": "Keep-Alive",
+							"value": "timeout=5"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"body\": {\n        \"message\": \"Task closed successfully\",\n        \"task_id\": \"SUAN202309220001\",\n        \"task_type\": \"Summarization\",\n        \"max_labeller\": 3,\n        \"status\": \"closed\",\n        \"maximal_cost\": 9312,\n        \"final_cost\": 1164,\n        \"pay_change\": 8148,\n        \"data\": [\n            {\n                \"data_id\": \"D20234331500001\",\n                \"data_text\": \"With the ambitious Ryuusui Nanami on board, Senkuu Ishigami and his team are almost ready to sail the seas and reach the other side of the world—where the bizarre green light that petrified humanity originated. Thanks to the revival of a skillful chef, enough food is being prepared for the entire crew, and the incredible reinvention of the GPS promises to ensure safety on the open sea.\",\n                \"total_label\": 0,\n                \"total_data_cost\": 1164,\n                \"final_data_cost\": 0\n            },\n            {\n                \"data_id\": \"D20234441400001\",\n                \"data_text\": \"With the ambitious Ryuusui Nanami on board, Senkuu Ishigami and his team are almost ready to sail the seas and reach the other side of the world—where the bizarre green light that petrified humanity originated. Thanks to the revival of a skillful chef, enough food is being prepared for the entire crew, and the incredible reinvention of the GPS promises to ensure safety on the open sea.\",\n                \"total_label\": 0,\n                \"total_data_cost\": 1164,\n                \"final_data_cost\": 0\n            },\n            {\n                \"data_id\": \"D20234441400002\",\n                \"data_text\": \"With the ambitious Ryuusui Nanami on board, Senkuu Ishigami and his team are almost ready to sail the seas and reach the other side of the world—where the bizarre green light that petrified humanity originated. Thanks to the revival of a skillful chef, enough food is being prepared for the entire crew, and the incredible reinvention of the GPS promises to ensure safety on the open sea.\",\n                \"total_label\": 3,\n                \"total_data_cost\": 1164,\n                \"final_data_cost\": 1164\n            },\n            {\n                \"data_id\": \"D20234441400003\",\n                \"data_text\": \"With the ambitious Ryuusui Nanami on board, Senkuu Ishigami and his team are almost ready to sail the seas and reach the other side of the world—where the bizarre green light that petrified humanity originated. Thanks to the revival of a skillful chef, enough food is being prepared for the entire crew, and the incredible reinvention of the GPS promises to ensure safety on the open sea.\",\n                \"total_label\": 0,\n                \"total_data_cost\": 1164,\n                \"final_data_cost\": 0\n            },\n            {\n                \"data_id\": \"D20234441400004\",\n                \"data_text\": \"With the ambitious Ryuusui Nanami on board, Senkuu Ishigami and his team are almost ready to sail the seas and reach the other side of the world—where the bizarre green light that petrified humanity originated. Thanks to the revival of a skillful chef, enough food is being prepared for the entire crew, and the incredible reinvention of the GPS promises to ensure safety on the open sea.\",\n                \"total_label\": 0,\n                \"total_data_cost\": 1164,\n                \"final_data_cost\": 0\n            },\n            {\n                \"data_id\": \"D20234441400005\",\n                \"data_text\": \"With the ambitious Ryuusui Nanami on board, Senkuu Ishigami and his team are almost ready to sail the seas and reach the other side of the world—where the bizarre green light that petrified humanity originated. Thanks to the revival of a skillful chef, enough food is being prepared for the entire crew, and the incredible reinvention of the GPS promises to ensure safety on the open sea.\",\n                \"total_label\": 0,\n                \"total_data_cost\": 1164,\n                \"final_data_cost\": 0\n            },\n            {\n                \"data_id\": \"D20234441400006\",\n                \"data_text\": \"With the ambitious Ryuusui Nanami on board, Senkuu Ishigami and his team are almost ready to sail the seas and reach the other side of the world—where the bizarre green light that petrified humanity originated. Thanks to the revival of a skillful chef, enough food is being prepared for the entire crew, and the incredible reinvention of the GPS promises to ensure safety on the open sea.\",\n                \"total_label\": 0,\n                \"total_data_cost\": 1164,\n                \"final_data_cost\": 0\n            },\n            {\n                \"data_id\": \"D20234441400007\",\n                \"data_text\": \"With the ambitious Ryuusui Nanami on board, Senkuu Ishigami and his team are almost ready to sail the seas and reach the other side of the world—where the bizarre green light that petrified humanity originated. Thanks to the revival of a skillful chef, enough food is being prepared for the entire crew, and the incredible reinvention of the GPS promises to ensure safety on the open sea.\",\n                \"total_label\": 0,\n                \"total_data_cost\": 1164,\n                \"final_data_cost\": 0\n            }\n        ]\n    }\n}"
+				},
+				{
+					"name": "Without token",
+					"originalRequest": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "x-auth-token",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IkFiaWdhaWw5MyIsImlhdCI6MTY4MzU0MDgxOSwiZXhwIjoxNjgzNTQ0NDE5fQ._BQdbPtjo7n6XDBga757SEtwan94U8LtqQjLtKpBHvE",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": []
+						},
+						"url": {
+							"raw": "{{HOST}}/api/v1/task/TRAB202305210001",
+							"host": [
+								"{{HOST}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"task",
+								"TRAB202305210001"
+							]
+						}
+					},
+					"status": "Unauthorized",
+					"code": 401,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "X-Powered-By",
+							"value": "Express"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json; charset=utf-8"
+						},
+						{
+							"key": "Content-Length",
+							"value": "28"
+						},
+						{
+							"key": "ETag",
+							"value": "W/\"1c-j+znjSBGYk1IoOLxkUWYndvLrls\""
+						},
+						{
+							"key": "Date",
+							"value": "Tue, 09 May 2023 10:06:13 GMT"
+						},
+						{
+							"key": "Connection",
+							"value": "keep-alive"
+						},
+						{
+							"key": "Keep-Alive",
+							"value": "timeout=5"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"message\": \"Not Authorized\"\n}"
+				},
+				{
+					"name": "Invalid token",
+					"originalRequest": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "x-auth-token",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IkFiaWdhaWw5MyIsImlhdCI6MTY4MzU0MDgxOSwiZXhwIjoxNjgzNTQ0NDE5fQ._BQdbPtjo7n6XDBga757SEtwan94U8LtqQjLtKpBHvE",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": []
+						},
+						"url": {
+							"raw": "{{HOST}}/api/v1/task/TRAB202305210001",
+							"host": [
+								"{{HOST}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"task",
+								"TRAB202305210001"
+							]
+						}
+					},
+					"status": "Unauthorized",
+					"code": 401,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "X-Powered-By",
+							"value": "Express"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json; charset=utf-8"
+						},
+						{
+							"key": "Content-Length",
+							"value": "31"
+						},
+						{
+							"key": "ETag",
+							"value": "W/\"1f-YcNYeMNtWOaOemFQirKL0uXCF/w\""
+						},
+						{
+							"key": "Date",
+							"value": "Tue, 09 May 2023 10:07:01 GMT"
+						},
+						{
+							"key": "Connection",
+							"value": "keep-alive"
+						},
+						{
+							"key": "Keep-Alive",
+							"value": "timeout=5"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"message\": \"Invalid JWT Token\"\n}"
+				},
+				{
+					"name": "User is not a requester",
+					"originalRequest": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "x-auth-token",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IkFsYmVydG81OSIsImlhdCI6MTY4MzYyNjg1MiwiZXhwIjoxNjgzNjMwNDUyfQ.wlL4VnM_LuQxSY2xYi-wSkwFCwxQiWzMsJF4Ez-eSPc",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": []
+						},
+						"url": {
+							"raw": "{{HOST}}/api/v1/task/TRAB202305210001",
+							"host": [
+								"{{HOST}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"task",
+								"TRAB202305210001"
+							]
+						}
+					},
+					"status": "Forbidden",
+					"code": 403,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "X-Powered-By",
+							"value": "Express"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json; charset=utf-8"
+						},
+						{
+							"key": "Content-Length",
+							"value": "67"
+						},
+						{
+							"key": "ETag",
+							"value": "W/\"43-SWNQIaJfYFZTTZ933QZKPaILNUg\""
+						},
+						{
+							"key": "Date",
+							"value": "Tue, 09 May 2023 10:07:48 GMT"
+						},
+						{
+							"key": "Connection",
+							"value": "keep-alive"
+						},
+						{
+							"key": "Keep-Alive",
+							"value": "timeout=5"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"message\": \"Endpoint is allowed for user with requester role only\"\n}"
+				},
+				{
+					"name": "Task is not owned by user",
+					"originalRequest": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "x-auth-token",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IkFsdmFoNDciLCJpYXQiOjE2ODM2MjcxODIsImV4cCI6MTY4MzYzMDc4Mn0.sc50sAXG7LNg8TAaJKnW898dnIADBZdAgKVbogMQxd4",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": []
+						},
+						"url": {
+							"raw": "{{HOST}}/api/v1/task/TRAB202305210001",
+							"host": [
+								"{{HOST}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"task",
+								"TRAB202305210001"
+							]
+						}
+					},
+					"status": "Forbidden",
+					"code": 403,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "X-Powered-By",
+							"value": "Express"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json; charset=utf-8"
+						},
+						{
+							"key": "Content-Length",
+							"value": "42"
+						},
+						{
+							"key": "ETag",
+							"value": "W/\"2a-DrBaIJfvMcSoWgUy8PI5Mdb07gM\""
+						},
+						{
+							"key": "Date",
+							"value": "Tue, 09 May 2023 10:13:11 GMT"
+						},
+						{
+							"key": "Connection",
+							"value": "keep-alive"
+						},
+						{
+							"key": "Keep-Alive",
+							"value": "timeout=5"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"message\": \"Task doesn't belongs to user\"\n}"
+				},
+				{
+					"name": "Task not found",
+					"originalRequest": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "x-auth-token",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IkFsdmFoNDciLCJpYXQiOjE2ODM2MjcxODIsImV4cCI6MTY4MzYzMDc4Mn0.sc50sAXG7LNg8TAaJKnW898dnIADBZdAgKVbogMQxd4",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": []
+						},
+						"url": {
+							"raw": "{{HOST}}/api/v1/task/TRAB20230521000",
+							"host": [
+								"{{HOST}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"task",
+								"TRAB20230521000"
+							]
+						}
+					},
+					"status": "Not Found",
+					"code": 404,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "X-Powered-By",
+							"value": "Express"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json; charset=utf-8"
+						},
+						{
+							"key": "Content-Length",
+							"value": "28"
+						},
+						{
+							"key": "ETag",
+							"value": "W/\"1c-MHDSHEeakQ3QeijgQMEHeol2HWg\""
+						},
+						{
+							"key": "Date",
+							"value": "Tue, 09 May 2023 10:13:48 GMT"
+						},
+						{
+							"key": "Connection",
+							"value": "keep-alive"
+						},
+						{
+							"key": "Keep-Alive",
+							"value": "timeout=5"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"message\": \"Task not found\"\n}"
+				},
+				{
+					"name": "Task is already closed",
+					"originalRequest": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "x-auth-token",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IkFiaWdhaWw5MyIsImlhdCI6MTY4MzYyNzMwOCwiZXhwIjoxNjgzNjMwOTA4fQ.m2bV8NnveR62MggCJqVt1l4HztozLy45dMKCtRAW7z4",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": []
+						},
+						"url": {
+							"raw": "{{HOST}}/api/v1/task/TRAB202305210001",
+							"host": [
+								"{{HOST}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"task",
+								"TRAB202305210001"
+							]
+						}
+					},
+					"status": "Bad Request",
+					"code": 400,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "X-Powered-By",
+							"value": "Express"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json; charset=utf-8"
+						},
+						{
+							"key": "Content-Length",
+							"value": "36"
+						},
+						{
+							"key": "ETag",
+							"value": "W/\"24-9HDQqNo4Y8AzSNHJ/HTpkyirvRk\""
+						},
+						{
+							"key": "Date",
+							"value": "Tue, 09 May 2023 10:15:48 GMT"
+						},
+						{
+							"key": "Connection",
+							"value": "keep-alive"
+						},
+						{
+							"key": "Keep-Alive",
+							"value": "timeout=5"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"message\": \"Task is already closed\"\n}"
+				}
+			]
+		},
+		{
+			"name": "createData",
+			"request": {
+				"auth": {
+					"type": "bearer"
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "x-auth-token",
+						"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IlF1ZW50aW40NCIsImlhdCI6MTY4NDkzNTc5MiwiZXhwIjoxNjg0OTM5MzkyfQ.uPkS0yzjBAtBVIVJTrIiJxq7IPNTUnMn4ExHiS9p_m8",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "task_id",
+							"value": "TRQU202305300001",
+							"type": "text"
+						},
+						{
+							"key": "data_text",
+							"value": "Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of classical Latin literature from 45 BC, making it over 2000 years old.",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "{{HOST}}/api/v1/data",
+					"host": [
+						"{{HOST}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"data"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "updateLabel",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Autohorization test\", () => {\r",
+							"    const result = pm.response.json();\r",
+							"    if(result.message === \"Invalid JWT Token\"){\r",
+							"        pm.response.to.have.status(403);\r",
+							"    }else if(result.message === \"User not found\"){\r",
+							"        pm.response.to.have.status(404);\r",
+							"    }\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Input test\", () => {\r",
+							"const request = pm.request.body.urlencoded.filter((item) => {\r",
+							"        if(!item.disabled){\r",
+							"            return item;\r",
+							"        }\r",
+							"    }).reduce((input, item) => {\r",
+							"        return {...input, [item.key] : item.value};\r",
+							"    }, {});\r",
+							"    \r",
+							"    for(const key in input){\r",
+							"        if(!input[key]){\r",
+							"            pm.expect(pm.response.json().message).is.equal(\"Every field must be provided\");\r",
+							"            pm.response.to.have.status(400);\r",
+							"        }\r",
+							"    }\r",
+							"\r",
+							"\r",
+							"    const result = pm.response.json();\r",
+							"    if(result.message === \"Every field must be provided\" || result.message === \"Task already closed\" || result.message === \"Label doesn't belong to this user\"){\r",
+							"        pm.response.to.have.status(400);\r",
+							"    }else if(result.message === \"Endpoint only allowed for labeller\"){\r",
+							"        pm.response.to.have.status(403);\r",
+							"    }else if(result.message === \"Label not found\"){\r",
+							"        pm.response.to.have.status(404);\r",
+							"    }\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Result test\", () => {\r",
+							"    pm.expect(pm.response).is.not.undefined;\r",
+							"    const result = pm.response.json();\r",
+							"    const body = result.body;\r",
+							"    console.log(body);\r",
+							"    pm.expect(body).to.have.all.keys('label_id', 'data_id', 'username', 'label_result');\r",
+							"    for(const property in body){\r",
+							"        console.log()\r",
+							"        pm.expect(body[property]).is.not.undefined;\r",
+							"    }\r",
+							"    pm.response.to.have.status(201);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "x-auth-token",
+						"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IkFsYmVydG81OSIsImlhdCI6MTY4NDgzODUyMiwiZXhwIjoxNjg0ODQyMTIyfQ.bRoERCB9XvHC64FMOah6foMN3xhCBOGm9K0ok_TOMHc",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "label_id",
+							"value": "L010",
+							"type": "text"
+						},
+						{
+							"key": "label_result",
+							"value": "New Label Result",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "{{HOST}}/api/v1/label",
+					"host": [
+						"{{HOST}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"label"
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "Not provide x-auth-token",
+					"originalRequest": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "x-auth-token",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IkFrZWVtNCIsImlhdCI6MTY4MzU0MjIzNSwiZXhwIjoxNjgzNTQ1ODM1fQ.0w9pBI3TciX_vefS2MCwVXVvNEsMZvYfU_ygSiHR_NU",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "label_id",
+									"value": "L006",
+									"type": "text"
+								},
+								{
+									"key": "label_result",
+									"value": "Yeah, i am a man",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{HOST}}/api/v1/label",
+							"host": [
+								"{{HOST}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"label"
+							]
+						}
+					},
+					"status": "Unauthorized",
+					"code": 401,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "X-Powered-By",
+							"value": "Express"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json; charset=utf-8"
+						},
+						{
+							"key": "Content-Length",
+							"value": "28"
+						},
+						{
+							"key": "ETag",
+							"value": "W/\"1c-j+znjSBGYk1IoOLxkUWYndvLrls\""
+						},
+						{
+							"key": "Date",
+							"value": "Tue, 09 May 2023 09:45:23 GMT"
+						},
+						{
+							"key": "Connection",
+							"value": "keep-alive"
+						},
+						{
+							"key": "Keep-Alive",
+							"value": "timeout=5"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"message\": \"Not Authorized\"\n}"
+				},
+				{
+					"name": "Invalid Token",
+					"originalRequest": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "x-auth-token",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IkFrZWVtNCIsImlhdCI6MTY4MzU0MjIzNSwiZXhwIjoxNjgzNTQ1ODM1fQ.0w9pBI3TciX_vefS2MCwVXVvNEsMZvYfU_ygSiHR_NU",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "label_id",
+									"value": "L006",
+									"type": "text"
+								},
+								{
+									"key": "label_result",
+									"value": "Yeah, i am a man",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{HOST}}/api/v1/label",
+							"host": [
+								"{{HOST}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"label"
+							]
+						}
+					},
+					"status": "Unauthorized",
+					"code": 401,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "X-Powered-By",
+							"value": "Express"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json; charset=utf-8"
+						},
+						{
+							"key": "Content-Length",
+							"value": "31"
+						},
+						{
+							"key": "ETag",
+							"value": "W/\"1f-YcNYeMNtWOaOemFQirKL0uXCF/w\""
+						},
+						{
+							"key": "Date",
+							"value": "Tue, 09 May 2023 09:46:00 GMT"
+						},
+						{
+							"key": "Connection",
+							"value": "keep-alive"
+						},
+						{
+							"key": "Keep-Alive",
+							"value": "timeout=5"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"message\": \"Invalid JWT Token\"\n}"
+				},
+				{
+					"name": "Field is empty",
+					"originalRequest": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "x-auth-token",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IkFrZWVtNCIsImlhdCI6MTY4MzYyNDMwMSwiZXhwIjoxNjgzNjI3OTAxfQ.1zvDCvJS27Etd7fka5OdahIjJuoBurerdAz3cjvva3s",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "label_id",
+									"value": "L006",
+									"type": "text",
+									"disabled": true
+								},
+								{
+									"key": "label_result",
+									"value": "Yeah, i am a man",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{HOST}}/api/v1/label",
+							"host": [
+								"{{HOST}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"label"
+							]
+						}
+					},
+					"status": "Not Found",
+					"code": 404,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "X-Powered-By",
+							"value": "Express"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json; charset=utf-8"
+						},
+						{
+							"key": "Content-Length",
+							"value": "42"
+						},
+						{
+							"key": "ETag",
+							"value": "W/\"2a-z03OoJyadxgz2has8US4A7lz0Y0\""
+						},
+						{
+							"key": "Date",
+							"value": "Tue, 09 May 2023 09:50:41 GMT"
+						},
+						{
+							"key": "Connection",
+							"value": "keep-alive"
+						},
+						{
+							"key": "Keep-Alive",
+							"value": "timeout=5"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"message\": \"Every field must be provided\"\n}"
+				},
+				{
+					"name": "Label not found",
+					"originalRequest": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "x-auth-token",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IkFrZWVtNCIsImlhdCI6MTY4MzYyNDMwMSwiZXhwIjoxNjgzNjI3OTAxfQ.1zvDCvJS27Etd7fka5OdahIjJuoBurerdAz3cjvva3s",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "label_id",
+									"value": "L0010",
+									"type": "text"
+								},
+								{
+									"key": "label_result",
+									"value": "Yeah, i am a man",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{HOST}}/api/v1/label",
+							"host": [
+								"{{HOST}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"label"
+							]
+						}
+					},
+					"status": "Not Found",
+					"code": 404,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "X-Powered-By",
+							"value": "Express"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json; charset=utf-8"
+						},
+						{
+							"key": "Content-Length",
+							"value": "29"
+						},
+						{
+							"key": "ETag",
+							"value": "W/\"1d-GJbEmuqV/2Uk07kKLiqcJiucRvo\""
+						},
+						{
+							"key": "Date",
+							"value": "Tue, 09 May 2023 09:51:16 GMT"
+						},
+						{
+							"key": "Connection",
+							"value": "keep-alive"
+						},
+						{
+							"key": "Keep-Alive",
+							"value": "timeout=5"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"message\": \"Label not found\"\n}"
+				},
+				{
+					"name": "Task is closed",
+					"originalRequest": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "x-auth-token",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IkFrZWVtNCIsImlhdCI6MTY4MzYyNDMwMSwiZXhwIjoxNjgzNjI3OTAxfQ.1zvDCvJS27Etd7fka5OdahIjJuoBurerdAz3cjvva3s",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "label_id",
+									"value": "L006",
+									"type": "text"
+								},
+								{
+									"key": "label_result",
+									"value": "New Label Result",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{HOST}}/api/v1/label",
+							"host": [
+								"{{HOST}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"label"
+							]
+						}
+					},
+					"status": "Bad Request",
+					"code": 400,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "X-Powered-By",
+							"value": "Express"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json; charset=utf-8"
+						},
+						{
+							"key": "Content-Length",
+							"value": "33"
+						},
+						{
+							"key": "ETag",
+							"value": "W/\"21-z9+ssclZBvfNP7OMgNZOd30ShOk\""
+						},
+						{
+							"key": "Date",
+							"value": "Tue, 09 May 2023 09:54:39 GMT"
+						},
+						{
+							"key": "Connection",
+							"value": "keep-alive"
+						},
+						{
+							"key": "Keep-Alive",
+							"value": "timeout=5"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"message\": \"Task already closed\"\n}"
+				},
+				{
+					"name": "Label is not owned by user",
+					"originalRequest": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "x-auth-token",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IkFsYmVydG81OSIsImlhdCI6MTY4MzYyNjIzMywiZXhwIjoxNjgzNjI5ODMzfQ.nXBCrCBS0rMGz0C6LROx-GwFShoqX-FAhSHPAZn0jJI",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "label_id",
+									"value": "L007",
+									"type": "text"
+								},
+								{
+									"key": "label_result",
+									"value": "New Label Result",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{HOST}}/api/v1/label",
+							"host": [
+								"{{HOST}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"label"
+							]
+						}
+					},
+					"status": "Bad Request",
+					"code": 400,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "X-Powered-By",
+							"value": "Express"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json; charset=utf-8"
+						},
+						{
+							"key": "Content-Length",
+							"value": "47"
+						},
+						{
+							"key": "ETag",
+							"value": "W/\"2f-L2WpM0ehrciwHvXmOkwo7zuk6Hg\""
+						},
+						{
+							"key": "Date",
+							"value": "Tue, 09 May 2023 09:57:40 GMT"
+						},
+						{
+							"key": "Connection",
+							"value": "keep-alive"
+						},
+						{
+							"key": "Keep-Alive",
+							"value": "timeout=5"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"message\": \"Label doesn't belong to this user\"\n}"
+				},
+				{
+					"name": "Success request",
+					"originalRequest": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "x-auth-token",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IkFrZWVtNCIsImlhdCI6MTY4MzYyNDMwMSwiZXhwIjoxNjgzNjI3OTAxfQ.1zvDCvJS27Etd7fka5OdahIjJuoBurerdAz3cjvva3s",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "label_id",
+									"value": "L007",
+									"type": "text"
+								},
+								{
+									"key": "label_result",
+									"value": "New Label Result",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{HOST}}/api/v1/label",
+							"host": [
+								"{{HOST}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"label"
+							]
+						}
+					},
+					"status": "Created",
+					"code": 201,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "X-Powered-By",
+							"value": "Express"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json; charset=utf-8"
+						},
+						{
+							"key": "Content-Length",
+							"value": "113"
+						},
+						{
+							"key": "ETag",
+							"value": "W/\"71-G6pZeBV67flLw50gBZA6ZS31F+0\""
+						},
+						{
+							"key": "Date",
+							"value": "Tue, 09 May 2023 09:58:37 GMT"
+						},
+						{
+							"key": "Connection",
+							"value": "keep-alive"
+						},
+						{
+							"key": "Keep-Alive",
+							"value": "timeout=5"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"message\": {\n        \"label_id\": \"L007\",\n        \"data_id\": \"D20234441400002\",\n        \"username\": \"Akeem4\",\n        \"label_result\": \"New Label Result\"\n    }\n}"
+				}
+			]
+		},
+		{
+			"name": "userDetail",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Autohorization test\", () => {\r",
+							"    const result = pm.response.json();\r",
+							"    if(result.message === \"Invalid JWT Token\"){\r",
+							"        pm.response.to.have.status(403);\r",
+							"    }else if(result.message === \"User not found\"){\r",
+							"        pm.response.to.have.status(404);\r",
+							"    }\r",
+							"});\r",
+							"\r",
+							"pm.test('Result test', () => {\r",
+							"    let requestBody = pm.request.body;\r",
+							"    let rawData = requestBody.raw;\r",
+							"    console.log(rawData);\r",
+							"    const result = pm.response.json().body;\r",
+							"    console.log(result)\r",
+							"    pm.expect(result).to.have.all.keys('username', 'name', 'role', 'credibility');\r",
+							"    for(const key in result){\r",
+							"        pm.expect(result[key]).is.not.undefined;\r",
+							"    }\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "x-auth-token",
+						"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IkFudG9pbmV0dGU0MyIsImlhdCI6MTY4NDg0NzM5MiwiZXhwIjoxNjg0ODUwOTkyfQ.-CRlD6tYDnbnznEpnvoPbKHG0xlsoWvn_NOXnloeycY",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{HOST}}/api/v1/user",
+					"host": [
+						"{{HOST}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"user"
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "Success with parameter",
+					"originalRequest": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "x-auth-token",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IkFudG9pbmV0dGU0MyIsImlhdCI6MTY4MzYzNDg1NSwiZXhwIjoxNjgzNjM4NDU1fQ.yqtZD9MP_PVKKUvq4msS6Ulyn4buiLgri9AcNb2d410",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{HOST}}/api/v1/user/Akeem4",
+							"host": [
+								"{{HOST}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"user",
+								"Akeem4"
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "X-Powered-By",
+							"value": "Express"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json; charset=utf-8"
+						},
+						{
+							"key": "Content-Length",
+							"value": "80"
+						},
+						{
+							"key": "ETag",
+							"value": "W/\"50-+zJCcJ6fNvuav0/1Wb07kGruvSM\""
+						},
+						{
+							"key": "Date",
+							"value": "Tue, 09 May 2023 12:21:08 GMT"
+						},
+						{
+							"key": "Connection",
+							"value": "keep-alive"
+						},
+						{
+							"key": "Keep-Alive",
+							"value": "timeout=5"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"body\": {\n        \"username\": \"Akeem4\",\n        \"name\": \"Akeem\",\n        \"role\": \"labeller\",\n        \"credibility\": 50\n    }\n}"
+				},
+				{
+					"name": "Success without parameter",
+					"originalRequest": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "x-auth-token",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IkFudG9pbmV0dGU0MyIsImlhdCI6MTY4MzYzNDg1NSwiZXhwIjoxNjgzNjM4NDU1fQ.yqtZD9MP_PVKKUvq4msS6Ulyn4buiLgri9AcNb2d410",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{HOST}}/api/v1/user",
+							"host": [
+								"{{HOST}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"user"
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "X-Powered-By",
+							"value": "Express"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json; charset=utf-8"
+						},
+						{
+							"key": "Content-Length",
+							"value": "92"
+						},
+						{
+							"key": "ETag",
+							"value": "W/\"5c-69c4U27mWQmwQ6iB8jXjlKZHFtE\""
+						},
+						{
+							"key": "Date",
+							"value": "Tue, 09 May 2023 12:21:52 GMT"
+						},
+						{
+							"key": "Connection",
+							"value": "keep-alive"
+						},
+						{
+							"key": "Keep-Alive",
+							"value": "timeout=5"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"body\": {\n        \"username\": \"Antoinette43\",\n        \"name\": \"Antoinette\",\n        \"role\": \"requester\",\n        \"credibility\": 50\n    }\n}"
+				},
+				{
+					"name": "Not provide x-auth-token",
+					"originalRequest": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "x-auth-token",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IkRlbm5pczY2IiwiaWF0IjoxNjgzNTQyNTczLCJleHAiOjE2ODM1NDYxNzN9.ehO4XJ4EOw_Rmcgqvo9z8oiDONSllmvbhkODGsRokn8",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"url": {
+							"raw": "{{HOST}}/api/v1/user/Akeem4",
+							"host": [
+								"{{HOST}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"user",
+								"Akeem4"
+							]
+						}
+					},
+					"status": "Unauthorized",
+					"code": 401,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "X-Powered-By",
+							"value": "Express"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json; charset=utf-8"
+						},
+						{
+							"key": "Content-Length",
+							"value": "28"
+						},
+						{
+							"key": "ETag",
+							"value": "W/\"1c-j+znjSBGYk1IoOLxkUWYndvLrls\""
+						},
+						{
+							"key": "Date",
+							"value": "Tue, 09 May 2023 10:19:07 GMT"
+						},
+						{
+							"key": "Connection",
+							"value": "keep-alive"
+						},
+						{
+							"key": "Keep-Alive",
+							"value": "timeout=5"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"message\": \"Not Authorized\"\n}"
+				},
+				{
+					"name": "Invalid token",
+					"originalRequest": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "x-auth-token",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IkRlbm5pczY2IiwiaWF0IjoxNjgzNTQyNTczLCJleHAiOjE2ODM1NDYxNzN9.ehO4XJ4EOw_Rmcgqvo9z8oiDONSllmvbhkODGsRokn8",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{HOST}}/api/v1/user/Akeem4",
+							"host": [
+								"{{HOST}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"user",
+								"Akeem4"
+							]
+						}
+					},
+					"status": "Unauthorized",
+					"code": 401,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "X-Powered-By",
+							"value": "Express"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json; charset=utf-8"
+						},
+						{
+							"key": "Content-Length",
+							"value": "31"
+						},
+						{
+							"key": "ETag",
+							"value": "W/\"1f-YcNYeMNtWOaOemFQirKL0uXCF/w\""
+						},
+						{
+							"key": "Date",
+							"value": "Tue, 09 May 2023 12:20:27 GMT"
+						},
+						{
+							"key": "Connection",
+							"value": "keep-alive"
+						},
+						{
+							"key": "Keep-Alive",
+							"value": "timeout=5"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"message\": \"Invalid JWT Token\"\n}"
+				}
+			]
+		},
+		{
+			"name": "getLabel",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Autohorization test\", () => {\r",
+							"    const result = pm.response.json();\r",
+							"    if(result.message === \"Invalid JWT Token\"){\r",
+							"        pm.response.to.have.status(403);\r",
+							"    }else if(result.message === \"User not found\"){\r",
+							"        pm.response.to.have.status(404);\r",
+							"    }\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Input test\", () => {\r",
+							"    const result = pm.response.json();\r",
+							"    if(result.message === \"Forbidden access\"){\r",
+							"        pm.response.to.have.status(403);\r",
+							"    }else if(result.message === \"Data not found\" || result.message === \"Task not found\"){\r",
+							"        pm.response.to.have.status(404);\r",
+							"    }\r",
+							"});\r",
+							"\r",
+							"pm.request.headers.add({\r",
+							"    key: 'Authorization',\r",
+							"    value: 'Bearer ' + pm.variables.get('jwt')\r",
+							"});\r",
+							"\r",
+							"pm.test('Result test', async () => {\r",
+							"    const request = pm.request.url.query.all()[0];\r",
+							"    await console.log(pm.response.body);\r",
+							"    if(request['task_id']){\r",
+							"\r",
+							"    }else if(request['data_id']){\r",
+							"\r",
+							"    }else{\r",
+							"\r",
+							"    }\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "x-auth-token",
+						"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IkFudG9pbmV0dGU0MyIsImlhdCI6MTY4NDg0NzM5MiwiZXhwIjoxNjg0ODUwOTkyfQ.-CRlD6tYDnbnznEpnvoPbKHG0xlsoWvn_NOXnloeycY",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": []
+				},
+				"url": {
+					"raw": "{{HOST}}/api/v1/label?task_id=CLAB202308250001",
+					"host": [
+						"{{HOST}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"label"
+					],
+					"query": [
+						{
+							"key": "task_id",
+							"value": "CLAB202308250001"
+						}
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "Without token",
+					"originalRequest": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "x-auth-token",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IkFrZWVtNCIsImlhdCI6MTY4MzYxNzY4NSwiZXhwIjoxNjgzNjIxMjg1fQ.s2W8IGtFBzB-4YUTQHj5wfCTVgic215HM5CLtXxfVlY",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"url": {
+							"raw": "{{HOST}}/api/v1/label?data_id=D20234441400002",
+							"host": [
+								"{{HOST}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"label"
+							],
+							"query": [
+								{
+									"key": "data_id",
+									"value": "D20234441400002"
+								},
+								{
+									"key": "task_id",
+									"value": "CLAB202308250001",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"status": "Unauthorized",
+					"code": 401,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "X-Powered-By",
+							"value": "Express"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json; charset=utf-8"
+						},
+						{
+							"key": "Content-Length",
+							"value": "28"
+						},
+						{
+							"key": "ETag",
+							"value": "W/\"1c-j+znjSBGYk1IoOLxkUWYndvLrls\""
+						},
+						{
+							"key": "Date",
+							"value": "Tue, 09 May 2023 12:22:27 GMT"
+						},
+						{
+							"key": "Connection",
+							"value": "keep-alive"
+						},
+						{
+							"key": "Keep-Alive",
+							"value": "timeout=5"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"message\": \"Not Authorized\"\n}"
+				},
+				{
+					"name": "Invalid token",
+					"originalRequest": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "x-auth-token",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IkFrZWVtNCIsImlhdCI6MTY4MzYxNzY4NSwiZXhwIjoxNjgzNjIxMjg1fQ.s2W8IGtFBzB-4YUTQHj5wfCTVgic215HM5CLtXxfVlY",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{HOST}}/api/v1/label?data_id=D20234441400002",
+							"host": [
+								"{{HOST}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"label"
+							],
+							"query": [
+								{
+									"key": "data_id",
+									"value": "D20234441400002"
+								},
+								{
+									"key": "task_id",
+									"value": "CLAB202308250001",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"status": "Unauthorized",
+					"code": 401,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "X-Powered-By",
+							"value": "Express"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json; charset=utf-8"
+						},
+						{
+							"key": "Content-Length",
+							"value": "31"
+						},
+						{
+							"key": "ETag",
+							"value": "W/\"1f-YcNYeMNtWOaOemFQirKL0uXCF/w\""
+						},
+						{
+							"key": "Date",
+							"value": "Tue, 09 May 2023 12:22:59 GMT"
+						},
+						{
+							"key": "Connection",
+							"value": "keep-alive"
+						},
+						{
+							"key": "Keep-Alive",
+							"value": "timeout=5"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"message\": \"Invalid JWT Token\"\n}"
+				},
+				{
+					"name": "Success request as requester role with data_id as query",
+					"originalRequest": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "x-auth-token",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IkFudG9pbmV0dGU0MyIsImlhdCI6MTY4MzYzNDg1NSwiZXhwIjoxNjgzNjM4NDU1fQ.yqtZD9MP_PVKKUvq4msS6Ulyn4buiLgri9AcNb2d410",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{HOST}}/api/v1/label?data_id=D20234441400002",
+							"host": [
+								"{{HOST}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"label"
+							],
+							"query": [
+								{
+									"key": "data_id",
+									"value": "D20234441400002"
+								},
+								{
+									"key": "task_id",
+									"value": "CLAB202308250001",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "X-Powered-By",
+							"value": "Express"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json; charset=utf-8"
+						},
+						{
+							"key": "Content-Length",
+							"value": "244"
+						},
+						{
+							"key": "ETag",
+							"value": "W/\"f4-/Jbu+bdEleKb+vMYIA7ujDprc9A\""
+						},
+						{
+							"key": "Date",
+							"value": "Tue, 09 May 2023 12:23:34 GMT"
+						},
+						{
+							"key": "Connection",
+							"value": "keep-alive"
+						},
+						{
+							"key": "Keep-Alive",
+							"value": "timeout=5"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"body\": [\n        {\n            \"label_id\": \"L007\",\n            \"username\": \"Akeem4\",\n            \"label_result\": \"New Label Result\"\n        },\n        {\n            \"label_id\": \"L008\",\n            \"username\": \"Diego8\",\n            \"label_result\": \"Label of dummy data 3\"\n        },\n        {\n            \"label_id\": \"L009\",\n            \"username\": \"Dennis66\",\n            \"label_result\": \"Label of dummy data 4\"\n        }\n    ]\n}"
+				},
+				{
+					"name": "Access other requester task",
+					"originalRequest": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "x-auth-token",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IkFudG9pbmV0dGU0MyIsImlhdCI6MTY4MzYzNDg1NSwiZXhwIjoxNjgzNjM4NDU1fQ.yqtZD9MP_PVKKUvq4msS6Ulyn4buiLgri9AcNb2d410",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{HOST}}/api/v1/label?data_id=D20234221600001",
+							"host": [
+								"{{HOST}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"label"
+							],
+							"query": [
+								{
+									"key": "task_id",
+									"value": "CLAB202308250001",
+									"disabled": true
+								},
+								{
+									"key": "data_id",
+									"value": "D20234221600001"
+								}
+							]
+						}
+					},
+					"status": "Forbidden",
+					"code": 403,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "X-Powered-By",
+							"value": "Express"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json; charset=utf-8"
+						},
+						{
+							"key": "Content-Length",
+							"value": "30"
+						},
+						{
+							"key": "ETag",
+							"value": "W/\"1e-jF8YAbqevWJCzE+L61bECHDk710\""
+						},
+						{
+							"key": "Date",
+							"value": "Tue, 09 May 2023 12:25:44 GMT"
+						},
+						{
+							"key": "Connection",
+							"value": "keep-alive"
+						},
+						{
+							"key": "Keep-Alive",
+							"value": "timeout=5"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"message\": \"Forbidden access\"\n}"
+				},
+				{
+					"name": "Access other requester task",
+					"originalRequest": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "x-auth-token",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IkFudG9pbmV0dGU0MyIsImlhdCI6MTY4MzYzNDg1NSwiZXhwIjoxNjgzNjM4NDU1fQ.yqtZD9MP_PVKKUvq4msS6Ulyn4buiLgri9AcNb2d410",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{HOST}}/api/v1/label?task_id=BOAB202308250001",
+							"host": [
+								"{{HOST}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"label"
+							],
+							"query": [
+								{
+									"key": "task_id",
+									"value": "CLAB202308250001",
+									"disabled": true
+								},
+								{
+									"key": "task_id",
+									"value": "BOAB202308250001"
+								}
+							]
+						}
+					},
+					"status": "Forbidden",
+					"code": 403,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "X-Powered-By",
+							"value": "Express"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json; charset=utf-8"
+						},
+						{
+							"key": "Content-Length",
+							"value": "30"
+						},
+						{
+							"key": "ETag",
+							"value": "W/\"1e-jF8YAbqevWJCzE+L61bECHDk710\""
+						},
+						{
+							"key": "Date",
+							"value": "Tue, 09 May 2023 12:27:08 GMT"
+						},
+						{
+							"key": "Connection",
+							"value": "keep-alive"
+						},
+						{
+							"key": "Keep-Alive",
+							"value": "timeout=5"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"message\": \"Forbidden access\"\n}"
+				},
+				{
+					"name": "Success request as requester role with task_id as query",
+					"originalRequest": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "x-auth-token",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IkFudG9pbmV0dGU0MyIsImlhdCI6MTY4MzYzNDg1NSwiZXhwIjoxNjgzNjM4NDU1fQ.yqtZD9MP_PVKKUvq4msS6Ulyn4buiLgri9AcNb2d410",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{HOST}}/api/v1/label?task_id=SUAN202309220001",
+							"host": [
+								"{{HOST}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"label"
+							],
+							"query": [
+								{
+									"key": "task_id",
+									"value": "CLAB202308250001",
+									"disabled": true
+								},
+								{
+									"key": "task_id",
+									"value": "SUAN202309220001"
+								}
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "X-Powered-By",
+							"value": "Express"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json; charset=utf-8"
+						},
+						{
+							"key": "Content-Length",
+							"value": "4079"
+						},
+						{
+							"key": "ETag",
+							"value": "W/\"fef-JVLLafaj53zHt+jaLtaCuKFuSNE\""
+						},
+						{
+							"key": "Date",
+							"value": "Tue, 09 May 2023 12:28:01 GMT"
+						},
+						{
+							"key": "Connection",
+							"value": "keep-alive"
+						},
+						{
+							"key": "Keep-Alive",
+							"value": "timeout=5"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"body\": {\n        \"task_id\": \"SUAN202309220001\",\n        \"task_type\": \"Summarization\",\n        \"data\": [\n            {\n                \"data_id\": \"D20234331500001\",\n                \"data_text\": \"With the ambitious Ryuusui Nanami on board, Senkuu Ishigami and his team are almost ready to sail the seas and reach the other side of the world—where the bizarre green light that petrified humanity originated. Thanks to the revival of a skillful chef, enough food is being prepared for the entire crew, and the incredible reinvention of the GPS promises to ensure safety on the open sea.\",\n                \"price\": 388,\n                \"labels\": \"Label is empty\"\n            },\n            {\n                \"data_id\": \"D20234441400001\",\n                \"data_text\": \"With the ambitious Ryuusui Nanami on board, Senkuu Ishigami and his team are almost ready to sail the seas and reach the other side of the world—where the bizarre green light that petrified humanity originated. Thanks to the revival of a skillful chef, enough food is being prepared for the entire crew, and the incredible reinvention of the GPS promises to ensure safety on the open sea.\",\n                \"price\": 388,\n                \"labels\": \"Label is empty\"\n            },\n            {\n                \"data_id\": \"D20234441400002\",\n                \"data_text\": \"With the ambitious Ryuusui Nanami on board, Senkuu Ishigami and his team are almost ready to sail the seas and reach the other side of the world—where the bizarre green light that petrified humanity originated. Thanks to the revival of a skillful chef, enough food is being prepared for the entire crew, and the incredible reinvention of the GPS promises to ensure safety on the open sea.\",\n                \"price\": 388,\n                \"labels\": [\n                    {\n                        \"label_id\": \"L007\",\n                        \"username\": \"Akeem4\",\n                        \"label_result\": \"New Label Result\"\n                    },\n                    {\n                        \"label_id\": \"L008\",\n                        \"username\": \"Diego8\",\n                        \"label_result\": \"Label of dummy data 3\"\n                    },\n                    {\n                        \"label_id\": \"L009\",\n                        \"username\": \"Dennis66\",\n                        \"label_result\": \"Label of dummy data 4\"\n                    }\n                ]\n            },\n            {\n                \"data_id\": \"D20234441400003\",\n                \"data_text\": \"With the ambitious Ryuusui Nanami on board, Senkuu Ishigami and his team are almost ready to sail the seas and reach the other side of the world—where the bizarre green light that petrified humanity originated. Thanks to the revival of a skillful chef, enough food is being prepared for the entire crew, and the incredible reinvention of the GPS promises to ensure safety on the open sea.\",\n                \"price\": 388,\n                \"labels\": \"Label is empty\"\n            },\n            {\n                \"data_id\": \"D20234441400004\",\n                \"data_text\": \"With the ambitious Ryuusui Nanami on board, Senkuu Ishigami and his team are almost ready to sail the seas and reach the other side of the world—where the bizarre green light that petrified humanity originated. Thanks to the revival of a skillful chef, enough food is being prepared for the entire crew, and the incredible reinvention of the GPS promises to ensure safety on the open sea.\",\n                \"price\": 388,\n                \"labels\": \"Label is empty\"\n            },\n            {\n                \"data_id\": \"D20234441400005\",\n                \"data_text\": \"With the ambitious Ryuusui Nanami on board, Senkuu Ishigami and his team are almost ready to sail the seas and reach the other side of the world—where the bizarre green light that petrified humanity originated. Thanks to the revival of a skillful chef, enough food is being prepared for the entire crew, and the incredible reinvention of the GPS promises to ensure safety on the open sea.\",\n                \"price\": 388,\n                \"labels\": \"Label is empty\"\n            },\n            {\n                \"data_id\": \"D20234441400006\",\n                \"data_text\": \"With the ambitious Ryuusui Nanami on board, Senkuu Ishigami and his team are almost ready to sail the seas and reach the other side of the world—where the bizarre green light that petrified humanity originated. Thanks to the revival of a skillful chef, enough food is being prepared for the entire crew, and the incredible reinvention of the GPS promises to ensure safety on the open sea.\",\n                \"price\": 388,\n                \"labels\": \"Label is empty\"\n            },\n            {\n                \"data_id\": \"D20234441400007\",\n                \"data_text\": \"With the ambitious Ryuusui Nanami on board, Senkuu Ishigami and his team are almost ready to sail the seas and reach the other side of the world—where the bizarre green light that petrified humanity originated. Thanks to the revival of a skillful chef, enough food is being prepared for the entire crew, and the incredible reinvention of the GPS promises to ensure safety on the open sea.\",\n                \"price\": 388,\n                \"labels\": \"Label is empty\"\n            }\n        ]\n    }\n}"
+				},
+				{
+					"name": "Task not found",
+					"originalRequest": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "x-auth-token",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IkFudG9pbmV0dGU0MyIsImlhdCI6MTY4MzYzNDg1NSwiZXhwIjoxNjgzNjM4NDU1fQ.yqtZD9MP_PVKKUvq4msS6Ulyn4buiLgri9AcNb2d410",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{HOST}}/api/v1/label?task_id=SUAN20230922000",
+							"host": [
+								"{{HOST}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"label"
+							],
+							"query": [
+								{
+									"key": "task_id",
+									"value": "CLAB202308250001",
+									"disabled": true
+								},
+								{
+									"key": "task_id",
+									"value": "SUAN20230922000"
+								}
+							]
+						}
+					},
+					"status": "Not Found",
+					"code": 404,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "X-Powered-By",
+							"value": "Express"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json; charset=utf-8"
+						},
+						{
+							"key": "Content-Length",
+							"value": "28"
+						},
+						{
+							"key": "ETag",
+							"value": "W/\"1c-MHDSHEeakQ3QeijgQMEHeol2HWg\""
+						},
+						{
+							"key": "Date",
+							"value": "Tue, 09 May 2023 12:28:41 GMT"
+						},
+						{
+							"key": "Connection",
+							"value": "keep-alive"
+						},
+						{
+							"key": "Keep-Alive",
+							"value": "timeout=5"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"message\": \"Task not found\"\n}"
+				},
+				{
+					"name": "Data not found",
+					"originalRequest": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "x-auth-token",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IkFudG9pbmV0dGU0MyIsImlhdCI6MTY4MzYzNDg1NSwiZXhwIjoxNjgzNjM4NDU1fQ.yqtZD9MP_PVKKUvq4msS6Ulyn4buiLgri9AcNb2d410",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{HOST}}/api/v1/label?data_id=SUAN20230922000",
+							"host": [
+								"{{HOST}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"label"
+							],
+							"query": [
+								{
+									"key": "task_id",
+									"value": "CLAB202308250001",
+									"disabled": true
+								},
+								{
+									"key": "data_id",
+									"value": "SUAN20230922000"
+								}
+							]
+						}
+					},
+					"status": "Not Found",
+					"code": 404,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "X-Powered-By",
+							"value": "Express"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json; charset=utf-8"
+						},
+						{
+							"key": "Content-Length",
+							"value": "28"
+						},
+						{
+							"key": "ETag",
+							"value": "W/\"1c-i0EptGmraAHmxP2zNRGy7HQtj2g\""
+						},
+						{
+							"key": "Date",
+							"value": "Tue, 09 May 2023 12:29:02 GMT"
+						},
+						{
+							"key": "Connection",
+							"value": "keep-alive"
+						},
+						{
+							"key": "Keep-Alive",
+							"value": "timeout=5"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"message\": \"Data not found\"\n}"
+				},
+				{
+					"name": "Success request as requester without query",
+					"originalRequest": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "x-auth-token",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IkFiZTY5IiwiaWF0IjoxNjgzNjM1MzkyLCJleHAiOjE2ODM2Mzg5OTJ9.i8kimh45AgyZ6I9B1dyyTmIYlg_2LwjCbzoEQONET9I",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{HOST}}/api/v1/label",
+							"host": [
+								"{{HOST}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"label"
+							],
+							"query": [
+								{
+									"key": "task_id",
+									"value": "CLAB202308250001",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "X-Powered-By",
+							"value": "Express"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json; charset=utf-8"
+						},
+						{
+							"key": "Content-Length",
+							"value": "1332"
+						},
+						{
+							"key": "ETag",
+							"value": "W/\"534-tPTsHJrBVxXUiXV/jgbUX2kU/KA\""
+						},
+						{
+							"key": "Date",
+							"value": "Tue, 09 May 2023 12:30:09 GMT"
+						},
+						{
+							"key": "Connection",
+							"value": "keep-alive"
+						},
+						{
+							"key": "Keep-Alive",
+							"value": "timeout=5"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"body\": [\n        {\n            \"task_id\": \"BOAB202308250001\",\n            \"task_type\": \"Bot Summarization\",\n            \"data\": [\n                {\n                    \"data_id\": \"D20234221600001\",\n                    \"data_text\": \"Gabimaru the Hollow  was set up by his fellow ninja and is now on death row. Tired of killing and betrayal, he wants to die. However, no method of execution works on him because as much as the seemingly apathetic Gabimaru refuses to admit it, he does have a reason to live. He wants to return to his wife, who was the reason why he softened up and failed to be an effective assassin. Thus, he refuses to die.\\n\\n Summary : Gabimaru the Hollow is a ninja who was set up by his fellow\",\n                    \"price\": 204,\n                    \"labels\": \"Label is empty\"\n                }\n            ]\n        },\n        {\n            \"task_id\": \"CLAB202308250001\",\n            \"task_type\": \"Classification\",\n            \"data\": [\n                {\n                    \"data_id\": \"D20234441400008\",\n                    \"data_text\": \"are you yes man?\",\n                    \"price\": 28,\n                    \"labels\": [\n                        {\n                            \"label_id\": \"L001\",\n                            \"username\": \"Ray7\",\n                            \"label_result\": \"yes\"\n                        },\n                        {\n                            \"label_id\": \"L002\",\n                            \"username\": \"Akeem4\",\n                            \"label_result\": \"yes\"\n                        },\n                        {\n                            \"label_id\": \"L003\",\n                            \"username\": \"Frida58\",\n                            \"label_result\": \"no\"\n                        },\n                        {\n                            \"label_id\": \"L005\",\n                            \"username\": \"Akeem4\",\n                            \"label_result\": \"Yeah, i am a man\"\n                        }\n                    ]\n                },\n                {\n                    \"data_id\": \"D20234441400009\",\n                    \"data_text\": \"do you like playing game?\",\n                    \"price\": 33,\n                    \"labels\": [\n                        {\n                            \"label_id\": \"L010\",\n                            \"username\": \"Akeem4\",\n                            \"label_result\": \"Label of dummy data\"\n                        }\n                    ]\n                },\n                {\n                    \"data_id\": \"D20234701600001\",\n                    \"data_text\": \"do you like watching anime?\",\n                    \"price\": 34,\n                    \"labels\": \"Label is empty\"\n                }\n            ]\n        }\n    ]\n}"
+				},
+				{
+					"name": "Success request as labeller with data_id as query",
+					"originalRequest": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "x-auth-token",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IkFrZWVtNCIsImlhdCI6MTY4MzYzNTU1NiwiZXhwIjoxNjgzNjM5MTU2fQ.hQCQH10Nas9lmWc1jCdpvqd8EzdDVoD5O00dyPbDQrM",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{HOST}}/api/v1/label?data_id=D20234441400002",
+							"host": [
+								"{{HOST}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"label"
+							],
+							"query": [
+								{
+									"key": "task_id",
+									"value": "CLAB202308250001",
+									"disabled": true
+								},
+								{
+									"key": "data_id",
+									"value": "D20234441400002"
+								}
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "X-Powered-By",
+							"value": "Express"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json; charset=utf-8"
+						},
+						{
+							"key": "Content-Length",
+							"value": "508"
+						},
+						{
+							"key": "ETag",
+							"value": "W/\"1fc-Q/cvmNc4QVuI9XSgNmmgAWvGbWs\""
+						},
+						{
+							"key": "Date",
+							"value": "Tue, 09 May 2023 12:33:18 GMT"
+						},
+						{
+							"key": "Connection",
+							"value": "keep-alive"
+						},
+						{
+							"key": "Keep-Alive",
+							"value": "timeout=5"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"body\": {\n        \"data_id\": \"D20234441400002\",\n        \"data_text\": \"With the ambitious Ryuusui Nanami on board, Senkuu Ishigami and his team are almost ready to sail the seas and reach the other side of the world—where the bizarre green light that petrified humanity originated. Thanks to the revival of a skillful chef, enough food is being prepared for the entire crew, and the incredible reinvention of the GPS promises to ensure safety on the open sea.\",\n        \"labels\": [\n            {\n                \"label_id\": \"L007\",\n                \"label_result\": \"New Label Result\"\n            }\n        ]\n    }\n}"
+				},
+				{
+					"name": "Success request as labeller without query",
+					"originalRequest": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "x-auth-token",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IkFrZWVtNCIsImlhdCI6MTY4MzYzNTU1NiwiZXhwIjoxNjgzNjM5MTU2fQ.hQCQH10Nas9lmWc1jCdpvqd8EzdDVoD5O00dyPbDQrM",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{HOST}}/api/v1/label",
+							"host": [
+								"{{HOST}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"label"
+							],
+							"query": [
+								{
+									"key": "task_id",
+									"value": "CLAB202308250001",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "X-Powered-By",
+							"value": "Express"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json; charset=utf-8"
+						},
+						{
+							"key": "Content-Length",
+							"value": "995"
+						},
+						{
+							"key": "ETag",
+							"value": "W/\"3e3-04hyX6VqAxJtYCb27n2k0NdS5mw\""
+						},
+						{
+							"key": "Date",
+							"value": "Tue, 09 May 2023 12:34:11 GMT"
+						},
+						{
+							"key": "Connection",
+							"value": "keep-alive"
+						},
+						{
+							"key": "Keep-Alive",
+							"value": "timeout=5"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"body\": [\n        {\n            \"data_id\": \"D20234441400008\",\n            \"data_text\": \"are you yes man?\",\n            \"label\": {\n                \"label_id\": \"L002\",\n                \"label_result\": \"yes\"\n            }\n        },\n        {\n            \"data_id\": \"D20234441400008\",\n            \"data_text\": \"are you yes man?\",\n            \"label\": {\n                \"label_id\": \"L005\",\n                \"label_result\": \"Yeah, i am a man\"\n            }\n        },\n        {\n            \"data_id\": \"D20234811700001\",\n            \"data_text\": \"Dummy Data\",\n            \"label\": {\n                \"label_id\": \"L006\",\n                \"label_result\": \"Label of dummy data\"\n            }\n        },\n        {\n            \"data_id\": \"D20234441400002\",\n            \"data_text\": \"With the ambitious Ryuusui Nanami on board, Senkuu Ishigami and his team are almost ready to sail the seas and reach the other side of the world—where the bizarre green light that petrified humanity originated. Thanks to the revival of a skillful chef, enough food is being prepared for the entire crew, and the incredible reinvention of the GPS promises to ensure safety on the open sea.\",\n            \"label\": {\n                \"label_id\": \"L007\",\n                \"label_result\": \"New Label Result\"\n            }\n        },\n        {\n            \"data_id\": \"D20234441400009\",\n            \"data_text\": \"do you like playing game?\",\n            \"label\": {\n                \"label_id\": \"L010\",\n                \"label_result\": \"Label of dummy data\"\n            }\n        }\n    ]\n}"
+				}
+			]
+		},
+		{
+			"name": "{{HOST}}/api/v1/label?task_id=BOAB202308250001",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "x-auth-token",
+						"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IkFudG9pbmV0dGU0MyIsImlhdCI6MTY4MzYzNDg1NSwiZXhwIjoxNjgzNjM4NDU1fQ.yqtZD9MP_PVKKUvq4msS6Ulyn4buiLgri9AcNb2d410",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": []
+				},
+				"url": {
+					"raw": "{{HOST}}/api/v1/label?task_id=BOAB202308250001",
+					"host": [
+						"{{HOST}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"label"
+					],
+					"query": [
+						{
+							"key": "task_id",
+							"value": "BOAB202308250001"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Topup",
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "x-auth-token",
+						"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IkFiZTY5IiwiaWF0IjoxNjg0OTE2NDI2LCJleHAiOjE2ODQ5MjAwMjZ9.a0vcurf4rrIQvvWv7rcqnlZbboQB4krxk7LMWSqL4w8",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "saldo",
+							"value": "67000",
+							"type": "text"
+						},
+						{
+							"key": "password",
+							"value": "gMB3Q",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "{{HOST}}/api/v1/user/topup/Abe69",
+					"host": [
+						"{{HOST}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"user",
+						"topup",
+						"Abe69"
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "Topup",
+					"originalRequest": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "x-auth-token",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IkFiZTY5IiwiaWF0IjoxNjg0OTE2NDI2LCJleHAiOjE2ODQ5MjAwMjZ9.a0vcurf4rrIQvvWv7rcqnlZbboQB4krxk7LMWSqL4w8",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "saldo",
+									"value": "67000",
+									"type": "text"
+								},
+								{
+									"key": "password",
+									"value": "gMB3Q",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{HOST}}/api/v1/user/topup/Abe69",
+							"host": [
+								"{{HOST}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"user",
+								"topup",
+								"Abe69"
+							]
+						}
+					},
+					"_postman_previewlanguage": null,
+					"header": null,
+					"cookie": [],
+					"body": null
+				},
+				{
+					"name": "ada field kosong",
+					"originalRequest": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "x-auth-token",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IkFiZTY5IiwiaWF0IjoxNjg0OTE2NDI2LCJleHAiOjE2ODQ5MjAwMjZ9.a0vcurf4rrIQvvWv7rcqnlZbboQB4krxk7LMWSqL4w8",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "saldo",
+									"value": "67000",
+									"type": "text"
+								},
+								{
+									"key": "password",
+									"value": "gMB3Q",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{HOST}}/api/v1/user/topup/Abe69",
+							"host": [
+								"{{HOST}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"user",
+								"topup",
+								"Abe69"
+							]
+						}
+					},
+					"_postman_previewlanguage": null,
+					"header": null,
+					"cookie": [],
+					"body": null
+				}
+			]
+		},
+		{
+			"name": "Withdraw",
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "x-auth-token",
+						"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Ildpbm9uYTcwIiwiaWF0IjoxNjg0OTE2OTgzLCJleHAiOjE2ODQ5MjA1ODN9.Q70mkes-58DAHuCZSIpVuCF5qCGGkoIuyWTDNpX-NNo",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "saldo",
+							"value": "50000",
+							"type": "text"
+						},
+						{
+							"key": "password",
+							"value": "bZIy4",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "{{HOST}}/api/v1/user/retrive/Winona70",
+					"host": [
+						"{{HOST}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"user",
+						"retrive",
+						"Winona70"
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "ada field gk di isi",
+					"originalRequest": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "x-auth-token",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Ildpbm9uYTcwIiwiaWF0IjoxNjg0OTE2OTgzLCJleHAiOjE2ODQ5MjA1ODN9.Q70mkes-58DAHuCZSIpVuCF5qCGGkoIuyWTDNpX-NNo",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "saldo",
+									"value": "50000",
+									"type": "text",
+									"disabled": true
+								},
+								{
+									"key": "password",
+									"value": "bZIy4",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "http://localhost:3000/api/v1/user/retrive/Winona70",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"v1",
+								"user",
+								"retrive",
+								"Winona70"
+							]
+						}
+					},
+					"_postman_previewlanguage": null,
+					"header": null,
+					"cookie": [],
+					"body": null
+				},
+				{
+					"name": "role nya bukan labeller",
+					"originalRequest": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "x-auth-token",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Ildpbm9uYTcwIiwiaWF0IjoxNjg0OTE2OTgzLCJleHAiOjE2ODQ5MjA1ODN9.Q70mkes-58DAHuCZSIpVuCF5qCGGkoIuyWTDNpX-NNo",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "saldo",
+									"value": "50000",
+									"type": "text"
+								},
+								{
+									"key": "password",
+									"value": "bZIy4",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{HOST}}/api/v1/user/retrive/Winona70",
+							"host": [
+								"{{HOST}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"user",
+								"retrive",
+								"Winona70"
+							]
+						}
+					},
+					"_postman_previewlanguage": null,
+					"header": null,
+					"cookie": [],
+					"body": null
+				},
+				{
+					"name": "saldo lebih kecil dari inputan",
+					"originalRequest": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "x-auth-token",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Ildpbm9uYTcwIiwiaWF0IjoxNjg0OTE2OTgzLCJleHAiOjE2ODQ5MjA1ODN9.Q70mkes-58DAHuCZSIpVuCF5qCGGkoIuyWTDNpX-NNo",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "saldo",
+									"value": "50000",
+									"type": "text"
+								},
+								{
+									"key": "password",
+									"value": "bZIy4",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{HOST}}/api/v1/user/retrive/Winona70",
+							"host": [
+								"{{HOST}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"user",
+								"retrive",
+								"Winona70"
+							]
+						}
+					},
+					"_postman_previewlanguage": null,
+					"header": null,
+					"cookie": [],
+					"body": null
+				},
+				{
+					"name": "berhasil Withdraw",
+					"originalRequest": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "x-auth-token",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Ildpbm9uYTcwIiwiaWF0IjoxNjg0OTE2OTgzLCJleHAiOjE2ODQ5MjA1ODN9.Q70mkes-58DAHuCZSIpVuCF5qCGGkoIuyWTDNpX-NNo",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "saldo",
+									"value": "50000",
+									"type": "text"
+								},
+								{
+									"key": "password",
+									"value": "bZIy4",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{HOST}}/api/v1/user/retrive/Winona70",
+							"host": [
+								"{{HOST}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"user",
+								"retrive",
+								"Winona70"
+							]
+						}
+					},
+					"_postman_previewlanguage": null,
+					"header": null,
+					"cookie": [],
+					"body": null
+				}
+			]
+		},
+		{
+			"name": "update_role",
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "x-auth-token",
+						"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IkFsYmVydG81OSIsImlhdCI6MTY4NzA2MzM2OSwiZXhwIjoxNjg3MDY2OTY5fQ.J3-GKXhTTIuTES7QaTjLEl6xwpcDwdXpgQH_q7ncq5g",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "saldo",
+							"value": "50000",
+							"type": "text"
+						},
+						{
+							"key": "password",
+							"value": "bZIy4",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:3000/api/v1/user/update/Alberto59",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"v1",
+						"user",
+						"update",
+						"Alberto59"
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "berhasil update jadi labeller",
+					"originalRequest": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "x-auth-token",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Ildpbm9uYTcwIiwiaWF0IjoxNjg0OTE2OTgzLCJleHAiOjE2ODQ5MjA1ODN9.Q70mkes-58DAHuCZSIpVuCF5qCGGkoIuyWTDNpX-NNo",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "saldo",
+									"value": "50000",
+									"type": "text"
+								},
+								{
+									"key": "password",
+									"value": "bZIy4",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{HOST}}/api/v1/user/retrive/Winona70",
+							"host": [
+								"{{HOST}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"user",
+								"retrive",
+								"Winona70"
+							]
+						}
+					},
+					"_postman_previewlanguage": null,
+					"header": null,
+					"cookie": [],
+					"body": null
+				},
+				{
+					"name": "berhasil update jadi requester",
+					"originalRequest": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "x-auth-token",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IkFsYmVydG81OSIsImlhdCI6MTY4NzA2MzM2OSwiZXhwIjoxNjg3MDY2OTY5fQ.J3-GKXhTTIuTES7QaTjLEl6xwpcDwdXpgQH_q7ncq5g",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "saldo",
+									"value": "50000",
+									"type": "text"
+								},
+								{
+									"key": "password",
+									"value": "bZIy4",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "http://localhost:3000/api/v1/user/update/Alberto59",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"v1",
+								"user",
+								"update",
+								"Alberto59"
+							]
+						}
+					},
+					"_postman_previewlanguage": null,
+					"header": null,
+					"cookie": [],
+					"body": null
+				}
+			]
+		},
+		{
+			"name": "Topup history",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "x-auth-token",
+						"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IkFiZTY5IiwiaWF0IjoxNjg0OTE1OTA1LCJleHAiOjE2ODQ5MTk1MDV9.tcg9_CS11uoNlyuuGxSoN0bRwDuKYWDeC8aAZasBLTs",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{HOST}}/api/v1/user/topup/history",
+					"host": [
+						"{{HOST}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"user",
+						"topup",
+						"history"
+					]
+				},
+				"description": "This endpoint is useful for getting topup history from logged in users."
+			},
+			"response": [
+				{
+					"name": "Success to get topup history",
+					"originalRequest": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "x-auth-token",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IkFiZTY5IiwiaWF0IjoxNjg0OTE1OTA1LCJleHAiOjE2ODQ5MTk1MDV9.tcg9_CS11uoNlyuuGxSoN0bRwDuKYWDeC8aAZasBLTs",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{HOST}}/api/v1/user/topup/history",
+							"host": [
+								"{{HOST}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"user",
+								"topup",
+								"history"
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "X-Powered-By",
+							"value": "Express"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json; charset=utf-8"
+						},
+						{
+							"key": "Content-Length",
+							"value": "383"
+						},
+						{
+							"key": "ETag",
+							"value": "W/\"17f-9PuHpk9RTByEtmQ+XR4FKcs7EEA\""
+						},
+						{
+							"key": "Date",
+							"value": "Wed, 24 May 2023 08:25:10 GMT"
+						},
+						{
+							"key": "Connection",
+							"value": "keep-alive"
+						},
+						{
+							"key": "Keep-Alive",
+							"value": "timeout=5"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"histories\": [\n        {\n            \"amount\": 10000,\n            \"date\": \"5/24/2007 15:13:19\"\n        },\n        {\n            \"amount\": 100000,\n            \"date\": \"6/10/2007 15:16:12\"\n        },\n        {\n            \"amount\": 200000,\n            \"date\": \"8/16/2007 15:20:38\"\n        },\n        {\n            \"amount\": 1000000,\n            \"date\": \"9/12/2007 15:21:00\"\n        },\n        {\n            \"amount\": 500000,\n            \"date\": \"10/31/2007 15:21:06\"\n        },\n        {\n            \"amount\": 650000,\n            \"date\": \"11/8/2007 15:21:14\"\n        },\n        {\n            \"amount\": 19000,\n            \"date\": \"12/31/2007 15:21:24\"\n        },\n        {\n            \"amount\": 67000,\n            \"date\": \"1/16/2008 15:21:30\"\n        }\n    ]\n}"
+				}
+			]
+		},
+		{
+			"name": "Withdraw History",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "x-auth-token",
+						"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Ildpbm9uYTcwIiwiaWF0IjoxNjg0OTE2OTgzLCJleHAiOjE2ODQ5MjA1ODN9.Q70mkes-58DAHuCZSIpVuCF5qCGGkoIuyWTDNpX-NNo",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{HOST}}/api/v1/user/withdraw/history",
+					"host": [
+						"{{HOST}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"user",
+						"withdraw",
+						"history"
+					]
+				},
+				"description": "This endpoint is useful for getting retrieve money history from logged in users."
+			},
+			"response": [
+				{
+					"name": "Success to get withdraw history",
+					"originalRequest": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "x-auth-token",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Ildpbm9uYTcwIiwiaWF0IjoxNjg0OTE2OTgzLCJleHAiOjE2ODQ5MjA1ODN9.Q70mkes-58DAHuCZSIpVuCF5qCGGkoIuyWTDNpX-NNo",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{HOST}}/api/v1/user/withdraw/history",
+							"host": [
+								"{{HOST}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"user",
+								"withdraw",
+								"history"
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "X-Powered-By",
+							"value": "Express"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json; charset=utf-8"
+						},
+						{
+							"key": "Content-Length",
+							"value": "334"
+						},
+						{
+							"key": "ETag",
+							"value": "W/\"14e-0ti/LBDeX3w13Wmyk2M1YbfSfBQ\""
+						},
+						{
+							"key": "Date",
+							"value": "Wed, 24 May 2023 08:37:00 GMT"
+						},
+						{
+							"key": "Connection",
+							"value": "keep-alive"
+						},
+						{
+							"key": "Keep-Alive",
+							"value": "timeout=5"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"histories\": [\n        {\n            \"amount\": 50000,\n            \"date\": \"5/23/2007 15:31:53\"\n        },\n        {\n            \"amount\": 50000,\n            \"date\": \"8/20/2007 15:32:45\"\n        },\n        {\n            \"amount\": 100000,\n            \"date\": \"10/25/2007 15:32:52\"\n        },\n        {\n            \"amount\": 25000,\n            \"date\": \"1/5/2008 15:32:57\"\n        },\n        {\n            \"amount\": 200000,\n            \"date\": \"2/7/2008 15:33:02\"\n        },\n        {\n            \"amount\": 300000,\n            \"date\": \"7/23/2008 15:33:11\"\n        },\n        {\n            \"amount\": 250000,\n            \"date\": \"12/16/2008 15:33:45\"\n        }\n    ]\n}"
+				}
+			]
+		},
+		{
+			"name": "Ban User",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "x-auth-token",
+						"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IkFudG9pbmV0dGU0MyIsImlhdCI6MTY4NDkzODYwNCwiZXhwIjoxNjg0OTQyMjA0fQ.9jy7ciOWtqylWZ5ziP3faSyPkfo_pDfEcGIxavZOgPs",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "username",
+							"value": "Alberto59",
+							"description": "The username of the user to be banned; must be a role labeller",
+							"type": "text"
+						},
+						{
+							"key": "task_id",
+							"value": "SUAN202309220001",
+							"description": "The reason the user is banned; task must have a logged in user",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "{{HOST}}/api/v1/user/ban",
+					"host": [
+						"{{HOST}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"user",
+						"ban"
+					]
+				},
+				"description": "This endpoint is useful for banning users by requesters because the label results are lacking or may be very disliked. This endpoint can only be accessed by requesters and can only burden users who have labeled one of the data in one of their tasks."
+			},
+			"response": [
+				{
+					"name": "Succses to Banned User",
+					"originalRequest": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "x-auth-token",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IlF1ZW50aW40NCIsImlhdCI6MTY4NDkzNjgzOSwiZXhwIjoxNjg0OTQwNDM5fQ.RFcnMPb1lFpyMrYmtu5kJlP2SXFbc2xt7cAmgdotQjw",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "username",
+									"value": "Winona70",
+									"description": "The username of the user to be banned; must be a role labeller",
+									"type": "text"
+								},
+								{
+									"key": "task_id",
+									"value": "TRQU202305300001",
+									"description": "The reason the user is banned; task must have a logged in user",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{HOST}}/api/v1/user/ban",
+							"host": [
+								"{{HOST}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"user",
+								"ban"
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "X-Powered-By",
+							"value": "Express"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json; charset=utf-8"
+						},
+						{
+							"key": "Content-Length",
+							"value": "88"
+						},
+						{
+							"key": "ETag",
+							"value": "W/\"58-VXErRnh2pPp1xzH5T3nVF3PwUG0\""
+						},
+						{
+							"key": "Date",
+							"value": "Wed, 24 May 2023 14:13:37 GMT"
+						},
+						{
+							"key": "Connection",
+							"value": "keep-alive"
+						},
+						{
+							"key": "Keep-Alive",
+							"value": "timeout=5"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"mag\": \"User dengan username Winona70 sudah di ban oleh User dengan username Quentin44\"\n}"
+				},
+				{
+					"name": "User never labelled",
+					"originalRequest": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "x-auth-token",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IlF1ZW50aW40NCIsImlhdCI6MTY4NDkzNjgzOSwiZXhwIjoxNjg0OTQwNDM5fQ.RFcnMPb1lFpyMrYmtu5kJlP2SXFbc2xt7cAmgdotQjw",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "username",
+									"value": "Akeem4",
+									"description": "The username of the user to be banned; must be a role labeller",
+									"type": "text"
+								},
+								{
+									"key": "task_id",
+									"value": "TRQU202305300001",
+									"description": "The reason the user is banned; task must have a logged in user",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{HOST}}/api/v1/user/ban",
+							"host": [
+								"{{HOST}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"user",
+								"ban"
+							]
+						}
+					},
+					"status": "Bad Request",
+					"code": 400,
+					"_postman_previewlanguage": "html",
+					"header": [
+						{
+							"key": "X-Powered-By",
+							"value": "Express"
+						},
+						{
+							"key": "Content-Type",
+							"value": "text/html; charset=utf-8"
+						},
+						{
+							"key": "Content-Length",
+							"value": "136"
+						},
+						{
+							"key": "ETag",
+							"value": "W/\"88-VIFPvDbJYgDAq+6CueSxeEaB+Bk\""
+						},
+						{
+							"key": "Date",
+							"value": "Wed, 24 May 2023 14:15:38 GMT"
+						},
+						{
+							"key": "Connection",
+							"value": "keep-alive"
+						},
+						{
+							"key": "Keep-Alive",
+							"value": "timeout=5"
+						}
+					],
+					"cookie": [],
+					"body": "Error: User yang memiliki username Akeem4 tidak pernah melabeli salah satu data pada task dengan task_id TRQU202305300001 (is_task_user)"
+				},
+				{
+					"name": "Task not belong User",
+					"originalRequest": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "x-auth-token",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IlF1ZW50aW40NCIsImlhdCI6MTY4NDkzNjgzOSwiZXhwIjoxNjg0OTQwNDM5fQ.RFcnMPb1lFpyMrYmtu5kJlP2SXFbc2xt7cAmgdotQjw",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "username",
+									"value": "Rhianna18",
+									"description": "The username of the user to be banned; must be a role labeller",
+									"type": "text"
+								},
+								{
+									"key": "task_id",
+									"value": "BOOF202312310001",
+									"description": "The reason the user is banned; task must have a logged in user",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{HOST}}/api/v1/user/ban",
+							"host": [
+								"{{HOST}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"user",
+								"ban"
+							]
+						}
+					},
+					"status": "Bad Request",
+					"code": 400,
+					"_postman_previewlanguage": "html",
+					"header": [
+						{
+							"key": "X-Powered-By",
+							"value": "Express"
+						},
+						{
+							"key": "Content-Type",
+							"value": "text/html; charset=utf-8"
+						},
+						{
+							"key": "Content-Length",
+							"value": "37"
+						},
+						{
+							"key": "ETag",
+							"value": "W/\"25-A7Vc9eWpX8g+v+zUvbhLEJy5oz0\""
+						},
+						{
+							"key": "Date",
+							"value": "Wed, 24 May 2023 14:17:28 GMT"
+						},
+						{
+							"key": "Connection",
+							"value": "keep-alive"
+						},
+						{
+							"key": "Keep-Alive",
+							"value": "timeout=5"
+						}
+					],
+					"cookie": [],
+					"body": "Error: Task bukan punya anda (istask)"
+				},
+				{
+					"name": "Task not found",
+					"originalRequest": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "x-auth-token",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IlF1ZW50aW40NCIsImlhdCI6MTY4NDkzNjgzOSwiZXhwIjoxNjg0OTQwNDM5fQ.RFcnMPb1lFpyMrYmtu5kJlP2SXFbc2xt7cAmgdotQjw",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "username",
+									"value": "Rhianna18",
+									"description": "The username of the user to be banned; must be a role labeller",
+									"type": "text"
+								},
+								{
+									"key": "task_id",
+									"value": "BOOF20231231000150",
+									"description": "The reason the user is banned; task must have a logged in user",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{HOST}}/api/v1/user/ban",
+							"host": [
+								"{{HOST}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"user",
+								"ban"
+							]
+						}
+					},
+					"status": "Bad Request",
+					"code": 400,
+					"_postman_previewlanguage": "html",
+					"header": [
+						{
+							"key": "X-Powered-By",
+							"value": "Express"
+						},
+						{
+							"key": "Content-Type",
+							"value": "text/html; charset=utf-8"
+						},
+						{
+							"key": "Content-Length",
+							"value": "37"
+						},
+						{
+							"key": "ETag",
+							"value": "W/\"25-4yZhh4wBAIawCe8Fvz5vyIJaepg\""
+						},
+						{
+							"key": "Date",
+							"value": "Wed, 24 May 2023 14:18:04 GMT"
+						},
+						{
+							"key": "Connection",
+							"value": "keep-alive"
+						},
+						{
+							"key": "Keep-Alive",
+							"value": "timeout=5"
+						}
+					],
+					"cookie": [],
+					"body": "Error: Task tidak terdaftar (task_id)"
+				},
+				{
+					"name": "Username belongs to user with role labeller",
+					"originalRequest": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "x-auth-token",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IlF1ZW50aW40NCIsImlhdCI6MTY4NDkzNjgzOSwiZXhwIjoxNjg0OTQwNDM5fQ.RFcnMPb1lFpyMrYmtu5kJlP2SXFbc2xt7cAmgdotQjw",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "username",
+									"value": "Alvah47",
+									"description": "The username of the user to be banned; must be a role labeller",
+									"type": "text"
+								},
+								{
+									"key": "task_id",
+									"value": "BOOF20231231000150",
+									"description": "The reason the user is banned; task must have a logged in user",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{HOST}}/api/v1/user/ban",
+							"host": [
+								"{{HOST}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"user",
+								"ban"
+							]
+						}
+					},
+					"status": "Bad Request",
+					"code": 400,
+					"_postman_previewlanguage": "html",
+					"header": [
+						{
+							"key": "X-Powered-By",
+							"value": "Express"
+						},
+						{
+							"key": "Content-Type",
+							"value": "text/html; charset=utf-8"
+						},
+						{
+							"key": "Content-Length",
+							"value": "42"
+						},
+						{
+							"key": "ETag",
+							"value": "W/\"2a-yfCiN2x+9ymOMF0DQjQtAqaxhOc\""
+						},
+						{
+							"key": "Date",
+							"value": "Wed, 24 May 2023 14:19:24 GMT"
+						},
+						{
+							"key": "Connection",
+							"value": "keep-alive"
+						},
+						{
+							"key": "Keep-Alive",
+							"value": "timeout=5"
+						}
+					],
+					"cookie": [],
+					"body": "Error: User role harus LABELLER (username)"
+				},
+				{
+					"name": "The logged in user is not a requester",
+					"originalRequest": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "x-auth-token",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IkFrZWVtNCIsImlhdCI6MTY4NDkzODA2MCwiZXhwIjoxNjg0OTQxNjYwfQ.-PqFitIpQNbdGM-1G-PMidJpNvAULRaxtrUSj4G0OUs",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "username",
+									"value": "Alberto59",
+									"description": "The username of the user to be banned; must be a role labeller",
+									"type": "text"
+								},
+								{
+									"key": "task_id",
+									"value": "BOOF202312310001",
+									"description": "The reason the user is banned; task must have a logged in user",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{HOST}}/api/v1/user/ban",
+							"host": [
+								"{{HOST}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"user",
+								"ban"
+							]
+						}
+					},
+					"status": "Bad Request",
+					"code": 400,
+					"_postman_previewlanguage": "html",
+					"header": [
+						{
+							"key": "X-Powered-By",
+							"value": "Express"
+						},
+						{
+							"key": "Content-Type",
+							"value": "text/html; charset=utf-8"
+						},
+						{
+							"key": "Content-Length",
+							"value": "55"
+						},
+						{
+							"key": "ETag",
+							"value": "W/\"37-ZIW/GnhteoLS6zI/yawoDfJ4eQA\""
+						},
+						{
+							"key": "Date",
+							"value": "Wed, 24 May 2023 14:23:06 GMT"
+						},
+						{
+							"key": "Connection",
+							"value": "keep-alive"
+						},
+						{
+							"key": "Keep-Alive",
+							"value": "timeout=5"
+						}
+					],
+					"cookie": [],
+					"body": "Error: Hanya role REQUESTER yang boleh mengakses (user)"
+				}
+			]
+		},
+		{
+			"name": "Get User Ban List",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "x-auth-token",
+						"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IkFsYmVydG81OSIsImlhdCI6MTY4NDkzODYyOCwiZXhwIjoxNjg0OTQyMjI4fQ.2R5j9vZCp_BG3GFOaS7meYN9il1_Y3ghXoREfz82aSI",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": []
+				},
+				"url": {
+					"raw": "{{HOST}}/api/v1/user/ban/list",
+					"host": [
+						"{{HOST}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"user",
+						"ban",
+						"list"
+					]
+				},
+				"description": "This endpoint is useful for requesters to see which users they have banned. As for the labeller, it's useful to see him banned in any task."
+			},
+			"response": [
+				{
+					"name": "The logged in user is the requester",
+					"originalRequest": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "x-auth-token",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IlF1ZW50aW40NCIsImlhdCI6MTY4NDkzODI5NSwiZXhwIjoxNjg0OTQxODk1fQ.lCeEVcdhGzQHmkT4VnOufaVjeYLylwTJpKUFX3W2Buw",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{HOST}}/api/v1/user/ban/list",
+							"host": [
+								"{{HOST}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"user",
+								"ban",
+								"list"
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "X-Powered-By",
+							"value": "Express"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json; charset=utf-8"
+						},
+						{
+							"key": "Content-Length",
+							"value": "357"
+						},
+						{
+							"key": "ETag",
+							"value": "W/\"165-bJg9FmuxXlaZzMjeqhb3fA9/hCo\""
+						},
+						{
+							"key": "Date",
+							"value": "Wed, 24 May 2023 14:25:04 GMT"
+						},
+						{
+							"key": "Connection",
+							"value": "keep-alive"
+						},
+						{
+							"key": "Keep-Alive",
+							"value": "timeout=5"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"blacklists\": [\n        {\n            \"ban_id\": \"BD1\",\n            \"username\": \"Winona70\",\n            \"task_id\": \"TRQU202305300001\"\n        },\n        {\n            \"ban_id\": \"BD2\",\n            \"username\": \"Alberto59\",\n            \"task_id\": \"TRQU202305300001\"\n        },\n        {\n            \"ban_id\": \"BD3\",\n            \"username\": \"Clinton98\",\n            \"task_id\": \"TRQU202305300001\"\n        },\n        {\n            \"ban_id\": \"BD4\",\n            \"username\": \"King13\",\n            \"task_id\": \"TRQU202305300001\"\n        },\n        {\n            \"ban_id\": \"BD5\",\n            \"username\": \"Rasheed76\",\n            \"task_id\": \"TRQU202305300001\"\n        }\n    ]\n}"
+				},
+				{
+					"name": "The logged in user is the labeller",
+					"originalRequest": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "x-auth-token",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IkFsYmVydG81OSIsImlhdCI6MTY4NDkzODYyOCwiZXhwIjoxNjg0OTQyMjI4fQ.2R5j9vZCp_BG3GFOaS7meYN9il1_Y3ghXoREfz82aSI",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{HOST}}/api/v1/user/ban/list",
+							"host": [
+								"{{HOST}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"user",
+								"ban",
+								"list"
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "X-Powered-By",
+							"value": "Express"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json; charset=utf-8"
+						},
+						{
+							"key": "Content-Length",
+							"value": "192"
+						},
+						{
+							"key": "ETag",
+							"value": "W/\"c0-4lio4pEQlNvNrf/AbQ7JLOUd7ug\""
+						},
+						{
+							"key": "Date",
+							"value": "Wed, 24 May 2023 14:30:35 GMT"
+						},
+						{
+							"key": "Connection",
+							"value": "keep-alive"
+						},
+						{
+							"key": "Keep-Alive",
+							"value": "timeout=5"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"blacklists\": [\n        {\n            \"task_id\": \"TRQU202305300001\",\n            \"owner_of_task\": \"Quentin44\"\n        },\n        {\n            \"task_id\": \"CLAB202308250001\",\n            \"owner_of_task\": \"Abe69\"\n        },\n        {\n            \"task_id\": \"SUAN202309220001\",\n            \"owner_of_task\": \"Antoinette43\"\n        }\n    ]\n}"
+				}
+			]
+		},
+		{
+			"name": "Remove Ban",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Studi Kasus 1: Hanya Requester yang bisa akses\", function () {\r",
+							"    const header = pm.request.headers;\r",
+							"    const token = header.get(\"x-auth-token\");\r",
+							"    var user;\r",
+							"    \r",
+							"    pm.sendRequest({\r",
+							"        url: \"http://localhost:3000/api/v1/user\",\r",
+							"        method: \"GET\",\r",
+							"        header: { 'x-auth-token': token }\r",
+							"    }, function (err, res) {        \r",
+							"        user = res.json().body;\r",
+							"    });\r",
+							"\r",
+							"    setTimeout(() => {\r",
+							"        console.log(user);\r",
+							"    }, 500);\r",
+							"    \r",
+							"    pm.expect(pm.response.code).equal(200);\r",
+							"    \r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "x-auth-token",
+						"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IkFiZTY5IiwiaWF0IjoxNjg0OTM4ODg3LCJleHAiOjE2ODQ5NDI0ODd9.R--fxVN4udCjn7HcjOJbMyuSJu1zQUuo7fWXK6W3RPE",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "ban_id",
+							"value": "BD1",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "{{HOST}}/api/v1/user/remove_ban",
+					"host": [
+						"{{HOST}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"user",
+						"remove_ban"
+					]
+				},
+				"description": "This endpoint is useful for the requester to unban the labeller."
+			},
+			"response": [
+				{
+					"name": "Success to remove Blacklist",
+					"originalRequest": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "x-auth-token",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IkFiZTY5IiwiaWF0IjoxNjg0OTM4ODg3LCJleHAiOjE2ODQ5NDI0ODd9.R--fxVN4udCjn7HcjOJbMyuSJu1zQUuo7fWXK6W3RPE",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "ban_id",
+									"value": "BD0",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{HOST}}/api/v1/user/remove_ban",
+							"host": [
+								"{{HOST}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"user",
+								"remove_ban"
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "X-Powered-By",
+							"value": "Express"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json; charset=utf-8"
+						},
+						{
+							"key": "Content-Length",
+							"value": "33"
+						},
+						{
+							"key": "ETag",
+							"value": "W/\"21-gOEEBQ6ysSFIWCcmGySTK+3BHug\""
+						},
+						{
+							"key": "Date",
+							"value": "Wed, 24 May 2023 14:34:56 GMT"
+						},
+						{
+							"key": "Connection",
+							"value": "keep-alive"
+						},
+						{
+							"key": "Keep-Alive",
+							"value": "timeout=5"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"msg\": \"Blacklist sudah dicabut\"\n}"
+				},
+				{
+					"name": "Blacklist doesn't exist",
+					"originalRequest": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "x-auth-token",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IkFiZTY5IiwiaWF0IjoxNjg0OTM4ODg3LCJleHAiOjE2ODQ5NDI0ODd9.R--fxVN4udCjn7HcjOJbMyuSJu1zQUuo7fWXK6W3RPE",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "ban_id",
+									"value": "BD0",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{HOST}}/api/v1/user/remove_ban",
+							"host": [
+								"{{HOST}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"user",
+								"remove_ban"
+							]
+						}
+					},
+					"status": "Bad Request",
+					"code": 400,
+					"_postman_previewlanguage": "html",
+					"header": [
+						{
+							"key": "X-Powered-By",
+							"value": "Express"
+						},
+						{
+							"key": "Content-Type",
+							"value": "text/html; charset=utf-8"
+						},
+						{
+							"key": "Content-Length",
+							"value": "35"
+						},
+						{
+							"key": "ETag",
+							"value": "W/\"23-9IR5g4iZo0BKpDT5mLzaQG1zsx0\""
+						},
+						{
+							"key": "Date",
+							"value": "Wed, 24 May 2023 14:35:16 GMT"
+						},
+						{
+							"key": "Connection",
+							"value": "keep-alive"
+						},
+						{
+							"key": "Keep-Alive",
+							"value": "timeout=5"
+						}
+					],
+					"cookie": [],
+					"body": "Error: Blacklist tidak ada (ban_id)"
+				},
+				{
+					"name": "The logged in user is not the blocking one",
+					"originalRequest": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "x-auth-token",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IkFiZTY5IiwiaWF0IjoxNjg0OTM4ODg3LCJleHAiOjE2ODQ5NDI0ODd9.R--fxVN4udCjn7HcjOJbMyuSJu1zQUuo7fWXK6W3RPE",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "ban_id",
+									"value": "BD1",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{HOST}}/api/v1/user/remove_ban",
+							"host": [
+								"{{HOST}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"user",
+								"remove_ban"
+							]
+						}
+					},
+					"status": "Bad Request",
+					"code": 400,
+					"_postman_previewlanguage": "html",
+					"header": [
+						{
+							"key": "X-Powered-By",
+							"value": "Express"
+						},
+						{
+							"key": "Content-Type",
+							"value": "text/html; charset=utf-8"
+						},
+						{
+							"key": "Content-Length",
+							"value": "37"
+						},
+						{
+							"key": "ETag",
+							"value": "W/\"25-HxMG/1N89LPgcNnM3xzU7XnjvqM\""
+						},
+						{
+							"key": "Date",
+							"value": "Wed, 24 May 2023 14:36:12 GMT"
+						},
+						{
+							"key": "Connection",
+							"value": "keep-alive"
+						},
+						{
+							"key": "Keep-Alive",
+							"value": "timeout=5"
+						}
+					],
+					"cookie": [],
+					"body": "Error: Blacklist is not yours (isban)"
+				}
+			]
+		}
+	]
+}
