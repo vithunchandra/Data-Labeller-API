@@ -18,7 +18,8 @@ module.exports = {
       credibility: {
         type: Sequelize.INTEGER,
         defaultValue: 50
-      }
+      },
+      profile_picture: Sequelize.STRING,
     });
   },
   async down(queryInterface, Sequelize) {

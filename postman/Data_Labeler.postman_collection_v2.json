@@ -1,8 +1,9 @@
 {
 	"info": {
-		"_postman_id": "1885de0d-c0ff-49ac-a341-6562ec0b2f3a",
+		"_postman_id": "9fa69062-0e55-4ab9-891d-d9c2145d5f60",
 		"name": "Data_Labeler",
-		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "27256056"
 	},
 	"item": [
 		{
@@ -15,17 +16,17 @@
 					"urlencoded": [
 						{
 							"key": "username",
-							"value": "user1",
+							"value": "user12",
 							"type": "text"
 						},
 						{
 							"key": "password",
-							"value": "user1",
+							"value": "user12",
 							"type": "text"
 						},
 						{
 							"key": "name",
-							"value": "user1",
+							"value": "user12",
 							"type": "text"
 						},
 						{
@@ -57,12 +58,68 @@
 		},
 		{
 			"name": "labelling",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Autohorization test\", () => {\r",
+							"    const result = pm.response.json();\r",
+							"    if(result.message === \"Invalid JWT Token\"){\r",
+							"        pm.response.to.have.status(403);\r",
+							"    }else if(result.message === \"User not found\"){\r",
+							"        pm.response.to.have.status(404);\r",
+							"    }\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Input test\", () => {\r",
+							"    const request = pm.request.body.urlencoded.filter((item) => {\r",
+							"        if(!item.disabled){\r",
+							"            return item;\r",
+							"        }\r",
+							"    }).reduce((input, item) => {\r",
+							"        return {...input, [item.key] : item.value};\r",
+							"    }, {});\r",
+							"    \r",
+							"    for(const key in input){\r",
+							"        if(!input[key]){\r",
+							"            pm.expect(pm.response.json().message).is.equal(\"Every field must be provided\");\r",
+							"            pm.response.to.have.status(400);\r",
+							"        }\r",
+							"    }\r",
+							"\r",
+							"    const result = pm.response.json();\r",
+							"    if(result.message === \"Every field must be provided\" || result.message === \"Task already closed\" || String(result.message).includes(\"Quota exceeded for Data\") || result.message === \"Labeller can only post one label in at one data\"){\r",
+							"        pm.response.to.have.status(400);\r",
+							"    }else if(result.message === \"Endpoint only allowed for labeller\"){\r",
+							"        pm.response.to.have.status(403);\r",
+							"    }else if(result.message === \"Data not found\" || result.message === \"Task not found\"){\r",
+							"        pm.response.to.have.status(404);\r",
+							"    }\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Result test\", () => {\r",
+							"    pm.expect(pm.response).is.not.undefined;\r",
+							"    const result = pm.response.json();\r",
+							"    const body = result.body;\r",
+							"    pm.expect(body).to.have.all.keys('label_id', 'data_id', 'username', 'label_result');\r",
+							"    for(const property in body){\r",
+							"        console.log()\r",
+							"        pm.expect(body[property]).is.not.undefined;\r",
+							"    }\r",
+							"    pm.response.to.have.status(201);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
 			"request": {
 				"method": "POST",
 				"header": [
 					{
 						"key": "x-auth-token",
-						"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IkFrZWVtNCIsImlhdCI6MTY4MzYyNDMwMSwiZXhwIjoxNjgzNjI3OTAxfQ.1zvDCvJS27Etd7fka5OdahIjJuoBurerdAz3cjvva3s",
+						"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IlJoaWFubmExOCIsImlhdCI6MTY4NDkzNjgwMCwiZXhwIjoxNjg0OTQwNDAwfQ.NQbGimg0pC-y7YMvsFrW2HF8LjHUtNSN962pn7aiUYk",
 						"type": "text"
 					}
 				],
@@ -71,12 +128,12 @@
 					"urlencoded": [
 						{
 							"key": "data_id",
-							"value": "D20234441400009",
+							"value": "D202342432000002",
 							"type": "text"
 						},
 						{
 							"key": "label_result",
-							"value": "Label of dummy data",
+							"value": "Qwerty U10p!",
 							"type": "text"
 						}
 					]
@@ -707,12 +764,12 @@
 					"urlencoded": [
 						{
 							"key": "username",
-							"value": "Akeem4",
+							"value": "Abe69",
 							"type": "text"
 						},
 						{
 							"key": "password",
-							"value": "ts7pB",
+							"value": "gMB3Q",
 							"type": "text"
 						}
 					]
@@ -784,6 +841,73 @@
 		},
 		{
 			"name": "closeTask",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Autohorization test\", () => {\r",
+							"    const result = pm.response.json();\r",
+							"    if(result.message === \"Invalid JWT Token\"){\r",
+							"        pm.response.to.have.status(403);\r",
+							"    }else if(result.message === \"User not found\"){\r",
+							"        pm.response.to.have.status(404);\r",
+							"    }\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Input test\", () => {\r",
+							"    const request = pm.request.body.urlencoded.filter((item) => {\r",
+							"        if(!item.disabled){\r",
+							"            return item;\r",
+							"        }\r",
+							"    }).reduce((input, item) => {\r",
+							"        return {...input, [item.key] : item.value};\r",
+							"    }, {});\r",
+							"\r",
+							"    console.log(pm.request.url.query.all());\r",
+							"    \r",
+							"    for(const key in input){\r",
+							"        if(!input[key]){\r",
+							"            pm.expect(pm.response.json().message).is.equal(\"Every field must be provided\");\r",
+							"            pm.response.to.have.status(400);\r",
+							"        }\r",
+							"    }\r",
+							"\r",
+							"\r",
+							"    const result = pm.response.json();\r",
+							"    if(result.message === \"Every field must be provided\" || result.message === \"Task already closed\"){\r",
+							"        pm.response.to.have.status(400);\r",
+							"    }else if(result.message === \"Endpoint only allowed for requester\"){\r",
+							"        pm.response.to.have.status(403);\r",
+							"    }else if(result.message === \"Data not found\" || result.message === \"Task not found\"){\r",
+							"        pm.response.to.have.status(404);\r",
+							"    }\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Result test\", () => {\r",
+							"    const body = pm.response.json().body;\r",
+							"    pm.expect(body).to.have.all.keys([\r",
+							"        'message', \r",
+							"        'task_id', \r",
+							"        'task_type', \r",
+							"        'max_labeller', \r",
+							"        'status', \r",
+							"        'maximal_cost', \r",
+							"        'final_cost', \r",
+							"        'pay_change',\r",
+							"        'data'\r",
+							"    ]);\r",
+							"    for(const property in body){\r",
+							"        console.log()\r",
+							"        pm.expect(body[property]).is.not.undefined;\r",
+							"    }\r",
+							"    pm.response.to.have.status(200);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
 			"request": {
 				"method": "POST",
 				"header": [
@@ -1263,210 +1387,114 @@
 			]
 		},
 		{
-			"name": "post data",
+			"name": "createData",
 			"request": {
 				"auth": {
-					"type": "apikey",
-					"apikey": [
-						{
-							"key": "value",
-							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IkFiZTY5IiwiaWF0IjoxNjg0NjQ1NjI5LCJleHAiOjE2ODQ2NDkyMjl9.tyD-1wYwozE5mEp592i8--NbrlI-NN8kv96kEup9MQk",
-							"type": "string"
-						},
-						{
-							"key": "key",
-							"value": "x-auth-token",
-							"type": "string"
-						}
-					]
+					"type": "bearer"
 				},
 				"method": "POST",
-				"header": [],
+				"header": [
+					{
+						"key": "x-auth-token",
+						"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IlF1ZW50aW40NCIsImlhdCI6MTY4NDkzNTc5MiwiZXhwIjoxNjg0OTM5MzkyfQ.uPkS0yzjBAtBVIVJTrIiJxq7IPNTUnMn4ExHiS9p_m8",
+						"type": "text"
+					}
+				],
 				"body": {
 					"mode": "urlencoded",
 					"urlencoded": [
 						{
 							"key": "task_id",
-							"value": "TRAB202307220001",
+							"value": "TRQU202305300001",
 							"type": "text"
 						},
 						{
 							"key": "data_text",
-							"value": "Gol D. Roger was known as the \"Pirate King,\" the strongest and most infamous being to have sailed the Grand Line. The capture and execution of Roger by the World Government brought a change throughout the world. His last words before his death revealed the existence of the greatest treasure in the world, One Piece. It was this revelation that brought about the Grand Age of Pirates, men who dreamed of finding One Piece—which promises an unlimited amount of riches and fame—and quite possibly the pinnacle of glory and the title of the Pirate King.Monkey D. Luffy, a 17-year-old boy who defies your standard definition of a pirate. Rather than the popular persona of a wicked, hardened, toothless pirate ransacking villages for fun, Luffy's reason for being a pirate is one of pure wonder: the thought of an exciting adventure that leads him to intriguing people and ultimately, the promised treasure. Following in the footsteps of his childhood hero, Luffy and his crew travel across the Grand Line, experiencing crazy adventures, unveiling dark mysteries and battling strong enemies, all in order to reach the most coveted of all fortunes—One Piece.",
+							"value": "Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of classical Latin literature from 45 BC, making it over 2000 years old.",
 							"type": "text"
 						}
 					]
 				},
 				"url": {
-					"raw": "{{HOST}}/data",
+					"raw": "{{HOST}}/api/v1/data",
 					"host": [
 						"{{HOST}}"
 					],
 					"path": [
+						"api",
+						"v1",
 						"data"
 					]
-				}
-			},
-			"response": [
-				{
-					"name": "bot summarization",
-					"originalRequest": {
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "urlencoded",
-							"urlencoded": [
-								{
-									"key": "task_id",
-									"value": "BOAB202308250001",
-									"type": "text"
-								},
-								{
-									"key": "data_text",
-									"value": "Sentenced to death, ninja Gabimaru the Hollow finds himself apathetic. After leading a blood-soaked life, Gabimaru believes he deserves to die. However, every attempt to execute him inexplicably fails. Finally, Sagiri Yamada Asaemon, a fledgling member of a famed executioner clan, is asked to take Gabimaru's life; yet Sagiri makes no move to kill him as requested.",
-									"type": "text"
-								}
-							]
-						},
-						"url": {
-							"raw": "localhost:3000/api/v1/data",
-							"host": [
-								"localhost"
-							],
-							"port": "3000",
-							"path": [
-								"api",
-								"v1",
-								"data"
-							]
-						}
-					},
-					"status": "OK",
-					"code": 200,
-					"_postman_previewlanguage": "json",
-					"header": [
-						{
-							"key": "X-Powered-By",
-							"value": "Express"
-						},
-						{
-							"key": "Content-Type",
-							"value": "application/json; charset=utf-8"
-						},
-						{
-							"key": "Content-Length",
-							"value": "1075"
-						},
-						{
-							"key": "ETag",
-							"value": "W/\"433-S7e5B0luy66i4njpuVULAiCm+hE\""
-						},
-						{
-							"key": "Date",
-							"value": "Thu, 18 May 2023 07:56:52 GMT"
-						},
-						{
-							"key": "Connection",
-							"value": "keep-alive"
-						},
-						{
-							"key": "Keep-Alive",
-							"value": "timeout=5"
-						}
-					],
-					"cookie": [],
-					"body": "{\n    \"status\": 200,\n    \"body\": {\n        \"message\": \"Succesfully Created\",\n        \"newData\": {\n            \"data_id\": \"D202341841400019\",\n            \"task_id\": \"BOAB202308250001\",\n            \"data_text\": \"Sentenced to death, ninja Gabimaru the Hollow finds himself apathetic. After leading a blood-soaked life, Gabimaru believes he deserves to die. However, every attempt to execute him inexplicably fails. Finally, Sagiri Yamada Asaemon, a fledgling member of a famed executioner clan, is asked to take Gabimaru's life; yet Sagiri makes no move to kill him as requested.\\n\\n Summary : Summarize in few word :\\nSentenced to death, ninja Gabimaru the Hollow finds himself apathetic. After leading a blood-soaked life, Gabimaru believes he deserves to die. However, every attempt to execute him inexplicably fails. Finally, Sagiri Yamada Asaemon, a fledgling member of a famed executioner clan, is asked to take Gabimaru's life; yet Sagiri makes no move to kill him as requested.\\nSummary: A young man named Gabimaru is sentenced to death for his crimes. He is taken to the\",\n            \"per_labeller_price\": 183,\n            \"price_you_pay\": 915,\n            \"remaining_money\": 39793\n        }\n    }\n}"
-				},
-				{
-					"name": "translation",
-					"originalRequest": {
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "urlencoded",
-							"urlencoded": [
-								{
-									"key": "task_id",
-									"value": "TRAB202307220001",
-									"type": "text"
-								},
-								{
-									"key": "data_text",
-									"value": "Gol D. Roger was known as the \"Pirate King,\" the strongest and most infamous being to have sailed the Grand Line. The capture and execution of Roger by the World Government brought a change throughout the world. His last words before his death revealed the existence of the greatest treasure in the world, One Piece. It was this revelation that brought about the Grand Age of Pirates, men who dreamed of finding One Piece—which promises an unlimited amount of riches and fame—and quite possibly the pinnacle of glory and the title of the Pirate King.Monkey D. Luffy, a 17-year-old boy who defies your standard definition of a pirate. Rather than the popular persona of a wicked, hardened, toothless pirate ransacking villages for fun, Luffy's reason for being a pirate is one of pure wonder: the thought of an exciting adventure that leads him to intriguing people and ultimately, the promised treasure. Following in the footsteps of his childhood hero, Luffy and his crew travel across the Grand Line, experiencing crazy adventures, unveiling dark mysteries and battling strong enemies, all in order to reach the most coveted of all fortunes—One Piece.",
-									"type": "text"
-								}
-							]
-						},
-						"url": {
-							"raw": "localhost:3000/api/v1/data",
-							"host": [
-								"localhost"
-							],
-							"port": "3000",
-							"path": [
-								"api",
-								"v1",
-								"data"
-							]
-						}
-					},
-					"status": "OK",
-					"code": 200,
-					"_postman_previewlanguage": "json",
-					"header": [
-						{
-							"key": "X-Powered-By",
-							"value": "Express"
-						},
-						{
-							"key": "Content-Type",
-							"value": "application/json; charset=utf-8"
-						},
-						{
-							"key": "Content-Length",
-							"value": "1372"
-						},
-						{
-							"key": "ETag",
-							"value": "W/\"55c-spGOBBF5Mxx5/AMiuKP7dRLzqiU\""
-						},
-						{
-							"key": "Date",
-							"value": "Thu, 18 May 2023 07:58:45 GMT"
-						},
-						{
-							"key": "Connection",
-							"value": "keep-alive"
-						},
-						{
-							"key": "Keep-Alive",
-							"value": "timeout=5"
-						}
-					],
-					"cookie": [],
-					"body": "{\n    \"status\": 200,\n    \"body\": {\n        \"message\": \"Succesfully Created\",\n        \"newData\": {\n            \"data_id\": \"D202341841400021\",\n            \"task_id\": \"TRAB202307220001\",\n            \"data_text\": \"Gol D. Roger was known as the \\\"Pirate King,\\\" the strongest and most infamous being to have sailed the Grand Line. The capture and execution of Roger by the World Government brought a change throughout the world. His last words before his death revealed the existence of the greatest treasure in the world, One Piece. It was this revelation that brought about the Grand Age of Pirates, men who dreamed of finding One Piece—which promises an unlimited amount of riches and fame—and quite possibly the pinnacle of glory and the title of the Pirate King.Monkey D. Luffy, a 17-year-old boy who defies your standard definition of a pirate. Rather than the popular persona of a wicked, hardened, toothless pirate ransacking villages for fun, Luffy's reason for being a pirate is one of pure wonder: the thought of an exciting adventure that leads him to intriguing people and ultimately, the promised treasure. Following in the footsteps of his childhood hero, Luffy and his crew travel across the Grand Line, experiencing crazy adventures, unveiling dark mysteries and battling strong enemies, all in order to reach the most coveted of all fortunes—One Piece.\",\n            \"per_labeller_price\": 1730,\n            \"price_you_pay\": 6920,\n            \"remaining_money\": 25953\n        }\n    }\n}"
-				}
-			]
-		},
-		{
-			"name": "createData",
-			"request": {
-				"method": "GET",
-				"header": [],
-				"url": {
-					"raw": ""
 				}
 			},
 			"response": []
 		},
 		{
 			"name": "updateLabel",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Autohorization test\", () => {\r",
+							"    const result = pm.response.json();\r",
+							"    if(result.message === \"Invalid JWT Token\"){\r",
+							"        pm.response.to.have.status(403);\r",
+							"    }else if(result.message === \"User not found\"){\r",
+							"        pm.response.to.have.status(404);\r",
+							"    }\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Input test\", () => {\r",
+							"const request = pm.request.body.urlencoded.filter((item) => {\r",
+							"        if(!item.disabled){\r",
+							"            return item;\r",
+							"        }\r",
+							"    }).reduce((input, item) => {\r",
+							"        return {...input, [item.key] : item.value};\r",
+							"    }, {});\r",
+							"    \r",
+							"    for(const key in input){\r",
+							"        if(!input[key]){\r",
+							"            pm.expect(pm.response.json().message).is.equal(\"Every field must be provided\");\r",
+							"            pm.response.to.have.status(400);\r",
+							"        }\r",
+							"    }\r",
+							"\r",
+							"\r",
+							"    const result = pm.response.json();\r",
+							"    if(result.message === \"Every field must be provided\" || result.message === \"Task already closed\" || result.message === \"Label doesn't belong to this user\"){\r",
+							"        pm.response.to.have.status(400);\r",
+							"    }else if(result.message === \"Endpoint only allowed for labeller\"){\r",
+							"        pm.response.to.have.status(403);\r",
+							"    }else if(result.message === \"Label not found\"){\r",
+							"        pm.response.to.have.status(404);\r",
+							"    }\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Result test\", () => {\r",
+							"    pm.expect(pm.response).is.not.undefined;\r",
+							"    const result = pm.response.json();\r",
+							"    const body = result.body;\r",
+							"    console.log(body);\r",
+							"    pm.expect(body).to.have.all.keys('label_id', 'data_id', 'username', 'label_result');\r",
+							"    for(const property in body){\r",
+							"        console.log()\r",
+							"        pm.expect(body[property]).is.not.undefined;\r",
+							"    }\r",
+							"    pm.response.to.have.status(201);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
 			"request": {
 				"method": "PUT",
 				"header": [
 					{
 						"key": "x-auth-token",
-						"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IkFrZWVtNCIsImlhdCI6MTY4MzYyNDMwMSwiZXhwIjoxNjgzNjI3OTAxfQ.1zvDCvJS27Etd7fka5OdahIjJuoBurerdAz3cjvva3s",
+						"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IkFsYmVydG81OSIsImlhdCI6MTY4NDgzODUyMiwiZXhwIjoxNjg0ODQyMTIyfQ.bRoERCB9XvHC64FMOah6foMN3xhCBOGm9K0ok_TOMHc",
 						"type": "text"
 					}
 				],
@@ -1475,7 +1503,7 @@
 					"urlencoded": [
 						{
 							"key": "label_id",
-							"value": "L007",
+							"value": "L010",
 							"type": "text"
 						},
 						{
@@ -2021,115 +2049,43 @@
 			]
 		},
 		{
-			"name": "get task_types",
-			"protocolProfileBehavior": {
-				"disableBodyPruning": true
-			},
-			"request": {
-				"auth": {
-					"type": "apikey",
-					"apikey": [
-						{
-							"key": "value",
-							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IkFrZWVtNCIsImlhdCI6MTY4NDY0MzM4NSwiZXhwIjoxNjg0NjQ2OTg1fQ.9hMfGBQYEYuNsP7nHlUvsZCzJkn3T7_Yi1Ig7Xm40sE",
-							"type": "string"
-						},
-						{
-							"key": "key",
-							"value": "x-auth-token",
-							"type": "string"
-						}
-					]
-				},
-				"method": "GET",
-				"header": [],
-				"body": {
-					"mode": "urlencoded",
-					"urlencoded": []
-				},
-				"url": {
-					"raw": "{{HOST}}/task/task_type/get_all",
-					"host": [
-						"{{HOST}}"
-					],
-					"path": [
-						"task",
-						"task_type",
-						"get_all"
-					]
-				}
-			},
-			"response": [
-				{
-					"name": "get task_types",
-					"originalRequest": {
-						"method": "GET",
-						"header": [],
-						"body": {
-							"mode": "urlencoded",
-							"urlencoded": []
-						},
-						"url": {
-							"raw": "localhost:3000/api/v1/task/task_type/get_all",
-							"host": [
-								"localhost"
-							],
-							"port": "3000",
-							"path": [
-								"api",
-								"v1",
-								"task",
-								"task_type",
-								"get_all"
-							]
-						}
-					},
-					"status": "OK",
-					"code": 200,
-					"_postman_previewlanguage": "json",
-					"header": [
-						{
-							"key": "X-Powered-By",
-							"value": "Express"
-						},
-						{
-							"key": "Content-Type",
-							"value": "application/json; charset=utf-8"
-						},
-						{
-							"key": "Content-Length",
-							"value": "286"
-						},
-						{
-							"key": "ETag",
-							"value": "W/\"11e-9KktLZASZZkUtkETc5g8ZbFlMBw\""
-						},
-						{
-							"key": "Date",
-							"value": "Sun, 21 May 2023 04:32:29 GMT"
-						},
-						{
-							"key": "Connection",
-							"value": "keep-alive"
-						},
-						{
-							"key": "Keep-Alive",
-							"value": "timeout=5"
-						}
-					],
-					"cookie": [],
-					"body": "{\n    \"status\": 200,\n    \"task_types\": [\n        {\n            \"type_id\": \"TT001\",\n            \"type_name\": \"Classification\",\n            \"price_char\": 5\n        },\n        {\n            \"type_id\": \"TT002\",\n            \"type_name\": \"Summarization\",\n            \"price_char\": 10\n        },\n        {\n            \"type_id\": \"TT003\",\n            \"type_name\": \"Translation\",\n            \"price_char\": 15\n        },\n        {\n            \"type_id\": \"TT004\",\n            \"type_name\": \"Bot Summarization\",\n            \"price_char\": 5\n        }\n    ]\n}"
-				}
-			]
-		},
-		{
 			"name": "userDetail",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Autohorization test\", () => {\r",
+							"    const result = pm.response.json();\r",
+							"    if(result.message === \"Invalid JWT Token\"){\r",
+							"        pm.response.to.have.status(403);\r",
+							"    }else if(result.message === \"User not found\"){\r",
+							"        pm.response.to.have.status(404);\r",
+							"    }\r",
+							"});\r",
+							"\r",
+							"pm.test('Result test', () => {\r",
+							"    let requestBody = pm.request.body;\r",
+							"    let rawData = requestBody.raw;\r",
+							"    console.log(rawData);\r",
+							"    const result = pm.response.json().body;\r",
+							"    console.log(result)\r",
+							"    pm.expect(result).to.have.all.keys('username', 'name', 'role', 'credibility');\r",
+							"    for(const key in result){\r",
+							"        pm.expect(result[key]).is.not.undefined;\r",
+							"    }\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
 			"request": {
 				"method": "GET",
 				"header": [
 					{
 						"key": "x-auth-token",
-						"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IkFudG9pbmV0dGU0MyIsImlhdCI6MTY4MzYzNDg1NSwiZXhwIjoxNjgzNjM4NDU1fQ.yqtZD9MP_PVKKUvq4msS6Ulyn4buiLgri9AcNb2d410",
+						"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IkFudG9pbmV0dGU0MyIsImlhdCI6MTY4NDg0NzM5MiwiZXhwIjoxNjg0ODUwOTkyfQ.-CRlD6tYDnbnznEpnvoPbKHG0xlsoWvn_NOXnloeycY",
 						"type": "text"
 					}
 				],
@@ -2390,6 +2346,50 @@
 		},
 		{
 			"name": "getLabel",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Autohorization test\", () => {\r",
+							"    const result = pm.response.json();\r",
+							"    if(result.message === \"Invalid JWT Token\"){\r",
+							"        pm.response.to.have.status(403);\r",
+							"    }else if(result.message === \"User not found\"){\r",
+							"        pm.response.to.have.status(404);\r",
+							"    }\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Input test\", () => {\r",
+							"    const result = pm.response.json();\r",
+							"    if(result.message === \"Forbidden access\"){\r",
+							"        pm.response.to.have.status(403);\r",
+							"    }else if(result.message === \"Data not found\" || result.message === \"Task not found\"){\r",
+							"        pm.response.to.have.status(404);\r",
+							"    }\r",
+							"});\r",
+							"\r",
+							"pm.request.headers.add({\r",
+							"    key: 'Authorization',\r",
+							"    value: 'Bearer ' + pm.variables.get('jwt')\r",
+							"});\r",
+							"\r",
+							"pm.test('Result test', async () => {\r",
+							"    const request = pm.request.url.query.all()[0];\r",
+							"    await console.log(pm.response.body);\r",
+							"    if(request['task_id']){\r",
+							"\r",
+							"    }else if(request['data_id']){\r",
+							"\r",
+							"    }else{\r",
+							"\r",
+							"    }\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
 			"protocolProfileBehavior": {
 				"disableBodyPruning": true
 			},
@@ -2398,7 +2398,7 @@
 				"header": [
 					{
 						"key": "x-auth-token",
-						"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IkFrZWVtNCIsImlhdCI6MTY4MzYzNTU1NiwiZXhwIjoxNjgzNjM5MTU2fQ.hQCQH10Nas9lmWc1jCdpvqd8EzdDVoD5O00dyPbDQrM",
+						"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IkFudG9pbmV0dGU0MyIsImlhdCI6MTY4NDg0NzM5MiwiZXhwIjoxNjg0ODUwOTkyfQ.-CRlD6tYDnbnznEpnvoPbKHG0xlsoWvn_NOXnloeycY",
 						"type": "text"
 					}
 				],
@@ -2407,7 +2407,7 @@
 					"urlencoded": []
 				},
 				"url": {
-					"raw": "{{HOST}}/api/v1/label",
+					"raw": "{{HOST}}/api/v1/label?task_id=CLAB202308250001",
 					"host": [
 						"{{HOST}}"
 					],
@@ -2419,8 +2419,7 @@
 					"query": [
 						{
 							"key": "task_id",
-							"value": "CLAB202308250001",
-							"disabled": true
+							"value": "CLAB202308250001"
 						}
 					]
 				}
@@ -2638,7 +2637,7 @@
 					"body": "{\n    \"body\": [\n        {\n            \"label_id\": \"L007\",\n            \"username\": \"Akeem4\",\n            \"label_result\": \"New Label Result\"\n        },\n        {\n            \"label_id\": \"L008\",\n            \"username\": \"Diego8\",\n            \"label_result\": \"Label of dummy data 3\"\n        },\n        {\n            \"label_id\": \"L009\",\n            \"username\": \"Dennis66\",\n            \"label_result\": \"Label of dummy data 4\"\n        }\n    ]\n}"
 				},
 				{
-					"name": "Access other requester data",
+					"name": "Access other requester task",
 					"originalRequest": {
 						"method": "GET",
 						"header": [
@@ -3192,296 +3191,176 @@
 			]
 		},
 		{
-			"name": "get task",
-			"request": {
-				"auth": {
-					"type": "apikey",
-					"apikey": [
-						{
-							"key": "value",
-							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Ik1pbmE1NCIsImlhdCI6MTY4NDY0NTA1NSwiZXhwIjoxNjg0NjQ4NjU1fQ.SBGHcwVmBkkcp_Xxz8SAoyaMb30Glj3Gw7UriCUL35E",
-							"type": "string"
-						},
-						{
-							"key": "key",
-							"value": "x-auth-token",
-							"type": "string"
-						}
-					]
-				},
-				"method": "GET",
-				"header": [],
-				"url": {
-					"raw": "{{HOST}}/task/CLAB202308250001",
-					"host": [
-						"{{HOST}}"
-					],
-					"path": [
-						"task",
-						"CLAB202308250001"
-					]
-				}
-			},
-			"response": [
-				{
-					"name": "get task for creator",
-					"originalRequest": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "localhost:3000/api/v1/task/CLAB202308250001",
-							"host": [
-								"localhost"
-							],
-							"port": "3000",
-							"path": [
-								"api",
-								"v1",
-								"task",
-								"CLAB202308250001"
-							]
-						}
-					},
-					"status": "OK",
-					"code": 200,
-					"_postman_previewlanguage": "json",
-					"header": [
-						{
-							"key": "X-Powered-By",
-							"value": "Express"
-						},
-						{
-							"key": "Content-Type",
-							"value": "application/json; charset=utf-8"
-						},
-						{
-							"key": "Content-Length",
-							"value": "655"
-						},
-						{
-							"key": "ETag",
-							"value": "W/\"28f-yZWBmr5LgMFimd+xcpoRJQG5my0\""
-						},
-						{
-							"key": "Date",
-							"value": "Sun, 21 May 2023 04:43:44 GMT"
-						},
-						{
-							"key": "Connection",
-							"value": "keep-alive"
-						},
-						{
-							"key": "Keep-Alive",
-							"value": "timeout=5"
-						}
-					],
-					"cookie": [],
-					"body": "{\n    \"status\": 200,\n    \"result\": {\n        \"task_id\": \"CLAB202308250001\",\n        \"type_name\": \"Classification\",\n        \"username\": \"Abe69\",\n        \"max_labeller\": 5,\n        \"close_date\": \"2023-08-25\",\n        \"status\": \"active\",\n        \"minimal_credibility\": 45,\n        \"possible\": [\n            \"no\",\n            \"yes\"\n        ],\n        \"data\": [\n            {\n                \"data_id\": \"D20234441400008\",\n                \"data_text\": \"are you yes man?\",\n                \"price\": 28,\n                \"label\": [\n                    {\n                        \"username\": \"Ray7\",\n                        \"label_result\": \"yes\"\n                    },\n                    {\n                        \"username\": \"Akeem4\",\n                        \"label_result\": \"yes\"\n                    },\n                    {\n                        \"username\": \"Frida58\",\n                        \"label_result\": \"no\"\n                    }\n                ],\n                \"labelled\": 3\n            },\n            {\n                \"data_id\": \"D20234441400009\",\n                \"data_text\": \"do you like playing game?\",\n                \"price\": 33,\n                \"label\": [],\n                \"labelled\": 0\n            },\n            {\n                \"data_id\": \"D20234701600001\",\n                \"data_text\": \"do you like watching anime?\",\n                \"price\": 34,\n                \"label\": [],\n                \"labelled\": 0\n            }\n        ]\n    }\n}"
-				},
-				{
-					"name": "get task forbidden",
-					"originalRequest": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "localhost:3000/api/v1/task/CLAB202308250001",
-							"host": [
-								"localhost"
-							],
-							"port": "3000",
-							"path": [
-								"api",
-								"v1",
-								"task",
-								"CLAB202308250001"
-							]
-						}
-					},
-					"status": "Forbidden",
-					"code": 403,
-					"_postman_previewlanguage": "json",
-					"header": [
-						{
-							"key": "X-Powered-By",
-							"value": "Express"
-						},
-						{
-							"key": "Content-Type",
-							"value": "application/json; charset=utf-8"
-						},
-						{
-							"key": "Content-Length",
-							"value": "91"
-						},
-						{
-							"key": "ETag",
-							"value": "W/\"5b-YnmHK8r8rw7sjEAU31+vFYU2bEE\""
-						},
-						{
-							"key": "Date",
-							"value": "Sun, 21 May 2023 04:53:42 GMT"
-						},
-						{
-							"key": "Connection",
-							"value": "keep-alive"
-						},
-						{
-							"key": "Keep-Alive",
-							"value": "timeout=5"
-						}
-					],
-					"cookie": [],
-					"body": "{\n    \"status\": 403,\n    \"message\": \"Task can only be seen by labeller/requester who create the task.\"\n}"
-				},
-				{
-					"name": "get task for labeller",
-					"originalRequest": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "localhost:3000/api/v1/task/CLAB202308250001",
-							"host": [
-								"localhost"
-							],
-							"port": "3000",
-							"path": [
-								"api",
-								"v1",
-								"task",
-								"CLAB202308250001"
-							]
-						}
-					},
-					"status": "OK",
-					"code": 200,
-					"_postman_previewlanguage": "json",
-					"header": [
-						{
-							"key": "X-Powered-By",
-							"value": "Express"
-						},
-						{
-							"key": "Content-Type",
-							"value": "application/json; charset=utf-8"
-						},
-						{
-							"key": "Content-Length",
-							"value": "496"
-						},
-						{
-							"key": "ETag",
-							"value": "W/\"1f0-TIvBmPKlV8v8hYj1QSke1lMeToc\""
-						},
-						{
-							"key": "Date",
-							"value": "Sun, 21 May 2023 04:58:52 GMT"
-						},
-						{
-							"key": "Connection",
-							"value": "keep-alive"
-						},
-						{
-							"key": "Keep-Alive",
-							"value": "timeout=5"
-						}
-					],
-					"cookie": [],
-					"body": "{\n    \"status\": 200,\n    \"result\": {\n        \"task_id\": \"CLAB202308250001\",\n        \"type_name\": \"Classification\",\n        \"username\": \"Abe69\",\n        \"max_labeller\": 5,\n        \"close_date\": \"2023-08-25\",\n        \"status\": \"active\",\n        \"minimal_credibility\": 45,\n        \"possible\": [\n            \"no\",\n            \"yes\"\n        ],\n        \"data\": [\n            {\n                \"data_id\": \"D20234441400008\",\n                \"data_text\": \"are you yes man?\",\n                \"price\": 28,\n                \"labelled\": 3\n            },\n            {\n                \"data_id\": \"D20234441400009\",\n                \"data_text\": \"do you like playing game?\",\n                \"price\": 33,\n                \"labelled\": 0\n            },\n            {\n                \"data_id\": \"D20234701600001\",\n                \"data_text\": \"do you like watching anime?\",\n                \"price\": 34,\n                \"labelled\": 0\n            }\n        ]\n    }\n}"
-				}
-			]
-		},
-		{
-			"name": "get tasks",
+			"name": "{{HOST}}/api/v1/label?task_id=BOAB202308250001",
 			"protocolProfileBehavior": {
 				"disableBodyPruning": true
 			},
 			"request": {
-				"auth": {
-					"type": "apikey",
-					"apikey": [
-						{
-							"key": "value",
-							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Ik1pbmE1NCIsImlhdCI6MTY4NDY0NTA1NSwiZXhwIjoxNjg0NjQ4NjU1fQ.SBGHcwVmBkkcp_Xxz8SAoyaMb30Glj3Gw7UriCUL35E",
-							"type": "string"
-						},
-						{
-							"key": "key",
-							"value": "x-auth-token",
-							"type": "string"
-						}
-					]
-				},
 				"method": "GET",
-				"header": [],
+				"header": [
+					{
+						"key": "x-auth-token",
+						"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IkFudG9pbmV0dGU0MyIsImlhdCI6MTY4MzYzNDg1NSwiZXhwIjoxNjgzNjM4NDU1fQ.yqtZD9MP_PVKKUvq4msS6Ulyn4buiLgri9AcNb2d410",
+						"type": "text"
+					}
+				],
 				"body": {
 					"mode": "urlencoded",
 					"urlencoded": []
 				},
 				"url": {
-					"raw": "{{HOST}}/task?type_id=TT001&requirement_fulfilled=true&page=0&data_per_page=1",
+					"raw": "{{HOST}}/api/v1/label?task_id=BOAB202308250001",
 					"host": [
 						"{{HOST}}"
 					],
 					"path": [
-						"task"
+						"api",
+						"v1",
+						"label"
 					],
 					"query": [
 						{
-							"key": "type_id",
-							"value": "TT001"
-						},
-						{
-							"key": "requirement_fulfilled",
-							"value": "true"
-						},
-						{
-							"key": "page",
-							"value": "0"
-						},
-						{
-							"key": "data_per_page",
-							"value": "1"
+							"key": "task_id",
+							"value": "BOAB202308250001"
 						}
 					]
 				}
 			},
+			"response": []
+		},
+		{
+			"name": "Topup",
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "x-auth-token",
+						"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IkFiZTY5IiwiaWF0IjoxNjg0OTE2NDI2LCJleHAiOjE2ODQ5MjAwMjZ9.a0vcurf4rrIQvvWv7rcqnlZbboQB4krxk7LMWSqL4w8",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "saldo",
+							"value": "67000",
+							"type": "text"
+						},
+						{
+							"key": "password",
+							"value": "gMB3Q",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "{{HOST}}/api/v1/user/topup/Abe69",
+					"host": [
+						"{{HOST}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"user",
+						"topup",
+						"Abe69"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Withdraw",
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "x-auth-token",
+						"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Ildpbm9uYTcwIiwiaWF0IjoxNjg0OTE2OTgzLCJleHAiOjE2ODQ5MjA1ODN9.Q70mkes-58DAHuCZSIpVuCF5qCGGkoIuyWTDNpX-NNo",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "saldo",
+							"value": "50000",
+							"type": "text"
+						},
+						{
+							"key": "password",
+							"value": "bZIy4",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "{{HOST}}/api/v1/user/retrive/Winona70",
+					"host": [
+						"{{HOST}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"user",
+						"retrive",
+						"Winona70"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Topup history",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "x-auth-token",
+						"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IkFiZTY5IiwiaWF0IjoxNjg0OTE1OTA1LCJleHAiOjE2ODQ5MTk1MDV9.tcg9_CS11uoNlyuuGxSoN0bRwDuKYWDeC8aAZasBLTs",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{HOST}}/api/v1/user/topup/history",
+					"host": [
+						"{{HOST}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"user",
+						"topup",
+						"history"
+					]
+				},
+				"description": "This endpoint is useful for getting topup history from logged in users."
+			},
 			"response": [
 				{
-					"name": "using page,data per page for labeller",
+					"name": "Success to get topup history",
 					"originalRequest": {
 						"method": "GET",
-						"header": [],
+						"header": [
+							{
+								"key": "x-auth-token",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IkFiZTY5IiwiaWF0IjoxNjg0OTE1OTA1LCJleHAiOjE2ODQ5MTk1MDV9.tcg9_CS11uoNlyuuGxSoN0bRwDuKYWDeC8aAZasBLTs",
+								"type": "text"
+							}
+						],
 						"url": {
-							"raw": "localhost:3000/api/v1/task/?page=0&data_per_page=1",
+							"raw": "{{HOST}}/api/v1/user/topup/history",
 							"host": [
-								"localhost"
+								"{{HOST}}"
 							],
-							"port": "3000",
 							"path": [
 								"api",
 								"v1",
-								"task",
-								""
-							],
-							"query": [
-								{
-									"key": "type_id",
-									"value": "TT001",
-									"disabled": true
-								},
-								{
-									"key": "requirement_fulfilled",
-									"value": "true",
-									"disabled": true
-								},
-								{
-									"key": "page",
-									"value": "0"
-								},
-								{
-									"key": "data_per_page",
-									"value": "1"
-								}
+								"user",
+								"topup",
+								"history"
 							]
 						}
 					},
@@ -3499,15 +3378,15 @@
 						},
 						{
 							"key": "Content-Length",
-							"value": "474"
+							"value": "383"
 						},
 						{
 							"key": "ETag",
-							"value": "W/\"1da-N2eKxGdaDR9YuxHWqIzzlVm5suw\""
+							"value": "W/\"17f-9PuHpk9RTByEtmQ+XR4FKcs7EEA\""
 						},
 						{
 							"key": "Date",
-							"value": "Mon, 08 May 2023 03:14:17 GMT"
+							"value": "Wed, 24 May 2023 08:25:10 GMT"
 						},
 						{
 							"key": "Connection",
@@ -3519,255 +3398,59 @@
 						}
 					],
 					"cookie": [],
-					"body": "[\n    {\n        \"task_id\": \"CLAB202308250001\",\n        \"type_name\": \"Classification\",\n        \"username\": \"Abe69\",\n        \"max_labeller\": 5,\n        \"close_date\": \"2023-08-25\",\n        \"status\": \"active\",\n        \"minimal_credibility\": 45,\n        \"possible\": [\n            \"no\",\n            \"yes\"\n        ],\n        \"data\": [\n            {\n                \"data_id\": \"D20234441400008\",\n                \"data_text\": \"are you yes man?\",\n                \"price\": 28,\n                \"labelled\": 3\n            },\n            {\n                \"data_id\": \"D20234441400009\",\n                \"data_text\": \"do you like playing game?\",\n                \"price\": 33,\n                \"labelled\": 0\n            },\n            {\n                \"data_id\": \"D20234701600001\",\n                \"data_text\": \"do you like watching anime?\",\n                \"price\": 34,\n                \"labelled\": 0\n            }\n        ]\n    }\n]"
-				},
-				{
-					"name": "get tasks forbidden",
-					"originalRequest": {
-						"method": "GET",
-						"header": [],
-						"body": {
-							"mode": "urlencoded",
-							"urlencoded": []
-						},
-						"url": {
-							"raw": "localhost:3000/api/v1/task?type_id=TT001&requirement_fulfilled=true&page=0&data_per_page=1",
-							"host": [
-								"localhost"
-							],
-							"port": "3000",
-							"path": [
-								"api",
-								"v1",
-								"task"
-							],
-							"query": [
-								{
-									"key": "type_id",
-									"value": "TT001"
-								},
-								{
-									"key": "requirement_fulfilled",
-									"value": "true"
-								},
-								{
-									"key": "page",
-									"value": "0"
-								},
-								{
-									"key": "data_per_page",
-									"value": "1"
-								}
-							]
-						}
-					},
-					"status": "Forbidden",
-					"code": 403,
-					"_postman_previewlanguage": "json",
-					"header": [
-						{
-							"key": "X-Powered-By",
-							"value": "Express"
-						},
-						{
-							"key": "Content-Type",
-							"value": "application/json; charset=utf-8"
-						},
-						{
-							"key": "Content-Length",
-							"value": "91"
-						},
-						{
-							"key": "ETag",
-							"value": "W/\"5b-YnmHK8r8rw7sjEAU31+vFYU2bEE\""
-						},
-						{
-							"key": "Date",
-							"value": "Sun, 21 May 2023 04:55:59 GMT"
-						},
-						{
-							"key": "Connection",
-							"value": "keep-alive"
-						},
-						{
-							"key": "Keep-Alive",
-							"value": "timeout=5"
-						}
-					],
-					"cookie": [],
-					"body": "{\n    \"status\": 403,\n    \"message\": \"Task can only be seen by labeller/requester who create the task.\"\n}"
-				},
-				{
-					"name": "get tasks for labeller",
-					"originalRequest": {
-						"method": "GET",
-						"header": [],
-						"body": {
-							"mode": "urlencoded",
-							"urlencoded": []
-						},
-						"url": {
-							"raw": "localhost:3000/api/v1/task?type_id=TT001&requirement_fulfilled=true&page=0&data_per_page=1",
-							"host": [
-								"localhost"
-							],
-							"port": "3000",
-							"path": [
-								"api",
-								"v1",
-								"task"
-							],
-							"query": [
-								{
-									"key": "type_id",
-									"value": "TT001"
-								},
-								{
-									"key": "requirement_fulfilled",
-									"value": "true"
-								},
-								{
-									"key": "page",
-									"value": "0"
-								},
-								{
-									"key": "data_per_page",
-									"value": "1"
-								}
-							]
-						}
-					},
-					"status": "OK",
-					"code": 200,
-					"_postman_previewlanguage": "json",
-					"header": [
-						{
-							"key": "X-Powered-By",
-							"value": "Express"
-						},
-						{
-							"key": "Content-Type",
-							"value": "application/json; charset=utf-8"
-						},
-						{
-							"key": "Content-Length",
-							"value": "474"
-						},
-						{
-							"key": "ETag",
-							"value": "W/\"1da-N2eKxGdaDR9YuxHWqIzzlVm5suw\""
-						},
-						{
-							"key": "Date",
-							"value": "Sun, 21 May 2023 04:57:52 GMT"
-						},
-						{
-							"key": "Connection",
-							"value": "keep-alive"
-						},
-						{
-							"key": "Keep-Alive",
-							"value": "timeout=5"
-						}
-					],
-					"cookie": [],
-					"body": "[\n    {\n        \"task_id\": \"CLAB202308250001\",\n        \"type_name\": \"Classification\",\n        \"username\": \"Abe69\",\n        \"max_labeller\": 5,\n        \"close_date\": \"2023-08-25\",\n        \"status\": \"active\",\n        \"minimal_credibility\": 45,\n        \"possible\": [\n            \"no\",\n            \"yes\"\n        ],\n        \"data\": [\n            {\n                \"data_id\": \"D20234441400008\",\n                \"data_text\": \"are you yes man?\",\n                \"price\": 28,\n                \"labelled\": 3\n            },\n            {\n                \"data_id\": \"D20234441400009\",\n                \"data_text\": \"do you like playing game?\",\n                \"price\": 33,\n                \"labelled\": 0\n            },\n            {\n                \"data_id\": \"D20234701600001\",\n                \"data_text\": \"do you like watching anime?\",\n                \"price\": 34,\n                \"labelled\": 0\n            }\n        ]\n    }\n]"
+					"body": "{\n    \"histories\": [\n        {\n            \"amount\": 10000,\n            \"date\": \"5/24/2007 15:13:19\"\n        },\n        {\n            \"amount\": 100000,\n            \"date\": \"6/10/2007 15:16:12\"\n        },\n        {\n            \"amount\": 200000,\n            \"date\": \"8/16/2007 15:20:38\"\n        },\n        {\n            \"amount\": 1000000,\n            \"date\": \"9/12/2007 15:21:00\"\n        },\n        {\n            \"amount\": 500000,\n            \"date\": \"10/31/2007 15:21:06\"\n        },\n        {\n            \"amount\": 650000,\n            \"date\": \"11/8/2007 15:21:14\"\n        },\n        {\n            \"amount\": 19000,\n            \"date\": \"12/31/2007 15:21:24\"\n        },\n        {\n            \"amount\": 67000,\n            \"date\": \"1/16/2008 15:21:30\"\n        }\n    ]\n}"
 				}
 			]
 		},
 		{
-			"name": "ger data for labeller",
+			"name": "Withdraw History",
 			"request": {
-				"auth": {
-					"type": "apikey",
-					"apikey": [
-						{
-							"key": "value",
-							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Ik1pbmE1NCIsImlhdCI6MTY4NDY0NTA1NSwiZXhwIjoxNjg0NjQ4NjU1fQ.SBGHcwVmBkkcp_Xxz8SAoyaMb30Glj3Gw7UriCUL35E",
-							"type": "string"
-						},
-						{
-							"key": "key",
-							"value": "x-auth-token",
-							"type": "string"
-						}
-					]
-				},
 				"method": "GET",
-				"header": [],
+				"header": [
+					{
+						"key": "x-auth-token",
+						"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Ildpbm9uYTcwIiwiaWF0IjoxNjg0OTE2OTgzLCJleHAiOjE2ODQ5MjA1ODN9.Q70mkes-58DAHuCZSIpVuCF5qCGGkoIuyWTDNpX-NNo",
+						"type": "text"
+					}
+				],
 				"url": {
-					"raw": "{{HOST}}/data/?type_id=TT003&requirement_fulfilled=true&page=0&data_per_page=2",
+					"raw": "{{HOST}}/api/v1/user/withdraw/history",
 					"host": [
 						"{{HOST}}"
 					],
 					"path": [
-						"data",
-						""
-					],
-					"query": [
-						{
-							"key": "type_id",
-							"value": "TT003"
-						},
-						{
-							"key": "requirement_fulfilled",
-							"value": "true"
-						},
-						{
-							"key": "page",
-							"value": "0"
-						},
-						{
-							"key": "data_per_page",
-							"value": "2"
-						},
-						{
-							"key": "price_sort_ascending",
-							"value": "false",
-							"disabled": true
-						}
+						"api",
+						"v1",
+						"user",
+						"withdraw",
+						"history"
 					]
-				}
+				},
+				"description": "This endpoint is useful for getting retrieve money history from logged in users."
 			},
 			"response": [
 				{
-					"name": "get data for classification",
+					"name": "Success to get withdraw history",
 					"originalRequest": {
 						"method": "GET",
-						"header": [],
+						"header": [
+							{
+								"key": "x-auth-token",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Ildpbm9uYTcwIiwiaWF0IjoxNjg0OTE2OTgzLCJleHAiOjE2ODQ5MjA1ODN9.Q70mkes-58DAHuCZSIpVuCF5qCGGkoIuyWTDNpX-NNo",
+								"type": "text"
+							}
+						],
 						"url": {
-							"raw": "localhost:3000/api/v1/data/?type_id=TT001&requirement_fulfilled=true&page=0&data_per_page=2&price_sort_ascending=false",
+							"raw": "{{HOST}}/api/v1/user/withdraw/history",
 							"host": [
-								"localhost"
+								"{{HOST}}"
 							],
-							"port": "3000",
 							"path": [
 								"api",
 								"v1",
-								"data",
-								""
-							],
-							"query": [
-								{
-									"key": "type_id",
-									"value": "TT001"
-								},
-								{
-									"key": "requirement_fulfilled",
-									"value": "true"
-								},
-								{
-									"key": "page",
-									"value": "0"
-								},
-								{
-									"key": "data_per_page",
-									"value": "2"
-								},
-								{
-									"key": "price_sort_ascending",
-									"value": "false"
-								}
+								"user",
+								"withdraw",
+								"history"
 							]
 						}
 					},
@@ -3785,15 +3468,15 @@
 						},
 						{
 							"key": "Content-Length",
-							"value": "393"
+							"value": "334"
 						},
 						{
 							"key": "ETag",
-							"value": "W/\"189-ZS6SZzqWsjqYJL6NKOSL3F02eSA\""
+							"value": "W/\"14e-0ti/LBDeX3w13Wmyk2M1YbfSfBQ\""
 						},
 						{
 							"key": "Date",
-							"value": "Sun, 07 May 2023 08:07:59 GMT"
+							"value": "Wed, 24 May 2023 08:37:00 GMT"
 						},
 						{
 							"key": "Connection",
@@ -3805,165 +3488,1024 @@
 						}
 					],
 					"cookie": [],
-					"body": "{\n    \"status\": 200,\n    \"results\": [\n        {\n            \"task_id\": \"CLAB202308250001\",\n            \"data_id\": \"D20234441400009\",\n            \"data_text\": \"do you like playing game?\",\n            \"type_name\": \"Classification\",\n            \"price\": 33,\n            \"minimal_credibility\": 45,\n            \"possible\": [\n                \"no\",\n                \"yes\"\n            ]\n        },\n        {\n            \"task_id\": \"CLAB202308250001\",\n            \"data_id\": \"D20234441400008\",\n            \"data_text\": \"are you yes man?\",\n            \"type_name\": \"Classification\",\n            \"price\": 28,\n            \"minimal_credibility\": 45,\n            \"possible\": [\n                \"no\",\n                \"yes\"\n            ]\n        }\n    ]\n}"
-				},
-				{
-					"name": "ger data for bot summarization",
-					"originalRequest": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "localhost:3000/api/v1/data/?type_id=TT004&requirement_fulfilled=false&page=0&data_per_page=2",
-							"host": [
-								"localhost"
-							],
-							"port": "3000",
-							"path": [
-								"api",
-								"v1",
-								"data",
-								""
-							],
-							"query": [
-								{
-									"key": "type_id",
-									"value": "TT004"
-								},
-								{
-									"key": "requirement_fulfilled",
-									"value": "false"
-								},
-								{
-									"key": "page",
-									"value": "0"
-								},
-								{
-									"key": "data_per_page",
-									"value": "2"
-								},
-								{
-									"key": "price_sort_ascending",
-									"value": "false",
-									"disabled": true
-								}
-							]
-						}
-					},
-					"status": "OK",
-					"code": 200,
-					"_postman_previewlanguage": "json",
-					"header": [
-						{
-							"key": "X-Powered-By",
-							"value": "Express"
-						},
-						{
-							"key": "Content-Type",
-							"value": "application/json; charset=utf-8"
-						},
-						{
-							"key": "Content-Length",
-							"value": "651"
-						},
-						{
-							"key": "ETag",
-							"value": "W/\"28b-l+ysgRxbMSfOCz6XnQMBucstB6Q\""
-						},
-						{
-							"key": "Date",
-							"value": "Sun, 21 May 2023 05:10:02 GMT"
-						},
-						{
-							"key": "Connection",
-							"value": "keep-alive"
-						},
-						{
-							"key": "Keep-Alive",
-							"value": "timeout=5"
-						}
-					],
-					"cookie": [],
-					"body": "{\n    \"status\": 200,\n    \"results\": [\n        {\n            \"task_id\": \"BOAB202308250001\",\n            \"data_id\": \"D20234221600001\",\n            \"data_text\": \"Gabimaru the Hollow  was set up by his fellow ninja and is now on death row. Tired of killing and betrayal, he wants to die. However, no method of execution works on him because as much as the seemingly apathetic Gabimaru refuses to admit it, he does have a reason to live. He wants to return to his wife, who was the reason why he softened up and failed to be an effective assassin. Thus, he refuses to die.\\n\\n Summary : Gabimaru the Hollow is a ninja who was set up by his fellow\",\n            \"type_name\": \"Bot Summarization\",\n            \"price\": 204,\n            \"minimal_credibility\": 40\n        }\n    ]\n}"
-				},
-				{
-					"name": "not found that satisfy param",
-					"originalRequest": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "localhost:3000/api/v1/data/?type_id=TT003&requirement_fulfilled=true&page=0&data_per_page=2",
-							"host": [
-								"localhost"
-							],
-							"port": "3000",
-							"path": [
-								"api",
-								"v1",
-								"data",
-								""
-							],
-							"query": [
-								{
-									"key": "type_id",
-									"value": "TT003"
-								},
-								{
-									"key": "requirement_fulfilled",
-									"value": "true"
-								},
-								{
-									"key": "page",
-									"value": "0"
-								},
-								{
-									"key": "data_per_page",
-									"value": "2"
-								},
-								{
-									"key": "price_sort_ascending",
-									"value": "false",
-									"disabled": true
-								}
-							]
-						}
-					},
-					"status": "OK",
-					"code": 200,
-					"_postman_previewlanguage": "json",
-					"header": [
-						{
-							"key": "X-Powered-By",
-							"value": "Express"
-						},
-						{
-							"key": "Content-Type",
-							"value": "application/json; charset=utf-8"
-						},
-						{
-							"key": "Content-Length",
-							"value": "27"
-						},
-						{
-							"key": "ETag",
-							"value": "W/\"1b-1y2B3fLogLtnu7V1OJLwB1q9JGI\""
-						},
-						{
-							"key": "Date",
-							"value": "Sun, 21 May 2023 05:11:40 GMT"
-						},
-						{
-							"key": "Connection",
-							"value": "keep-alive"
-						},
-						{
-							"key": "Keep-Alive",
-							"value": "timeout=5"
-						}
-					],
-					"cookie": [],
-					"body": "{\n    \"status\": 200,\n    \"results\": []\n}"
+					"body": "{\n    \"histories\": [\n        {\n            \"amount\": 50000,\n            \"date\": \"5/23/2007 15:31:53\"\n        },\n        {\n            \"amount\": 50000,\n            \"date\": \"8/20/2007 15:32:45\"\n        },\n        {\n            \"amount\": 100000,\n            \"date\": \"10/25/2007 15:32:52\"\n        },\n        {\n            \"amount\": 25000,\n            \"date\": \"1/5/2008 15:32:57\"\n        },\n        {\n            \"amount\": 200000,\n            \"date\": \"2/7/2008 15:33:02\"\n        },\n        {\n            \"amount\": 300000,\n            \"date\": \"7/23/2008 15:33:11\"\n        },\n        {\n            \"amount\": 250000,\n            \"date\": \"12/16/2008 15:33:45\"\n        }\n    ]\n}"
 				}
 			]
+		},
+		{
+			"name": "Ban User",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "x-auth-token",
+						"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IkFudG9pbmV0dGU0MyIsImlhdCI6MTY4NDkzODYwNCwiZXhwIjoxNjg0OTQyMjA0fQ.9jy7ciOWtqylWZ5ziP3faSyPkfo_pDfEcGIxavZOgPs",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "username",
+							"value": "Alberto59",
+							"description": "The username of the user to be banned; must be a role labeller",
+							"type": "text"
+						},
+						{
+							"key": "task_id",
+							"value": "SUAN202309220001",
+							"description": "The reason the user is banned; task must have a logged in user",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "{{HOST}}/api/v1/user/ban",
+					"host": [
+						"{{HOST}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"user",
+						"ban"
+					]
+				},
+				"description": "This endpoint is useful for banning users by requesters because the label results are lacking or may be very disliked. This endpoint can only be accessed by requesters and can only burden users who have labeled one of the data in one of their tasks."
+			},
+			"response": [
+				{
+					"name": "Succses to Banned User",
+					"originalRequest": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "x-auth-token",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IlF1ZW50aW40NCIsImlhdCI6MTY4NDkzNjgzOSwiZXhwIjoxNjg0OTQwNDM5fQ.RFcnMPb1lFpyMrYmtu5kJlP2SXFbc2xt7cAmgdotQjw",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "username",
+									"value": "Winona70",
+									"description": "The username of the user to be banned; must be a role labeller",
+									"type": "text"
+								},
+								{
+									"key": "task_id",
+									"value": "TRQU202305300001",
+									"description": "The reason the user is banned; task must have a logged in user",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{HOST}}/api/v1/user/ban",
+							"host": [
+								"{{HOST}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"user",
+								"ban"
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "X-Powered-By",
+							"value": "Express"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json; charset=utf-8"
+						},
+						{
+							"key": "Content-Length",
+							"value": "88"
+						},
+						{
+							"key": "ETag",
+							"value": "W/\"58-VXErRnh2pPp1xzH5T3nVF3PwUG0\""
+						},
+						{
+							"key": "Date",
+							"value": "Wed, 24 May 2023 14:13:37 GMT"
+						},
+						{
+							"key": "Connection",
+							"value": "keep-alive"
+						},
+						{
+							"key": "Keep-Alive",
+							"value": "timeout=5"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"mag\": \"User dengan username Winona70 sudah di ban oleh User dengan username Quentin44\"\n}"
+				},
+				{
+					"name": "User never labelled",
+					"originalRequest": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "x-auth-token",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IlF1ZW50aW40NCIsImlhdCI6MTY4NDkzNjgzOSwiZXhwIjoxNjg0OTQwNDM5fQ.RFcnMPb1lFpyMrYmtu5kJlP2SXFbc2xt7cAmgdotQjw",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "username",
+									"value": "Akeem4",
+									"description": "The username of the user to be banned; must be a role labeller",
+									"type": "text"
+								},
+								{
+									"key": "task_id",
+									"value": "TRQU202305300001",
+									"description": "The reason the user is banned; task must have a logged in user",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{HOST}}/api/v1/user/ban",
+							"host": [
+								"{{HOST}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"user",
+								"ban"
+							]
+						}
+					},
+					"status": "Bad Request",
+					"code": 400,
+					"_postman_previewlanguage": "html",
+					"header": [
+						{
+							"key": "X-Powered-By",
+							"value": "Express"
+						},
+						{
+							"key": "Content-Type",
+							"value": "text/html; charset=utf-8"
+						},
+						{
+							"key": "Content-Length",
+							"value": "136"
+						},
+						{
+							"key": "ETag",
+							"value": "W/\"88-VIFPvDbJYgDAq+6CueSxeEaB+Bk\""
+						},
+						{
+							"key": "Date",
+							"value": "Wed, 24 May 2023 14:15:38 GMT"
+						},
+						{
+							"key": "Connection",
+							"value": "keep-alive"
+						},
+						{
+							"key": "Keep-Alive",
+							"value": "timeout=5"
+						}
+					],
+					"cookie": [],
+					"body": "Error: User yang memiliki username Akeem4 tidak pernah melabeli salah satu data pada task dengan task_id TRQU202305300001 (is_task_user)"
+				},
+				{
+					"name": "Task not belong User",
+					"originalRequest": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "x-auth-token",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IlF1ZW50aW40NCIsImlhdCI6MTY4NDkzNjgzOSwiZXhwIjoxNjg0OTQwNDM5fQ.RFcnMPb1lFpyMrYmtu5kJlP2SXFbc2xt7cAmgdotQjw",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "username",
+									"value": "Rhianna18",
+									"description": "The username of the user to be banned; must be a role labeller",
+									"type": "text"
+								},
+								{
+									"key": "task_id",
+									"value": "BOOF202312310001",
+									"description": "The reason the user is banned; task must have a logged in user",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{HOST}}/api/v1/user/ban",
+							"host": [
+								"{{HOST}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"user",
+								"ban"
+							]
+						}
+					},
+					"status": "Bad Request",
+					"code": 400,
+					"_postman_previewlanguage": "html",
+					"header": [
+						{
+							"key": "X-Powered-By",
+							"value": "Express"
+						},
+						{
+							"key": "Content-Type",
+							"value": "text/html; charset=utf-8"
+						},
+						{
+							"key": "Content-Length",
+							"value": "37"
+						},
+						{
+							"key": "ETag",
+							"value": "W/\"25-A7Vc9eWpX8g+v+zUvbhLEJy5oz0\""
+						},
+						{
+							"key": "Date",
+							"value": "Wed, 24 May 2023 14:17:28 GMT"
+						},
+						{
+							"key": "Connection",
+							"value": "keep-alive"
+						},
+						{
+							"key": "Keep-Alive",
+							"value": "timeout=5"
+						}
+					],
+					"cookie": [],
+					"body": "Error: Task bukan punya anda (istask)"
+				},
+				{
+					"name": "Task not found",
+					"originalRequest": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "x-auth-token",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IlF1ZW50aW40NCIsImlhdCI6MTY4NDkzNjgzOSwiZXhwIjoxNjg0OTQwNDM5fQ.RFcnMPb1lFpyMrYmtu5kJlP2SXFbc2xt7cAmgdotQjw",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "username",
+									"value": "Rhianna18",
+									"description": "The username of the user to be banned; must be a role labeller",
+									"type": "text"
+								},
+								{
+									"key": "task_id",
+									"value": "BOOF20231231000150",
+									"description": "The reason the user is banned; task must have a logged in user",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{HOST}}/api/v1/user/ban",
+							"host": [
+								"{{HOST}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"user",
+								"ban"
+							]
+						}
+					},
+					"status": "Bad Request",
+					"code": 400,
+					"_postman_previewlanguage": "html",
+					"header": [
+						{
+							"key": "X-Powered-By",
+							"value": "Express"
+						},
+						{
+							"key": "Content-Type",
+							"value": "text/html; charset=utf-8"
+						},
+						{
+							"key": "Content-Length",
+							"value": "37"
+						},
+						{
+							"key": "ETag",
+							"value": "W/\"25-4yZhh4wBAIawCe8Fvz5vyIJaepg\""
+						},
+						{
+							"key": "Date",
+							"value": "Wed, 24 May 2023 14:18:04 GMT"
+						},
+						{
+							"key": "Connection",
+							"value": "keep-alive"
+						},
+						{
+							"key": "Keep-Alive",
+							"value": "timeout=5"
+						}
+					],
+					"cookie": [],
+					"body": "Error: Task tidak terdaftar (task_id)"
+				},
+				{
+					"name": "Username belongs to user with role labeller",
+					"originalRequest": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "x-auth-token",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IlF1ZW50aW40NCIsImlhdCI6MTY4NDkzNjgzOSwiZXhwIjoxNjg0OTQwNDM5fQ.RFcnMPb1lFpyMrYmtu5kJlP2SXFbc2xt7cAmgdotQjw",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "username",
+									"value": "Alvah47",
+									"description": "The username of the user to be banned; must be a role labeller",
+									"type": "text"
+								},
+								{
+									"key": "task_id",
+									"value": "BOOF20231231000150",
+									"description": "The reason the user is banned; task must have a logged in user",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{HOST}}/api/v1/user/ban",
+							"host": [
+								"{{HOST}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"user",
+								"ban"
+							]
+						}
+					},
+					"status": "Bad Request",
+					"code": 400,
+					"_postman_previewlanguage": "html",
+					"header": [
+						{
+							"key": "X-Powered-By",
+							"value": "Express"
+						},
+						{
+							"key": "Content-Type",
+							"value": "text/html; charset=utf-8"
+						},
+						{
+							"key": "Content-Length",
+							"value": "42"
+						},
+						{
+							"key": "ETag",
+							"value": "W/\"2a-yfCiN2x+9ymOMF0DQjQtAqaxhOc\""
+						},
+						{
+							"key": "Date",
+							"value": "Wed, 24 May 2023 14:19:24 GMT"
+						},
+						{
+							"key": "Connection",
+							"value": "keep-alive"
+						},
+						{
+							"key": "Keep-Alive",
+							"value": "timeout=5"
+						}
+					],
+					"cookie": [],
+					"body": "Error: User role harus LABELLER (username)"
+				},
+				{
+					"name": "The logged in user is not a requester",
+					"originalRequest": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "x-auth-token",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IkFrZWVtNCIsImlhdCI6MTY4NDkzODA2MCwiZXhwIjoxNjg0OTQxNjYwfQ.-PqFitIpQNbdGM-1G-PMidJpNvAULRaxtrUSj4G0OUs",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "username",
+									"value": "Alberto59",
+									"description": "The username of the user to be banned; must be a role labeller",
+									"type": "text"
+								},
+								{
+									"key": "task_id",
+									"value": "BOOF202312310001",
+									"description": "The reason the user is banned; task must have a logged in user",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{HOST}}/api/v1/user/ban",
+							"host": [
+								"{{HOST}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"user",
+								"ban"
+							]
+						}
+					},
+					"status": "Bad Request",
+					"code": 400,
+					"_postman_previewlanguage": "html",
+					"header": [
+						{
+							"key": "X-Powered-By",
+							"value": "Express"
+						},
+						{
+							"key": "Content-Type",
+							"value": "text/html; charset=utf-8"
+						},
+						{
+							"key": "Content-Length",
+							"value": "55"
+						},
+						{
+							"key": "ETag",
+							"value": "W/\"37-ZIW/GnhteoLS6zI/yawoDfJ4eQA\""
+						},
+						{
+							"key": "Date",
+							"value": "Wed, 24 May 2023 14:23:06 GMT"
+						},
+						{
+							"key": "Connection",
+							"value": "keep-alive"
+						},
+						{
+							"key": "Keep-Alive",
+							"value": "timeout=5"
+						}
+					],
+					"cookie": [],
+					"body": "Error: Hanya role REQUESTER yang boleh mengakses (user)"
+				}
+			]
+		},
+		{
+			"name": "Get User Ban List",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "x-auth-token",
+						"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IkFsYmVydG81OSIsImlhdCI6MTY4NDkzODYyOCwiZXhwIjoxNjg0OTQyMjI4fQ.2R5j9vZCp_BG3GFOaS7meYN9il1_Y3ghXoREfz82aSI",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": []
+				},
+				"url": {
+					"raw": "{{HOST}}/api/v1/user/ban/list",
+					"host": [
+						"{{HOST}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"user",
+						"ban",
+						"list"
+					]
+				},
+				"description": "This endpoint is useful for requesters to see which users they have banned. As for the labeller, it's useful to see him banned in any task."
+			},
+			"response": [
+				{
+					"name": "The logged in user is the requester",
+					"originalRequest": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "x-auth-token",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IlF1ZW50aW40NCIsImlhdCI6MTY4NDkzODI5NSwiZXhwIjoxNjg0OTQxODk1fQ.lCeEVcdhGzQHmkT4VnOufaVjeYLylwTJpKUFX3W2Buw",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": []
+						},
+						"url": {
+							"raw": "{{HOST}}/api/v1/user/ban/list",
+							"host": [
+								"{{HOST}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"user",
+								"ban",
+								"list"
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "X-Powered-By",
+							"value": "Express"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json; charset=utf-8"
+						},
+						{
+							"key": "Content-Length",
+							"value": "357"
+						},
+						{
+							"key": "ETag",
+							"value": "W/\"165-bJg9FmuxXlaZzMjeqhb3fA9/hCo\""
+						},
+						{
+							"key": "Date",
+							"value": "Wed, 24 May 2023 14:25:04 GMT"
+						},
+						{
+							"key": "Connection",
+							"value": "keep-alive"
+						},
+						{
+							"key": "Keep-Alive",
+							"value": "timeout=5"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"blacklists\": [\n        {\n            \"ban_id\": \"BD1\",\n            \"username\": \"Winona70\",\n            \"task_id\": \"TRQU202305300001\"\n        },\n        {\n            \"ban_id\": \"BD2\",\n            \"username\": \"Alberto59\",\n            \"task_id\": \"TRQU202305300001\"\n        },\n        {\n            \"ban_id\": \"BD3\",\n            \"username\": \"Clinton98\",\n            \"task_id\": \"TRQU202305300001\"\n        },\n        {\n            \"ban_id\": \"BD4\",\n            \"username\": \"King13\",\n            \"task_id\": \"TRQU202305300001\"\n        },\n        {\n            \"ban_id\": \"BD5\",\n            \"username\": \"Rasheed76\",\n            \"task_id\": \"TRQU202305300001\"\n        }\n    ]\n}"
+				},
+				{
+					"name": "The logged in user is the labeller",
+					"originalRequest": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "x-auth-token",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IkFsYmVydG81OSIsImlhdCI6MTY4NDkzODYyOCwiZXhwIjoxNjg0OTQyMjI4fQ.2R5j9vZCp_BG3GFOaS7meYN9il1_Y3ghXoREfz82aSI",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": []
+						},
+						"url": {
+							"raw": "{{HOST}}/api/v1/user/ban/list",
+							"host": [
+								"{{HOST}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"user",
+								"ban",
+								"list"
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "X-Powered-By",
+							"value": "Express"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json; charset=utf-8"
+						},
+						{
+							"key": "Content-Length",
+							"value": "192"
+						},
+						{
+							"key": "ETag",
+							"value": "W/\"c0-4lio4pEQlNvNrf/AbQ7JLOUd7ug\""
+						},
+						{
+							"key": "Date",
+							"value": "Wed, 24 May 2023 14:30:35 GMT"
+						},
+						{
+							"key": "Connection",
+							"value": "keep-alive"
+						},
+						{
+							"key": "Keep-Alive",
+							"value": "timeout=5"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"blacklists\": [\n        {\n            \"task_id\": \"TRQU202305300001\",\n            \"owner_of_task\": \"Quentin44\"\n        },\n        {\n            \"task_id\": \"CLAB202308250001\",\n            \"owner_of_task\": \"Abe69\"\n        },\n        {\n            \"task_id\": \"SUAN202309220001\",\n            \"owner_of_task\": \"Antoinette43\"\n        }\n    ]\n}"
+				}
+			]
+		},
+		{
+			"name": "Remove Ban",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Studi Kasus 1: Hanya Requester yang bisa akses\", function () {\r",
+							"    const header = pm.request.headers;\r",
+							"    const token = header.get(\"x-auth-token\");\r",
+							"    var user;\r",
+							"    \r",
+							"    pm.sendRequest({\r",
+							"        url: \"http://localhost:3000/api/v1/user\",\r",
+							"        method: \"GET\",\r",
+							"        header: { 'x-auth-token': token }\r",
+							"    }, function (err, res) {        \r",
+							"        user = res.json().body;\r",
+							"    });\r",
+							"\r",
+							"    setTimeout(() => {\r",
+							"        console.log(user);\r",
+							"    }, 500);\r",
+							"    \r",
+							"    pm.expect(pm.response.code).equal(200);\r",
+							"    \r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "x-auth-token",
+						"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IkFiZTY5IiwiaWF0IjoxNjg0OTM4ODg3LCJleHAiOjE2ODQ5NDI0ODd9.R--fxVN4udCjn7HcjOJbMyuSJu1zQUuo7fWXK6W3RPE",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "ban_id",
+							"value": "BD1",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "{{HOST}}/api/v1/user/remove_ban",
+					"host": [
+						"{{HOST}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"user",
+						"remove_ban"
+					]
+				},
+				"description": "This endpoint is useful for the requester to unban the labeller."
+			},
+			"response": [
+				{
+					"name": "Success to remove Blacklist",
+					"originalRequest": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "x-auth-token",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IkFiZTY5IiwiaWF0IjoxNjg0OTM4ODg3LCJleHAiOjE2ODQ5NDI0ODd9.R--fxVN4udCjn7HcjOJbMyuSJu1zQUuo7fWXK6W3RPE",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "ban_id",
+									"value": "BD0",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{HOST}}/api/v1/user/remove_ban",
+							"host": [
+								"{{HOST}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"user",
+								"remove_ban"
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "X-Powered-By",
+							"value": "Express"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json; charset=utf-8"
+						},
+						{
+							"key": "Content-Length",
+							"value": "33"
+						},
+						{
+							"key": "ETag",
+							"value": "W/\"21-gOEEBQ6ysSFIWCcmGySTK+3BHug\""
+						},
+						{
+							"key": "Date",
+							"value": "Wed, 24 May 2023 14:34:56 GMT"
+						},
+						{
+							"key": "Connection",
+							"value": "keep-alive"
+						},
+						{
+							"key": "Keep-Alive",
+							"value": "timeout=5"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"msg\": \"Blacklist sudah dicabut\"\n}"
+				},
+				{
+					"name": "Blacklist doesn't exist",
+					"originalRequest": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "x-auth-token",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IkFiZTY5IiwiaWF0IjoxNjg0OTM4ODg3LCJleHAiOjE2ODQ5NDI0ODd9.R--fxVN4udCjn7HcjOJbMyuSJu1zQUuo7fWXK6W3RPE",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "ban_id",
+									"value": "BD0",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{HOST}}/api/v1/user/remove_ban",
+							"host": [
+								"{{HOST}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"user",
+								"remove_ban"
+							]
+						}
+					},
+					"status": "Bad Request",
+					"code": 400,
+					"_postman_previewlanguage": "html",
+					"header": [
+						{
+							"key": "X-Powered-By",
+							"value": "Express"
+						},
+						{
+							"key": "Content-Type",
+							"value": "text/html; charset=utf-8"
+						},
+						{
+							"key": "Content-Length",
+							"value": "35"
+						},
+						{
+							"key": "ETag",
+							"value": "W/\"23-9IR5g4iZo0BKpDT5mLzaQG1zsx0\""
+						},
+						{
+							"key": "Date",
+							"value": "Wed, 24 May 2023 14:35:16 GMT"
+						},
+						{
+							"key": "Connection",
+							"value": "keep-alive"
+						},
+						{
+							"key": "Keep-Alive",
+							"value": "timeout=5"
+						}
+					],
+					"cookie": [],
+					"body": "Error: Blacklist tidak ada (ban_id)"
+				},
+				{
+					"name": "The logged in user is not the blocking one",
+					"originalRequest": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "x-auth-token",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IkFiZTY5IiwiaWF0IjoxNjg0OTM4ODg3LCJleHAiOjE2ODQ5NDI0ODd9.R--fxVN4udCjn7HcjOJbMyuSJu1zQUuo7fWXK6W3RPE",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "ban_id",
+									"value": "BD1",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{HOST}}/api/v1/user/remove_ban",
+							"host": [
+								"{{HOST}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"user",
+								"remove_ban"
+							]
+						}
+					},
+					"status": "Bad Request",
+					"code": 400,
+					"_postman_previewlanguage": "html",
+					"header": [
+						{
+							"key": "X-Powered-By",
+							"value": "Express"
+						},
+						{
+							"key": "Content-Type",
+							"value": "text/html; charset=utf-8"
+						},
+						{
+							"key": "Content-Length",
+							"value": "37"
+						},
+						{
+							"key": "ETag",
+							"value": "W/\"25-HxMG/1N89LPgcNnM3xzU7XnjvqM\""
+						},
+						{
+							"key": "Date",
+							"value": "Wed, 24 May 2023 14:36:12 GMT"
+						},
+						{
+							"key": "Connection",
+							"value": "keep-alive"
+						},
+						{
+							"key": "Keep-Alive",
+							"value": "timeout=5"
+						}
+					],
+					"cookie": [],
+					"body": "Error: Blacklist is not yours (isban)"
+				}
+			]
+		},
+		{
+			"name": "Update User",
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "x-auth-token",
+						"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IkFiZTY5IiwiaWF0IjoxNjg3MDgzMTE0LCJleHAiOjE2ODcwODY3MTR9.N_rWepnKhtjbzezsKO5pV1dOotfyuMRe5uwLAIRcBp8",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "user_profpic",
+							"type": "file",
+							"src": "/D:/Bluetooth/1671433755267.png"
+						}
+					]
+				},
+				"url": {
+					"raw": "{{HOST}}/api/v1/user/update/Abe69",
+					"host": [
+						"{{HOST}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"user",
+						"update",
+						"Abe69"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "User Profile Picture",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "x-auth-token",
+						"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IkFiZTY5IiwiaWF0IjoxNjg3MDgzMTE0LCJleHAiOjE2ODcwODY3MTR9.N_rWepnKhtjbzezsKO5pV1dOotfyuMRe5uwLAIRcBp8",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{HOST}}/api/v1/user/profpic",
+					"host": [
+						"{{HOST}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"user",
+						"profpic"
+					]
+				}
+			},
+			"response": []
 		}
 	]
 }

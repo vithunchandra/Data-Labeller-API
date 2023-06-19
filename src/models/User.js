@@ -23,6 +23,7 @@ module.exports = (sequelize, DataTypes) => {
       role: DataTypes.STRING,
       saldo: DataTypes.BIGINT.UNSIGNED,
       credibility: DataTypes.INTEGER,
+      profile_picture: DataTypes.STRING,
     },
     {
       sequelize,

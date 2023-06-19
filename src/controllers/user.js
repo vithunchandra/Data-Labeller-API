@@ -3,9 +3,66 @@ const Joi = require('joi')
 const { number } = require("joi");
 const {Op, where} = require('sequelize');
 const jwt = require('jsonwebtoken');
+const multer = require('multer');
+const fs = require('fs');
+const path = require('path');
 require ("dotenv").config();
 
 const {User, History, Task, Data, Label, UserBlacklist} = require("../models");
+
+const storage = multer.diskStorage({
+  destination: (req, file, callback) => {
+    const folderName = `images/`;
+
+    if(!fs.existsSync(folderName)){
+      fs.mkdirSync(folderName, {recursive: true});
+    }
+
+    callback(null, folderName);
+  },
+  filename: (req, file, callback) => {
+    console.log(file);
+    const fileExtension = path.extname(file.originalname).toLowerCase();
+    if(file.fieldname == "user_profpic"){
+      callback(null, `${req.params.username}${fileExtension}`);
+    }else{
+      callback(null, false);
+    }
+  },
+})
+
+const upload = multer({
+  storage: storage,
+  limits: {
+    fileSize: 5000000, // dalam byte jadi 1000 = 1kb, 1000000 = 1mb
+  },
+  fileFilter: (req, file, callback) => {
+    if(!file){
+      return callback(null, false);
+    }
+
+    // buat aturan dalam bentuk regex, mengenai extension apa saja yang diperbolehkan
+    const rules = /jpeg|jpg|png|gif/;
+    
+    const fileExtension = path.extname(file.originalname).toLowerCase();
+    const fileMimeType = file.mimetype;
+
+    const cekExt = rules.test(fileExtension);
+    const cekMime = rules.test(fileMimeType);
+
+    if(cekExt && cekMime){
+      callback(null, true);
+    }else{
+      callback(null, false);
+      return callback(
+        new multer.MulterError(
+          "Tipe file harus .gif, .png, .jpg, atau .jpeg",
+          file.fieldname
+        )
+      );
+    }
+  },
+});
 
 const register = async (req, res) => {
   const {name, username, password,email,role} = req.body;
@@ -240,6 +297,11 @@ const userDetail = async (req, res) => {
 
   return res.status(200).json({body: result});
 };
+
+const getProfpic = (req, res) => {
+  const lokasinya = `images/${req.body.user.profile_picture}`;
+  return res.status(200).sendFile(lokasinya, {root: "."});
+}
 
 const topup = async (req, res) => {
   const {password , saldo} = req.body;
@@ -620,22 +682,38 @@ const update_user = async (req, res) => {
       {where: {username: username,}}
       
     );
-    
-    return res.status(201).send
-      ({
-          
-          username: username,
-          msg: `berhasil mengganti role menjadi "${ rolenow}" `,
-          
-          
-          
-          
-      });
-   
 
-    
+    const uploadingFile = upload.single("user_profpic");
+    uploadingFile(req, res, async (err) => {
+      if(err){
+        console.log(err);
+        return res.status(400).send((err.message || err.code) + " pada field " + err.field);
+      }
+
+      if(req.file){
+        let userup = await User.update
+        (
+          {
+            profile_picture: req.file.filename ,
+          },
+          {where: {username: username,}}
+          
+        );
+
+        return res.status(201).send
+          ({        
+              username: username,
+              msg: `berhasil mengganti role menjadi "${ rolenow}" dan update profile picture dengan nama ${req.file.filename}`,  
+          });
+      }else{
+        return res.status(201).send
+          ({        
+              username: username,
+              msg: `berhasil mengganti role menjadi "${ rolenow}" `,  
+          });
+      }
+    })
 }
-
 
 const withdrawHistory = async (req, res) => {
   const histories = await History.findAll({
@@ -846,6 +924,7 @@ module.exports = {
   register,
   login,
   userDetail,
+  getProfpic,
   topup,
   topupHistory,
   retrive_money,
